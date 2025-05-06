@@ -1,26 +1,39 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: #ffffff;
+  --color-blue-50: #f0f8fe;
+  --color-blue-100: #deeffb;
+  --color-blue-200: #c5e5f8;
+  --color-blue-300: #9cd5f4;
+  --color-blue-400: #6ebcec;
+  --color-blue-500: #4ba1e6;
+  --color-blue-600: #3686da;
+  --color-blue-700: #2d71c8;
+  --color-blue-800: #2b5ca2;
+  --color-blue-900: #284e80;
+  --color-blue-950: #233c61;
+  --color-orange-50: #fef6ee;
+  --color-orange-100: #fee9d6;
+  --color-orange-200: #fbd0ad;
+  --color-orange-300: #f9af78;
+  --color-orange-400: #f58342;
+  --color-orange-500: #f26522;
+  --color-orange-600: #e34813;
+  --color-orange-700: #bc3412;
+  --color-orange-800: #962b16;
+  --color-orange-900: #792615;
+  --color-orange-950: #411009;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    @apply bg-background font-sans;
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  button {
+    @apply rounded-xl py-3 px-5 bg-blue-500 text-background hover:cursor-pointer hover:bg-blue-600 disabled:bg-blue-100 disabled:text-blue-400;
+  }
 }
