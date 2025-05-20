@@ -1,16 +1,17 @@
 import { estadoCliente } from '@/types/estado-cliente';
 import { createClient } from '../server';
+import { user } from '@/types/user';
 
-export async function getClientes (){
+export async function getClientes (): Promise<any[]|null>{
     const supabase = await createClient();
-    const { data: inmueble } = await supabase.from("cliente").select();
-    return JSON.stringify(inmueble)
+    const { data: cliente } = await supabase.from("cliente").select();
+    return cliente
 }
 
-export async function getCliente( id:number ) {
+export async function getCliente( mail:string ): Promise<user> {
     const supabase = await createClient();
-    const { data: inmueble } = (await supabase.from("cliente").select().eq( "id", id ).single());
-    return JSON.stringify(inmueble)
+    const { data: cliente } = (await supabase.from("cliente").select().eq( "mail", mail ).single());
+    return cliente
 }
 
 export async function createCliente ( cliente: {
