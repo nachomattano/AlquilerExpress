@@ -1,16 +1,17 @@
+import { user } from '@/types/user';
 import { createClient } from '../server';
 import { estadoEmpleado } from '@/types/estado-empleados';
 
-export async function getEmpleados (){
+export async function getEmpleados ():Promise<any[]|null>{
     const supabase = await createClient();
     const { data: empleado } = await supabase.from("empleado").select();
-    return JSON.stringify(empleado)
+    return empleado
 }
 
-export async function getEmpleado( id:number ) {
+export async function getEmpleado( mail:string ): Promise<user> {
     const supabase = await createClient();
-    const { data: empleado } = (await supabase.from("empleado").select().eq( "id", id ).single());
-    return JSON.stringify(empleado)
+    const { data: empleado } = (await supabase.from("empleado").select().eq( "mail", mail ).single());
+    return empleado
 }
 
 export async function createEmpleado ( empleado: {

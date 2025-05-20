@@ -1,15 +1,16 @@
+import { user } from '@/types/user';
 import { createClient } from '../server';
 
-export async function getAdministradores (){
+export async function getAdministradores ():Promise<any[]|null>{
     const supabase = await createClient();
-    const { data: inmueble } = await supabase.from("administrador").select();
-    return JSON.stringify(inmueble)
+    const { data: administrador } = await supabase.from("administrador").select();
+    return administrador
 }
 
-export async function getAdministrador( id:number ) {
+export async function getAdministrador( mail:string ): Promise<user> {
     const supabase = await createClient();
-    const { data: inmueble } = (await supabase.from("administrador").select().eq( "id", id ).single());
-    return JSON.stringify(inmueble)
+    const { data: administrador } = (await supabase.from("administrador").select().eq( "mail", mail ).single());
+    return administrador
 }
 
 export async function createAdministrador ( administrador: {
