@@ -1,6 +1,6 @@
 
 import { createClient } from './server';
-import { estadoInmueble } from '../../../.next/types/estados';
+import { estadoInmueble } from '../../types/estado-inmueble';
 
 export async function getInmuebles (){
     const supabase = await createClient();
@@ -32,10 +32,11 @@ export async function updateStateInmueble ( state: estadoInmueble, id: number ){
 }
 
 
-export async function getEstadoInmueble (){
-
+export async function getEstadoInmueble (id:number){
+    const supabase = await createClient()
+    await supabase.from("inmueble").select("estado").eq("id", id)
 }
 
-export async function setEstadoInmueble (){
+export async function setEstadoInmueble (id:number){
 
 }
