@@ -1,8 +1,8 @@
-import { estadoCliente } from '@/types/estado-cliente';
+import { estadoUser } from '@/types/estado-cliente';
 import { createClient } from '../server';
 import { user } from '@/types/user';
 
-export async function getClientes (): Promise<any[]|null>{
+export async function getClientes (): Promise<user[]|null>{
     const supabase = await createClient();
     const { data: cliente } = await supabase.from("cliente").select();
     return cliente
@@ -14,14 +14,7 @@ export async function getCliente( mail:string ): Promise<user> {
     return cliente
 }
 
-export async function createCliente ( cliente: {
-    nombre:string,
-    contraseña:number,
-    DNI:number,
-    edad:string,
-    mail:string,
-    estado: estadoCliente
-} ){
+export async function createCliente ( cliente: user ){
     const supabase = await createClient();
     await supabase.from("cliente").insert(cliente)
 }
@@ -33,5 +26,5 @@ export async function modificarContraseña ( contraseña:string , id: number ){
 
 export async function deleteCliente ( id: number ){
     const supabase = await createClient()
-    await supabase.from("empleado").update({ estado: estadoCliente.inactivo }).eq("id", id)
+    await supabase.from("empleado").update({ estado: estadoUser.inactivo }).eq("id", id)
 }

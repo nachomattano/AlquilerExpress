@@ -1,7 +1,7 @@
 import { user } from '@/types/user';
 import { createClient } from '../server';
 
-export async function getAdministradores ():Promise<any[]|null>{
+export async function getAdministradores ():Promise<user[]|null>{
     const supabase = await createClient();
     const { data: administrador } = await supabase.from("administrador").select();
     return administrador
@@ -13,14 +13,7 @@ export async function getAdministrador( mail:string ): Promise<user> {
     return administrador
 }
 
-export async function createAdministrador ( administrador: {
-    nombre:string,
-    contrasenia:number,
-    DNI:number,
-    edad:string,
-    mail:string,
-    
-} ){
+export async function createAdministrador ( administrador: user ){
     const supabase = await createClient();
     await supabase.from("administrador").insert(administrador)
 }
