@@ -9,7 +9,7 @@ export async function getSolicitudesReserva (): Promise<solicitud[]|null>{
     return solicitudreserva
 }
 
-export async function getSolicitudReserva( id:string ): Promise<solicitud|null>{
+export async function getSolicitudReserva( id:string|null ): Promise<solicitud|null>{
     const supabase = await createClient();
     const { data: solicitudreserva } = (await supabase.from("solicitudreserva").select().eq( "id", id ).single());
     return solicitudreserva

@@ -1,4 +1,5 @@
 
+import { reserva } from '@/types/reserva';
 import { createClient } from './server';
 import { estadoReserva } from '@/types/estado-reservas';
 
@@ -14,14 +15,7 @@ export async function getReserva( id:number ) {
     return JSON.stringify(reserva)
 }
 
-export async function createReserva ( reserva: {
-    fechadesde:Date,
-    fechahasta:Date,
-    cantidad:number,
-    solicitante:number,
-    pagoid:number,
-    estado: estadoReserva.Vigente
-} ){
+export async function createReserva ( reserva: reserva ){
     const supabase = await createClient();
     await supabase.from("reserva").insert(reserva)
 }
