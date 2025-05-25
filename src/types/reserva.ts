@@ -7,6 +7,7 @@ export type reserva ={
         fechahasta:Date|null|undefined,
         cantidad:number|null|undefined,
         solicitante:string|null|undefined,
+        acompañantesid:string[]|null|undefined,
         pagoid:string|null|undefined,
         estado: estadoReserva |null|undefined
 }

@@ -9,7 +9,7 @@ export async function getSolicitudesReserva (): Promise<solicitud[]|null>{
     return solicitudreserva
 }
 
-export async function getSolicitudReserva( id:string|null ): Promise<solicitud|null>{
+export async function getSolicitudReserva( id:string|null|undefined ): Promise<solicitud|null>{
     const supabase = await createClient();
     const { data: solicitudreserva } = (await supabase.from("solicitudreserva").select().eq( "id", id ).single());
     return solicitudreserva
@@ -21,15 +21,15 @@ export async function createSolicitud ( solicitud: solicitud ){
     return query
 }
 
-export async function updateStateReserva ( state: estadoSolicitud, id: string ){
+export async function updateStateReserva ( state: estadoSolicitud, id: string|null|undefined ){
     const supabase = await createClient()
     await supabase.from("inmueble").update({ estado: state }).eq("id", id)
 }
 
 export async function getSolicitudesReservaFilters(
-  desde?: Date,
-  hasta?: Date,
-  clienteIds?: number[]
+  desde?: Date|null|undefined,
+  hasta?: Date|null|undefined,
+  clienteIds?: number[]|null|undefined
 ): Promise<solicitud[] | null> {
   const supabase = await createClient();
 

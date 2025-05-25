@@ -1,10 +1,10 @@
 import { estadoPago } from "./estado-pago"
 
 export type pago={
-    id:string|null,
-    numerotarjeta:number|null,
-    numeroseguridad:number|null,
-    clienteid:string|null,
-    solicitudid:string|null,
-    estado:estadoPago|null
+    id:string|null|undefined,
+    numerotarjeta:number|null|undefined,
+    numeroseguridad:number|null|undefined,
+    clienteid:string|null|undefined,
+    solicitudid:string|null|undefined,
+    estado:estadoPago|null|undefined
 }

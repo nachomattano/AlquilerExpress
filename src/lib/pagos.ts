@@ -6,8 +6,8 @@ import { getSolicitudReserva } from "./db/solicitudes-reservas";
 import { solicitud } from "@/types/solicitud";
 
 
-export async function pagoExitoso (pago:pago){
-    let solicitud: solicitud|null = await getSolicitudReserva(pago.solicitudid)
+export async function pagoExitoso (pago:pago|null|undefined){
+    let solicitud: solicitud|null = await getSolicitudReserva(pago?.solicitudid)
 
     let reserva:reserva ={
         id: undefined,
@@ -15,10 +15,12 @@ export async function pagoExitoso (pago:pago){
         fechahasta:solicitud?.fechahasta,
         cantidad:solicitud?.cantidad,
         solicitante:solicitud?.solicitante,
-        pagoid:pago.id,
+        acompañantesid:solicitud?.acompañantesid,
+        pagoid:pago?.id,
         estado: estadoReserva.Vigente
     }
 
-    await createReserva(reserva)
+    
+    return await createReserva(reserva)
 
 }
