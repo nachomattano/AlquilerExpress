@@ -32,9 +32,12 @@ export default function NavBar() {
                 <div className="hidden md:flex items-center space-x-6">
                     <Link href="/">Inicio</Link>
                     <Link href="/propiedades">Propiedades</Link>
-                    <button>
-                        Iniciar sesión
-                    </button>
+                    <Link href="/mipanel">Mi Panel</Link>
+                    <Link href="/auth">
+                        <button>
+                            Iniciar sesión
+                        </button>
+                    </Link>
                 </div>
             </div>
     
@@ -46,9 +49,11 @@ export default function NavBar() {
                 <Link href="/propiedades" className="block">
                     Propiedades
                 </Link>
-                <button>
-                    Iniciar sesión
-                </button>
+                <Link href="/auth">
+                    <button>
+                        Iniciar sesión
+                    </button>
+                </Link>
             </div>
             )}
         </nav>
