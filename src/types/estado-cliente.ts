@@ -1,3 +1,3 @@
-export enum estadoCliente{
+export enum estadoUser{
     inactivo, activo
 }

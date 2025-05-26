@@ -1,7 +1,15 @@
+import { estadoUser } from "./estado-cliente"
+
 export type user ={
-    nombre:string,
-    contrasenia:string,
-    DNI:number,
-    edad:string,
-    mail:string,
+    id:string|null,
+    nombre:string|null,
+    contraseña:string|null,
+    DNI:number|null,
+    edad:string|null,
+    mail:string|null,
+    estado:estadoUser|null
+}
+
+export enum typeUser {
+    empleado, cliente, administrador
 }

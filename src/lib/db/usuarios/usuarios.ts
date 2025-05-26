@@ -1,19 +1,21 @@
 import { getCliente } from "./clientes";
 import { getAdministrador } from "./administradores";
 import { getEmpleado } from "./empleados";
-import { user } from "@/types/user";
+import { typeUser, user } from "@/types/user";
 
-export async function getUsuarioPorMail( mail:string ): Promise<{user: user| undefined,administrador:boolean|undefined}> {
-    let cuenta : {user: user | undefined, administrador:boolean | undefined} = {
+export async function getUsuarioPorMail( mail:string ): Promise<{user: user| undefined,userType:typeUser|undefined}> {
+    let cuenta : {user: user | undefined, userType:typeUser | undefined} = {
     user: undefined,
-    administrador: false
+    userType: undefined
 }
     cuenta.user = await getCliente(mail)
+    cuenta.userType = typeUser.cliente
     if (!cuenta.user){
         cuenta.user = await getEmpleado(mail)
+        cuenta.userType = typeUser.empleado
         if (!cuenta.user){
             cuenta.user = await getAdministrador(mail)
-            cuenta.administrador = true
+            cuenta.userType = typeUser.administrador
         }
     }
     return cuenta
