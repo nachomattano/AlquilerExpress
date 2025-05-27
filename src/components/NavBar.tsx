@@ -8,18 +8,22 @@ import { useState } from "react";
 export default function NavBar() {
     const [ isOpen, setIsOpen ] = useState(false)
 
+    const handleClose = async () => {
+        await fetch('/api/users/cerrarsesion', {
+            method: 'GET'
+        })
+    }
     return (
         <nav>
-            <div className="container max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
-                <div className="flex items-center space-x-4">
+           <div className="max-w-500 text-white bg-orange-400 px-4  py-3 flex justify-between items-center">
+                <div className="ml-6">
                     <Image
                     src="/logo.png"
                     alt="Alquiler Express"
-                    width={120}
+                    width={80}
                     height={50}
                     />
                 </div>
-        
                 <div className="md:hidden">
                     <button
                         onClick={() => setIsOpen(!isOpen)}
@@ -28,10 +32,9 @@ export default function NavBar() {
                         <Menu/>
                     </button>
                 </div>
-
                 <div className="hidden md:flex items-center space-x-6">
                     <Link href="/">Inicio</Link>
-                    <Link href="/propiedades">Propiedades</Link>
+                    <Link href="/inmuebles">Propiedades</Link>
                     <Link href="/mipanel">Mi Panel</Link>
                     <Link href="/auth">
                         <button>
@@ -39,6 +42,32 @@ export default function NavBar() {
                         </button>
                     </Link>
                 </div>
+            
+            
+            <div className="relative">
+                <button
+                    onClick={() => setIsOpen(!isOpen)}
+                    className="inline-flex  w-full px-4 py-2 bg-orange-400 text-sm font-medium text-gray-700 hover:bg-orange-300">
+                        <img src="https://cdn-icons-png.flaticon.com/128/15218/15218567.png" className="w-10 h-10" />
+                </button>
+
+                {isOpen && (
+                <div className="absolute right-0 z-10 mt-2 w-56  rounded-md shadow-lg ">
+                    <div className="py-1 bg-black">
+                        <button className="py-3 text-sm bg-black hover:bg-gray-300 w-full text-left">
+                            Mi perfil
+                        </button>
+                        <button className="py-3 text-sm bg-black hover:bg-gray-300 w-full text-left">
+                            Mis solicitudes
+                        </button>
+                        <button className="py-3 text-sm bg-black hover:bg-gray-300 w-full text-left" onClick={handleClose}>
+                            Cerrar Sesion
+                        </button>
+                    </div>
+                </div>
+            )}
+            </div>
+            
             </div>
     
             {isOpen && (
@@ -56,6 +85,8 @@ export default function NavBar() {
                 </Link>
             </div>
             )}
+
+    
         </nav>
     )
 }
