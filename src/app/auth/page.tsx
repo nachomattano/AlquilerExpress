@@ -3,25 +3,35 @@
 import LogIn from "@/components/auth/LogIn"
 import SignUp from "@/components/auth/SignUp"
 import TwoFactor from "@/components/auth/TwoFactor"
+import { typeUser } from "@/types/user"
+import { useRouter } from 'next/navigation'
 import { useState } from "react"
 
 export default function Auth() {
     const [ currentView, setCurrentView ] = useState<"login" | "register" | "2fa">("login")
     const [ userEmail, setUserEmail ] = useState<string>("")
+    const router = useRouter()
 
-    const handleLoginSubmit = (email:string, password: string) => {
-        const isAdmin = email.includes("@admin.com")
-
+    const handleLoginSubmit = async (email:string, password: string) => {
+        const userType = localStorage.getItem('userType') as typeUser | null
+        const isAdmin = userType === typeUser.administrador
         if (isAdmin) {
             setUserEmail(email)
             setCurrentView("2fa")
         } else {
             // Logica de inicio de sesión normal
+            router.push('/')
         }
     }
 
     const handle2FAVerify = (code: string) => {
-        // Logica de verificacion de codigo e inicio de sesion de admin
+        // Logica de verificacion de codigo e inicio de sesion de admin}
+        console.log(code == '1111')
+        if (code == '1111'){
+            console.log('ENTRE ACA')
+            router.push('/')
+        }
+
     }
 
     const handleBackToLogin = () => {

@@ -16,7 +16,9 @@ export async function getCliente( mail:string ): Promise<user> {
 
 export async function createCliente ( cliente: user ){
     const supabase = await createClient();
-    await supabase.from("cliente").insert(cliente)
+     const { id, ...clienteSinId } = cliente;
+    const resp= await supabase.from("cliente").insert(clienteSinId)
+    console.log(JSON.stringify(resp))
 }
 
 export async function modificarContraseña ( contraseña:string , id: number ){

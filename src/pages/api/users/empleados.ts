@@ -11,7 +11,7 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
        res.send(JSON.stringify(resp))
     }
     if (method == 'POST'){
-        const user :user = {nombre,contraseña,DNI,edad,mail,estado}
+        const user :user = {id:undefined,nombre,contraseña,DNI,edad,mail,estado}
         const resp = await createEmpleado(user)
         res.send(JSON.stringify(resp))
     }

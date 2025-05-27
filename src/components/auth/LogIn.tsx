@@ -1,6 +1,8 @@
 'use client'
 
 import { useState } from "react"
+import Router from "next/router"
+import { typeUser } from "@/types/user"
 
 interface LoginFormProps {
   onSwitchToRegister?: () => void
@@ -16,6 +18,20 @@ export default function LogIn({ onSwitchToRegister, onLoginSubmit } : LoginFormP
         e.preventDefault()
         setIsLoading(true)
 
+        const res = await fetch('/api/users/iniciarsesion', {
+            method: 'POST',
+            body: JSON.stringify({ mail:email, contraseña:password }),
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            localStorage.setItem('user', JSON.stringify(data.user));
+            localStorage.setItem('userType', data.userType);
+ // o a donde quieras ir
+        } else {
+            alert('Credenciales incorrectas');
+        }
         // Logica de inicio de sesion
         
         onLoginSubmit?.(email, password)
