@@ -1,20 +1,22 @@
 import { inicarSesion } from "@/lib/iniciar-sesion"
 import { typeUser } from "@/types/user"
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { sendVerificationEmail } from "@/lib/email"
 
 export default async function handler(req:NextApiRequest,res:NextApiResponse){
     const {method, body:{mail, contraseña}} = req
 
-    if (method !== 'GET'){
+    if (method !== 'POST'){
         return ''
     }
     const creds = await inicarSesion(contraseña,mail)
-
+    console.log(creds.correct)
     if (creds.correct){
         if (creds.userType === typeUser.administrador){
-            //SEND EMAIL
+            await sendVerificationEmail(mail, '1111')
         }
-        res.status(200).send('credenciales correctas')
+        res.status(200).send(JSON.stringify({correct:creds.correct,user:creds.user, userType:creds.userType}))
+        return 
     }
-    res.status(400).send('credenciales incorrectas')
+    res.status(402).send('credenciales incorrectas')
 }
