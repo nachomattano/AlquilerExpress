@@ -29,10 +29,13 @@ export default function NavBar() {
                 <div className= "text-xl mr-250">Alquiler Express</div>
                 <div className="hidden md:flex items-center space-x-6">
                     <Link href="/">Inicio</Link>
-                    <Link href="/inmuebles">Inmuebles</Link>
-                    <button className="bg-black hover:bg-blue-300">
-                        Iniciar sesión
-                    </button>
+                    <Link href="/propiedades">Propiedades</Link>
+                    <Link href="/mipanel">Mi Panel</Link>
+                    <Link href="/auth">
+                        <button>
+                            Iniciar sesión
+                        </button>
+                    </Link>
                 </div>
             
             
@@ -70,9 +73,11 @@ export default function NavBar() {
                 <Link href="/propiedades" className="block">
                     Propiedades
                 </Link>
-                <button>
-                    Iniciar sesión
-                </button>
+                <Link href="/auth">
+                    <button>
+                        Iniciar sesión
+                    </button>
+                </Link>
             </div>
             )}
 
