@@ -1,19 +1,43 @@
 'use client'
 
 import { useState } from "react"
-
+import { useRouter } from "next/router"
 interface SignUpFormProps {
     onSwitchToLogin?: () => void
 }
 
 export default function SignUp({ onSwitchToLogin }: SignUpFormProps = {}) {
-    const [fullName, setFullName] = useState("")
-    const [email, setEmail] = useState("")
-    const [dni, setDni] = useState("")
-    const [age, setAge] = useState("")
-    const [password, setPassword] = useState("")
-    const [confirmPassword, setConfirmPassword] = useState("")
-    
+  const [fullName, setFullName] = useState("")
+  const [email, setEmail] = useState("")
+  const [dni, setDni] = useState("")
+  const [age, setAge] = useState("")
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
+  const [ isLoading, setIsLoading ] = useState<boolean>(false)
+  const router = useRouter()
+   const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        setIsLoading(true)
+
+        const res = await fetch('/api/users/clientes', {
+            method: 'POST',
+            body: JSON.stringify({ mail:email, contraseña:password, dni, edad:age, nombre:fullName }),
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (res.ok) {
+            
+            router.push('/auth'); // o a donde quieras ir
+        } else {
+            alert('no se pudo crear la cuenta');
+        }
+        // Logica de inicio de sesion
+        setIsLoading(false)
+
+   }
+
+
+
     return (
         <div className="mx-auto max-w-sm bg-white rounded-lg border border-gray-200 shadow-sm">
             <div className="p-6 space-y-1">
@@ -21,6 +45,7 @@ export default function SignUp({ onSwitchToLogin }: SignUpFormProps = {}) {
                 <p className="text-sm text-gray-600">Completa todos los campos para registrarte.</p>
             </div>
             <div className="p-6 pt-0">
+                <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-4">
                     <div className="space-y-2">
                         <label htmlFor="fullName" className="text-sm font-medium text-gray-700">
@@ -122,6 +147,7 @@ export default function SignUp({ onSwitchToLogin }: SignUpFormProps = {}) {
                     >
                         Crear Cuenta
                     </button>
+                    
                 </div>
                 <div className="mt-4 text-center text-sm text-gray-600">
                     ¿Ya tienes cuenta?{" "}
@@ -129,6 +155,7 @@ export default function SignUp({ onSwitchToLogin }: SignUpFormProps = {}) {
                         Inicia Sesión
                     </a>
                 </div>
+                </form>
             </div>
         </div>
     )

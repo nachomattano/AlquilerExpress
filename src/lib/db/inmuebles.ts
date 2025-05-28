@@ -1,32 +1,28 @@
 
 import { createClient } from './server';
 import { estadoInmueble } from '../../types/estado-inmueble';
+import { inmueble } from '@/types/inmueble';
 
-export async function getInmuebles (){
+export async function getInmuebles (): Promise<inmueble[]|null|undefined>{
     const supabase = await createClient();
     const { data: inmueble } = await supabase.from("inmueble").select();
-    return JSON.stringify(inmueble)
+    return inmueble
 }
 
-export async function getInmueble( id:number ) {
+export async function getInmueble( id:string ) : Promise<inmueble|null|undefined>{
     const supabase = await createClient();
+    console.log('ENTRE ACAAAAAAAA')
     const { data: inmueble } = (await supabase.from("inmueble").select().eq( "id", id ).single());
-    return JSON.stringify(inmueble)
+    return inmueble
 }
 
-export async function createInmueble ( inmueble: {
-    localidad:string,
-    cantidadHuespedes:number,
-    espacioCochera:number,
-    dpto:string,
-    direccion:string,
-    estado: estadoInmueble
-} ){
+export async function createInmueble ( inmueble: inmueble ){
     const supabase = await createClient();
-    await supabase.from("inmueble").insert(inmueble)
+    const { id, ...inmuebleSinId } = inmueble
+    await supabase.from("inmueble").insert(inmuebleSinId)
 }
 
-export async function updateStateInmueble ( state: estadoInmueble, id: number ){
+export async function updateStateInmueble ( state: estadoInmueble, id: string ){
     const supabase = await createClient()
     await supabase.from("inmueble").update({ estado: state }).eq("id", id)
 }

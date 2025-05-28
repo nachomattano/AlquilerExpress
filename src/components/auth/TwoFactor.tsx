@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from "react"
+import { useRouter } from 'next/navigation'
 
 interface TwoFactorProps {
     onVerify?: (code: string) => void
@@ -11,11 +12,17 @@ interface TwoFactorProps {
 export default function TwoFactor({ onVerify, onBack, userEmail }: TwoFactorProps = {}) {
     const [ code, setCode ] = useState<string>("");
     const [ isLoading, setIsLoading ] = useState<boolean>(false)
+    const router = useRouter()
  
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-
+        console.log(code.length)
         if (code.length !== 4) return
+        if (code == '1111'){
+            console.log('ENTRE ACA')
+            router.push("/")
+        }
+
     }
 
     const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
