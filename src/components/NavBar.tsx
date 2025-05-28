@@ -8,6 +8,10 @@ import { useState } from "react";
 export default function NavBar() {
     const [ isOpen, setIsOpen ] = useState(false)
 
+    const roles = ["usuario", "empleado", "admin"]
+
+    const rol = 2 // Aca guardar numero de rol del usuario
+
     return (
         <nav>
             <div className="container max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
@@ -32,7 +36,7 @@ export default function NavBar() {
                 <div className="hidden md:flex items-center space-x-6">
                     <Link href="/">Inicio</Link>
                     <Link href="/propiedades">Propiedades</Link>
-                    <Link href="/mipanel">Mi Panel</Link>
+                    <Link href={`/panel${roles[rol]}`}>Mi Panel</Link>
                     <Link href="/auth">
                         <button>
                             Iniciar sesión

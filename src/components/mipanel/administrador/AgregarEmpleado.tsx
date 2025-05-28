@@ -2,26 +2,26 @@
 
 import { useState } from "react"
 
-interface SignUpFormProps {
-    onSwitchToLogin?: () => void
-}
-
-export default function SignUp({ onSwitchToLogin }: SignUpFormProps = {}) {
+export default function AgregarEmpleado() {
     const [fullName, setFullName] = useState("")
     const [email, setEmail] = useState("")
     const [dni, setDni] = useState("")
     const [age, setAge] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+    }
     
     return (
-        <div className="mx-auto max-w-sm bg-white rounded-lg border border-gray-200 shadow-sm">
+        <div className="bg-white rounded-lg">
             <div className="p-6 space-y-1">
-                <h1 className="text-2xl font-bold text-gray-900">Crear Cuenta</h1>
-                <p className="text-sm text-gray-600">Completa todos los campos para registrarte.</p>
+                <h1 className="text-2xl font-bold text-gray-900">Agregar Empleado</h1>
+                <p>Ingresa nombre completo, email, DNI, edad y contraseña para registrar un empleado.</p>
             </div>
             <div className="p-6 pt-0">
-                <div className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-2">
                         <label htmlFor="fullName" className="text-sm font-medium text-gray-700">
                         Nombre Completo
@@ -120,15 +120,9 @@ export default function SignUp({ onSwitchToLogin }: SignUpFormProps = {}) {
                         type="submit"
                         className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                     >
-                        Crear Cuenta
+                        Crear Cuenta de Empleado
                     </button>
-                </div>
-                <div className="mt-4 text-center text-sm text-gray-600">
-                    ¿Ya tienes cuenta?{" "}
-                    <a onClick={onSwitchToLogin} className="text-blue-600 hover:text-blue-500 hover:cursor-pointer underline">
-                        Inicia Sesión
-                    </a>
-                </div>
+                </form>
             </div>
         </div>
     )
