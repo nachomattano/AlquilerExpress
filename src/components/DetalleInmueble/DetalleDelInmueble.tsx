@@ -24,7 +24,7 @@ export default function DetalleDelInmueble({inmueble}:{inmueble:string}){
                 <label className="shadow-md bg-orange-100 px-4 py-2 rounded-md text-base ">titulo:{inmuebles?.titulo}</label>
                 <label className="shadow-md bg-orange-100 px-4 py-2 rounded-md text-base ">Ciudad:{inmuebles?.ciudad}</label>
                 <label className="shadow-md bg-orange-100 px-4 py-2 rounded-md text-base">Localidad:{inmuebles.localidad}</label>
-                <label className="shadow-md bg-orange-100 px-4 py-2 rounded-md text-base ">Cantidad de huéspedes:{inmuebles.cantidadHuespedes}</label>
+                <label className="shadow-md bg-orange-100 px-4 py-2 rounded-md text-base ">Cantidad de huéspedes:{inmuebles.cantidadhuespedes}</label>
                 <label className="absolute top-50 px-70 text-4xl">{inmuebles.direccion}</label>
                 <label className="absolute  px-70 top-70 text-2xl">Descripcion:{inmuebles.descripcion}</label>
                 </div>

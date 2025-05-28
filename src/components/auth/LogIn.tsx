@@ -28,6 +28,7 @@ export default function LogIn({ onSwitchToRegister, onLoginSubmit } : LoginFormP
             const data = await res.json();
             localStorage.setItem('user', JSON.stringify(data.user));
             localStorage.setItem('userType', data.userType);
+
  // o a donde quieras ir
         } else {
             alert('Credenciales incorrectas');

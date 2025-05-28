@@ -3,19 +3,26 @@
 import { Menu } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
+import { typeUser } from "@/types/user";
 
 export default function NavBar() {
     const [ isOpen, setIsOpen ] = useState(false)
 
-    const roles = ["usuario", "empleado", "admin"]
+    const [rol, setRol] = useState<typeUser | null>(null)
+    const router = useRouter()
 
-    const rol = 2 // Aca guardar numero de rol del usuario
+    useEffect(() => {
+        const storedRol = localStorage.getItem('userType') as typeUser | null
+        setRol(storedRol)
+        console.log(storedRol)
+    }, [])
+    
 
     const handleClose = async () => {
-        await fetch('/api/users/cerrarsesion', {
-            method: 'GET'
-        })
+        localStorage.clear();
+        window.location.replace('/')
     }
     return (
         <nav>
@@ -38,13 +45,13 @@ export default function NavBar() {
                 </div>
                 <div className="hidden md:flex items-center space-x-6">
                     <Link href="/">Inicio</Link>
-                    <Link href="/propiedades">Propiedades</Link>
-                    <Link href={`/panel${roles[rol]}`}>Mi Panel</Link>
-                    <Link href="/auth">
+                    <Link href="/inmuebles">Inmuebles</Link>
+                    <Link href={`/panel${rol}`}>Mi Panel</Link>
+                    {!rol && (<Link href="/auth">
                         <button>
                             Iniciar sesión
                         </button>
-                    </Link>
+                    </Link>)}
                 </div>
             
             
@@ -58,9 +65,7 @@ export default function NavBar() {
                 {isOpen && (
                 <div className="absolute right-0 z-10 mt-2 w-56  rounded-md shadow-lg ">
                     <div className="py-1 bg-black">
-                        <button className="py-3 text-sm bg-black hover:bg-gray-300 w-full text-left">
-                            Mi perfil
-                        </button>
+                        
                         <button className="py-3 text-sm bg-black hover:bg-gray-300 w-full text-left">
                             Mis solicitudes
                         </button>
@@ -79,8 +84,8 @@ export default function NavBar() {
                 <Link href="/" className="block">
                     Inicio
                 </Link>
-                <Link href="/propiedades" className="block">
-                    Propiedades
+                <Link href="/inmuebles" className="block">
+                    Inmuebles
                 </Link>
                 <Link href="/auth">
                     <button>

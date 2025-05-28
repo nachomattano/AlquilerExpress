@@ -3,124 +3,176 @@
 import { useState } from "react"
 
 export default function AgregarInmueble() {
-    const [fullName, setFullName] = useState("")
-    const [email, setEmail] = useState("")
-    const [dni, setDni] = useState("")
-    const [age, setAge] = useState("")
-    const [password, setPassword] = useState("")
-    const [confirmPassword, setConfirmPassword] = useState("")
+    const [titulo, setTitulo] = useState("")
+    const [ciudad, setCiudad] = useState("")
+    const [localidad, setLocalidad] = useState("")
+    const [descripcion, setDescripcion] = useState("")
+    const [dpto, setDpto] = useState("")
+    const [espacioCochera, setEspacioCochera] = useState("")
+    const [cantidadHuespedes, setCantHuespedes] = useState("")
+    const [direccion, setDireccion] = useState("")
+    const [tipo, setTipo] = useState("")
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        const res = await fetch('/api/inmueble', {
+            method: 'POST',
+            body: JSON.stringify({cantidadhuespedes:cantidadHuespedes,titulo, espaciocochera:espacioCochera, dpto , direccion, localidad, ciudad, tipo, descripcion}),
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (res.ok) {
+            alert ('Empleado Creado con Exito!')// o a donde quieras ir
+        } else {
+            alert('no se pudo crear la cuenta');
+        }
     }
     
     return (
         <div className="bg-white rounded-lg">
             <div className="p-6 space-y-1">
                 <h1 className="text-2xl font-bold text-gray-900">Agregar Inmueble</h1>
-                <p>Ingresa nombre completo, email, DNI, edad y contraseña para registrar un empleado.</p>
+                <p>Ingresar los datos solicitados del inmueble.</p>
             </div>
             <div className="p-6 pt-0">
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="space-y-2">
-                        <label htmlFor="fullName" className="text-sm font-medium text-gray-700">
-                        Nombre Completo
+                        <label htmlFor="titulo" className="text-sm font-medium text-gray-700">
+                        Titulo del Inmueble
                         </label>
                         <input
-                        id="fullName"
+                        id="titulo"
                         type="text"
-                        placeholder="Juan Pérez"
+                        placeholder=""
                         required
-                        value={fullName}
-                        onChange={(e) => setFullName(e.target.value)}
+                        value={titulo}
+                        onChange={(e) => setTitulo(e.target.value)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         />
                     </div>
 
                     <div className="space-y-2">
-                        <label htmlFor="email" className="text-sm font-medium text-gray-700">
-                            Correo Electrónico
+                        <label htmlFor="ciudad" className="text-sm font-medium text-gray-700">
+                            Ciudad 
                         </label>
                         <input
-                        id="email"
-                        type="email"
-                        placeholder="correo@ejemplo.com"
+                        id="ciudad"
+                        type="text"
+                        placeholder=""
                         required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        value={ciudad}
+                        onChange={(e) => setCiudad(e.target.value)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <label htmlFor="dni" className="text-sm font-medium text-gray-700">
-                                DNI
+                            <label htmlFor="localidad" className="text-sm font-medium text-gray-700">
+                                Localidad
                             </label>
                             <input
-                                id="dni"
+                                id="localidad"
                                 type="text"
-                                placeholder="12345678"
+                                placeholder=""
                                 required
-                                value={dni}
-                                onChange={(e) => setDni(e.target.value)}
+                                value={localidad}
+                                onChange={(e) => setLocalidad(e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <label htmlFor="age" className="text-sm font-medium text-gray-700">
-                                Edad
+                            <label htmlFor="descripcion" className="text-sm font-medium text-gray-700">
+                                Descripcion
                             </label>
                             <input
-                                id="age"
-                                type="number"
-                                placeholder="25"
-                                min="18"
-                                max="100"
+                                id="descripcion"
+                                type="text"
+                                placeholder=""
                                 required
-                                value={age}
-                                onChange={(e) => setAge(e.target.value)}
+                                value={descripcion}
+                                onChange={(e) => setDescripcion(e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <label htmlFor="dpto" className="text-sm font-medium text-gray-700">
+                                Numero de Departamento (en caso de ser departamento)
+                            </label>
+                            <input
+                                id="dpto"
+                                type="text"
+                                placeholder=""
+                                value={dpto}
+                                onChange={(e) => setDpto(e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <label htmlFor="cantidadHuespedes" className="text-sm font-medium text-gray-700">
+                                Cantidad de Huespedes
+                            </label>
+                            <input
+                                id="cantidadHuespedes"
+                                type="number"
+                                placeholder=""
+                                value={cantidadHuespedes}
+                                onChange={(e) => setCantHuespedes(e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             />
                         </div>
                     </div>
 
                     <div className="space-y-2">
-                        <label htmlFor="password" className="text-sm font-medium text-gray-700">
-                            Contraseña
-                        </label>
-                        <input
-                        id="password"
-                        type="password"
-                        placeholder="Mínimo 8 caracteres"
-                        required
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        />
+                            <label htmlFor="espacioCochera" className="text-sm font-medium text-gray-700">
+                                Espacio en la cochera (en caso de tener)
+                            </label>
+                            <input
+                                id="espacioCochera"
+                                type="number"
+                                placeholder=""
+                                value={espacioCochera}
+                                onChange={(e) => setEspacioCochera(e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            />
+                        </div>
+
+                    <div className="space-y-2">
+                            <label htmlFor="direccion" className="text-sm font-medium text-gray-700">
+                                Direccion
+                            </label>
+                            <input
+                                id="direccion"
+                                type="text"
+                                placeholder=""
+                                value={direccion}
+                                onChange={(e) => setDireccion(e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            />
                     </div>
 
                     <div className="space-y-2">
-                        <label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700">
-                            Confirmar Contraseña
-                        </label>
-                        <input
-                        id="confirmPassword"
-                        type="password"
-                        placeholder="Repite tu contraseña"
-                        required
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        />
-                    </div>
+                            <label htmlFor="tipo" className="text-sm font-medium text-gray-700">
+                                Tipo de Inmueble
+                            </label>
+                            <input
+                                id="tipo"
+                                type="text"
+                                placeholder=""
+                                value={tipo}
+                                onChange={(e) => setTipo(e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            />
+                        </div>
 
                     <button
                         type="submit"
                         className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                     >
-                        Crear Cuenta de Empleado
+                        Crear Inmueble
                     </button>
                 </form>
             </div>
