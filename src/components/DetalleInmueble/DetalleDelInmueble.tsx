@@ -1,38 +1,47 @@
+'use client'
 
 import { inmueble } from '@/types/inmueble';
 import Link from 'next/link';
 
+
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from 'react';
-type Detalle = {
-    nom: string; 
-    ciu: string; 
-    loc: string; 
-    cantHuespedes: string; 
-    imagen: string;
-    descrip: string;  
-    className?: string;
-}; 
+import { useState } from 'react';
 
 export default function DetalleDelInmueble({inmueble}:{inmueble:string}){
     let inmuebles:inmueble = JSON.parse(inmueble)
+    const [ isOpen, setIsOpen ] = useState(false)
+    const [ isOp, setIsOp ] = useState(false)
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+    }
+    const [fullName, setFullName] = useState("")
+    const [email, setEmail] = useState("")
+    const [emailAcom, setEmailAcom] = useState("")
+    const [dni, setDni] = useState("")
     return (<>
         
             
-            <div className="p-1 mx-5 mt-15 bg-white rounded-xl shadow-md space-y-4">    
-                <div className='px-9 gap-2 p-4'>
-                <label className="shadow-md bg-orange-100 px-4 py-2 rounded-md text-base ">titulo:{inmuebles?.titulo}</label>
-                <label className="shadow-md bg-orange-100 px-4 py-2 rounded-md text-base ">Ciudad:{inmuebles?.ciudad}</label>
-                <label className="shadow-md bg-orange-100 px-4 py-2 rounded-md text-base">Localidad:{inmuebles.localidad}</label>
-                <label className="shadow-md bg-orange-100 px-4 py-2 rounded-md text-base ">Cantidad de huéspedes:{inmuebles.cantidadhuespedes}</label>
-                <label className="absolute top-50 px-70 text-4xl">{inmuebles.direccion}</label>
-                <label className="absolute  px-70 top-70 text-2xl">Descripcion:{inmuebles.descripcion}</label>
-                </div>
-                <Link href= "/alquilar"> 
-                    <div className="absolute  px-210 top-120">
-                      <button className=" bg-black hover:bg-gray-300 text-white w-150 rounded-xl w-1/2 h-13 mx-5">Alquilar</button>
+
+                <div className="flex justify-center items-center min-h-screen bg-gray-50">
+                    <div className="bg-white rounded-xl shadow-md p-8 space-y-4 w-full ">
+                        <div className="space-y-4">
+                            <label className="block shadow-md bg-orange-100 px-4 py-2 rounded-md text-base">Título: {inmuebles?.titulo}</label>
+                            <label className="block shadow-md bg-orange-100 px-4 py-2 rounded-md text-base">Ciudad: {inmuebles?.ciudad}</label>
+                            <label className="block shadow-md bg-orange-100 px-4 py-2 rounded-md text-base">Localidad: {inmuebles?.localidad}</label>
+                            <label className="block shadow-md bg-orange-100 px-4 py-2 rounded-md text-base">Cantidad de huéspedes: {inmuebles?.cantidadHuespedes}</label>
+                            <label className="block shadow-md bg-orange-100 px-4 py-2 rounded-md text-base">Dirección: {inmuebles?.direccion}</label>
+                            <label className="block shadow-md bg-orange-100 px-4 py-2 rounded-md text-base">Descripción: {inmuebles?.descripcion}</label>
+                        </div>
+                        <div className="pt-4 flex justify-center">
+                            <Link href="/solicitarreserva">
+                            <button className="bg-black hover:bg-gray-700 text-white w-48 py-2 rounded-xl">
+                                Alquilar
+                            </button>
+                            </Link>
+                        </div>
+
                     </div>
-                </Link>
-            </div>
+                </div>
         </>)
 }   

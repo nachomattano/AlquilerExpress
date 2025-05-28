@@ -11,7 +11,7 @@ type CuadradoAlquilerProps = {
 export default function CuadradoInmueble({inmueble}:{inmueble:inmueble}) {
     return <>
                 <div className="shadow-md rounded-lg h-110 w-90 text-lg ">
-                  <div className="mt-6">
+                  <div className="grid mt-6">
                     <label className="px-6">Nombre:{inmueble.titulo} </label>
                     <label className="px-6">Ciudad:{inmueble.ciudad}</label>
                     <label className="px-6">Localidad:{inmueble.localidad}</label>
