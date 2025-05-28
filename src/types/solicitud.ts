@@ -1,12 +1,12 @@
 import { estadoSolicitud } from "./estado-solicitud"
 
 export type solicitud ={
-    id:number|null,
-    fechadesde:Date|null,
-    fechahasta:Date|null,
-    cantidad:number|null,
-    solicitante:string|null,
-    acompañantesid:string[]|null,
-    inmuebleid: number|null,
-    estado: estadoSolicitud|null
+    id:string|null|undefined,
+    fechadesde:Date|null|undefined,
+    fechahasta:Date|null|undefined,
+    cantidad:number|null|undefined,
+    solicitante:string|null|undefined,
+    acompañantesid:string[]|null|undefined,
+    inmuebleid: number|null|undefined,
+    estado: estadoSolicitud|null|undefined
 }

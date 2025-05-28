@@ -8,7 +8,8 @@ export async function solicitudAccepted(solicitud:solicitud|null){
         id:null,
         numeroseguridad:null,
         numerotarjeta:null,
-        clienteid:solicitud?solicitud.solicitante:0,
+        clienteid:solicitud?solicitud.solicitante:'',
+        solicitudid:solicitud?.id,
         estado: estadoPago.pendiente
     }
     

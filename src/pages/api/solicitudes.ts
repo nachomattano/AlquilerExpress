@@ -10,7 +10,7 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
        res.send(JSON.stringify(resp))
     }
     if (method == 'POST'){
-        const solicitud :solicitud = {fechadesde, fechahasta, cantidad, solicitante, acompañantesid, inmuebleid, estado}
+        const solicitud :solicitud = {id:null,fechadesde, fechahasta, cantidad, solicitante, acompañantesid, inmuebleid, estado}
         const resp = await createSolicitud(solicitud)
         res.send(JSON.stringify(resp))
     }

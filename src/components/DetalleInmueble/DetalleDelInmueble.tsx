@@ -22,6 +22,7 @@ export default function DetalleDelInmueble({inmueble}:{inmueble:string}){
     return (<>
         
             
+
                 <div className="flex justify-center items-center min-h-screen bg-gray-50">
                     <div className="bg-white rounded-xl shadow-md p-8 space-y-4 w-full ">
                         <div className="space-y-4">
@@ -39,6 +40,7 @@ export default function DetalleDelInmueble({inmueble}:{inmueble:string}){
                             </button>
                             </Link>
                         </div>
+
                     </div>
                 </div>
         </>)

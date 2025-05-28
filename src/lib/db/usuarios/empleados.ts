@@ -16,7 +16,8 @@ export async function getEmpleado( mail:string ): Promise<user> {
 
 export async function createEmpleado ( empleado: user ){
     const supabase = await createClient();
-    await supabase.from("empleado").insert(empleado)
+    const { id, ...empSinId } = empleado
+    await supabase.from("empleado").insert(empSinId)
 }
 
 export async function modificarContraseña ( contraseña: string, id: number ){

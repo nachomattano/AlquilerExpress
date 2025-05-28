@@ -19,7 +19,8 @@ export async function getInmueble( id:string ) : Promise<inmueble|null|undefined
 export async function createInmueble ( inmueble: inmueble ){
     const supabase = await createClient();
     const { id, ...inmuebleSinId } = inmueble
-    await supabase.from("inmueble").insert(inmuebleSinId)
+    const query=await supabase.from("inmueble").insert(inmuebleSinId)
+    console.log(JSON.stringify(query))
 }
 
 export async function updateStateInmueble ( state: estadoInmueble, id: string ){

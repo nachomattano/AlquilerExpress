@@ -20,7 +20,8 @@ export default function Auth() {
             setCurrentView("2fa")
         } else {
             // Logica de inicio de sesión normal
-            router.push('/')
+            window.location.replace('/')
+            
         }
     }
 

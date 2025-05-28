@@ -12,6 +12,17 @@ export default function AgregarEmpleado() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        const res = await fetch('/api/users/empleados', {
+            method: 'POST',
+            body: JSON.stringify({ mail:email, contraseña:password, dni, edad:age, nombre:fullName }),
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (res.ok) {
+            alert ('Empleado Creado con Exito!')// o a donde quieras ir
+        } else {
+            alert('no se pudo crear la cuenta');
+        }
     }
     
     return (
