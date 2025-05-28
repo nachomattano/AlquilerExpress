@@ -38,7 +38,7 @@ export default function NavBar() {
                 </div>
                 <div className="hidden md:flex items-center space-x-6">
                     <Link href="/">Inicio</Link>
-                    <Link href="/propiedades">Propiedades</Link>
+                    <Link href="/inmuebles">Inmuebles</Link>
                     <Link href={`/panel${roles[rol]}`}>Mi Panel</Link>
                     <Link href="/auth">
                         <button>
