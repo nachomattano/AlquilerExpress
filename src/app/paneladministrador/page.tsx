@@ -1,5 +1,6 @@
 'use client'
 
+import Solicitudes from "@/components/mipanel/Solicitudes"
 import AgregarEmpleado from "@/components/mipanel/administrador/AgregarEmpleado"
 import InicioAdmin from "@/components/mipanel/administrador/InicioAdmin"
 import AgregarInmueble from "@/components/mipanel/AgregarInmueble"
@@ -24,6 +25,12 @@ const adminItems = [
       title: "Agregar Inmueble",
       icon: HousePlus,
       component: AgregarInmueble
+    },
+    {
+      id: "Solicitudes",
+      title: "Ver Solicitudes",
+      icon: HousePlus,
+      component: Solicitudes
     }
 ]
 

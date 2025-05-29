@@ -8,9 +8,15 @@ export async function getClientes (): Promise<user[]|null>{
     return cliente
 }
 
-export async function getCliente( mail:string ): Promise<user> {
+export async function getClienteMail( mail:string|null|undefined ): Promise<user> {
     const supabase = await createClient();
     const { data: cliente } = (await supabase.from("cliente").select().eq( "mail", mail ).single());
+    return cliente
+}
+
+export async function getClienteId( id:string|null|undefined ): Promise<user> {
+    const supabase = await createClient();
+    const { data: cliente } = (await supabase.from("cliente").select().eq( "id", id ).single());
     return cliente
 }
 

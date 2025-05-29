@@ -1,3 +1,3 @@
 export enum estadoSolicitud{
-    Pendiente, Aceptada, Rechazada, EsperaPago
+    Pendiente = 'Pendiente', Aceptada = 'Aceptada', Rechazada = 'Rechazada', EsperaPago = 'EsperaPago'
 }

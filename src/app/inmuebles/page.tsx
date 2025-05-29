@@ -6,7 +6,6 @@ export default async function Alquiler() {
     method:'GET'
   })
   const inmuebles = await inmueblesRaw.json()
-  console.log ('estoy aca')
   return (
     <div>
       <h1 className="text-4xl font-bold mt-10 mb-8 text-center">Inmuebles en Alquiler</h1>
