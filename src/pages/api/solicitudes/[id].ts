@@ -1,4 +1,4 @@
-import { getSolicitudReserva, updateStateReserva } from "@/lib/db/solicitudes-reservas"
+import { getSolicitudReserva, updateStateSolicitud } from "@/lib/db/solicitudes-reservas"
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { estadoSolicitud } from "@/types/estado-solicitud"
 import { solicitudAccepted } from "@/lib/solicitudes"
@@ -15,6 +15,6 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
         if (estado === estadoSolicitud.Aceptada){
             await solicitudAccepted(await getSolicitudReserva(id as string))
         }
-        const resp = await updateStateReserva(estado, id as string)
+        const resp = await updateStateSolicitud(estado, id as string)
     }
 }

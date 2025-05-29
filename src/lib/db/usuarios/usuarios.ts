@@ -1,4 +1,4 @@
-import { getCliente } from "./clientes";
+import { getClienteMail } from "./clientes";
 import { getAdministrador } from "./administradores";
 import { getEmpleado } from "./empleados";
 import { typeUser, user } from "@/types/user";
@@ -8,7 +8,7 @@ export async function getUsuarioPorMail( mail:string ): Promise<{user: user| und
     user: undefined,
     userType: undefined
 }
-    cuenta.user = await getCliente(mail)
+    cuenta.user = await getClienteMail(mail)
     cuenta.userType = typeUser.cliente
     if (!cuenta.user){
         cuenta.user = await getEmpleado(mail)

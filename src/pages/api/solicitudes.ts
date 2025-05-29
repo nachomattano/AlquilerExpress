@@ -9,6 +9,7 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
     if (method == 'GET'){
         const resp = await getSolicitudesReserva()
        res.send(JSON.stringify(resp))
+       return ''
     }
     if (method == 'POST'){
         const solicitud :solicitud = {id:null,fechadesde, fechahasta, cantidad, solicitante, acompañantesid, inmuebleid, estado:estadoSolicitud.Pendiente}

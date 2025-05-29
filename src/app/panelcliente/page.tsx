@@ -1,5 +1,5 @@
 'use client'
-
+import Solicitudes from "@/components/mipanel/Solicitudes"
 import InicioUsuario from "@/components/mipanel/usuario/InicioUsuario"
 import { ChartColumnBig, House } from "lucide-react"
 import { useState } from "react"
@@ -11,6 +11,12 @@ const usuarioItems = [
         icon: ChartColumnBig,
         component: InicioUsuario
     },
+    {
+      id: "Solicitudes",
+      title: "Ver Solicitudes",
+      icon: House,
+      component: Solicitudes
+    }
 ]
 
 export default function PanelUsuario() {
