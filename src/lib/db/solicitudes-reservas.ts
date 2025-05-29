@@ -17,7 +17,9 @@ export async function getSolicitudReserva( id:string|null|undefined ): Promise<s
 
 export async function createSolicitud ( solicitud: solicitud ){
     const supabase = await createClient();
-    const query = await supabase.from("solicitudreserva").insert(solicitud)
+    const { id, ...soliSinId } = solicitud
+    const query = await supabase.from("solicitudreserva").insert(soliSinId)
+    console.log(JSON.stringify(query))
     return query
 }
 
