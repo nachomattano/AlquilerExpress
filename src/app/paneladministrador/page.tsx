@@ -3,8 +3,10 @@
 import AgregarEmpleado from "@/components/mipanel/administrador/AgregarEmpleado"
 import InicioAdmin from "@/components/mipanel/administrador/InicioAdmin"
 import AgregarInmueble from "@/components/mipanel/AgregarInmueble"
-import { ChartColumnBig, House, HousePlus, UserPlus } from "lucide-react"
+import { ChartColumnBig, House, HousePlus, User, UserPlus } from "lucide-react"
 import { useState } from "react"
+import VerEmpleados from "../verempleados/page"
+import VerCliente from "../verclientes/page"
 
 const adminItems = [
     {
@@ -24,6 +26,18 @@ const adminItems = [
       title: "Agregar Inmueble",
       icon: HousePlus,
       component: AgregarInmueble
+    },
+    {
+        id: "verEmpleados",
+        title: "Ver Empleados",
+        icon: User,
+        component: VerEmpleados
+    },
+    {
+        id: "verclientes",
+        title: "Ver Clientes",
+        icon: User,
+        component: VerCliente
     }
 ]
 
