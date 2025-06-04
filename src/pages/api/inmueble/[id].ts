@@ -7,6 +7,9 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
     if (method == 'GET'){
         const resp = await getInmueble(id as string)
         console.log(JSON.stringify(resp))
+        if (!resp){
+            res.status(404).send('no se encontro el inmueble sugerido')
+        }
         res.status(200).json(JSON.stringify(resp))
     }else{
         return ''
