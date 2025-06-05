@@ -23,9 +23,9 @@ export async function createSolicitud ( solicitud: solicitud ){
     return query
 }
 
-export async function updateStateReserva ( state: estadoSolicitud, id: string|null|undefined ){
+export async function updateStateSolicitud ( state: estadoSolicitud, id: string|null|undefined ){
     const supabase = await createClient()
-    await supabase.from("inmueble").update({ estado: state }).eq("id", id)
+    await supabase.from("solicitudreserva").update({ estado: state }).eq("id", id)
 }
 
 export async function getSolicitudesReservaFilters(

@@ -6,7 +6,7 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
     const {method, body:{estado}} = req
 
     if (method !== 'POST'){
-        return ''
+        return 
     }
     const resp = await changeState(estado)
     res.send(JSON.stringify(resp))

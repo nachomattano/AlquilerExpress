@@ -1,5 +1,6 @@
 'use client'
 
+import Solicitudes from "@/components/mipanel/Solicitudes"
 import AgregarInmueble from "@/components/mipanel/AgregarInmueble"
 import InicioEmpleado from "@/components/mipanel/empleado/InicioEmpleado"
 import { ChartColumnBig, House, HousePlus } from "lucide-react"
@@ -17,6 +18,12 @@ const empleadoItems = [
       title: "Agregar Inmueble",
       icon: HousePlus,
       component: AgregarInmueble
+    },
+    {
+      id: "Solicitudes",
+      title: "Ver Solicitudes",
+      icon: HousePlus,
+      component: Solicitudes
     }
 ]
 
