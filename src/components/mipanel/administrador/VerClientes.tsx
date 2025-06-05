@@ -11,7 +11,7 @@ export default function VerClientes({ cliente }: { cliente: user }) {
       <label className="text-black text-xl">Estado: {cliente.estado}</label>
       <label className="text-black text-xl">Edad: {cliente.edad}</label>
       <label className="text-black text-xl">Email: {cliente.mail}</label>
-      <label className="text-black text-xl">Id: {cliente.id}</label>
+      <label className="text-black text-xl">Id: {cliente.id}</label> 
     </div>
   )
 }

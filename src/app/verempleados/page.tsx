@@ -19,7 +19,7 @@ export default function VerEmpleados() {
       } finally {
         setLoading(false);
       }
-    };
+    };  
 
     fetchEmpleados();
   }, []);

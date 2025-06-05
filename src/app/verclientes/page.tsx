@@ -21,7 +21,7 @@ export default function VerCliente() {
         setLoading(false);
       }
     };
-
+ 
     fetchClientes();
   }, []);
 

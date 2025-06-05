@@ -11,6 +11,6 @@ export default function VerEmpleado({ empleado }: { empleado: user }) {
       <label className="text-black text-xl">Edad: {empleado.edad}</label>
       <label className="text-black text-xl">Email: {empleado.mail}</label>
       <label className="text-black text-xl">Id: {empleado.id}</label>
-    </div>
+    </div> 
   )
 }
