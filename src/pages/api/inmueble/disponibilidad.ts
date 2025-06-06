@@ -2,10 +2,10 @@ import { getInmueble, getInmuebles } from '@/lib/db/inmuebles'
 import { getReservas, getReservasPorInmueble } from '@/lib/db/reservas'
 import type { NextApiRequest, NextApiResponse } from 'next'
 export default async function handler(req:NextApiRequest,res:NextApiResponse){
-    const {method, query: { id,fechadesde, fechahasta }} = req
+    const {method, query: { id }} = req
 
 
-    if (method == 'POST'){
+    if (method == 'GET'){
         const resp = await getInmuebles()
 
         console.log(JSON.stringify(resp))
