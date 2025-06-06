@@ -86,7 +86,7 @@ export default function Solicitud({solicitud}:{solicitud:solicitud}){
                     <button onClick={handleCancelar}>Cancelar</button>
                 </div>}
                 {(localStorage.getItem('userType') == 'cliente' && solicitud.estado == estadoSolicitud.Aceptada)&&<div>
-                    <button>Pagar</button>
+                    <Link href={`/pago`}><button>Pagar</button></Link>
                 </div>}
                 
             </div>

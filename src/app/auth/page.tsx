@@ -30,7 +30,7 @@ export default function Auth() {
         console.log(code == '1111')
         if (code == '1111'){
             console.log('ENTRE ACA')
-            router.push('/')
+            window.location.replace('/')
         }
 
     }
