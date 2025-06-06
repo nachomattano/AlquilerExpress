@@ -13,5 +13,6 @@ export type inmueble = {
     ciudad: string|null|undefined,
     estado: estadoInmueble|null|undefined,
     tipo:string|null|undefined,
+    imagen?: string|null|undefined,
     descripcion:string|null|undefined
 }

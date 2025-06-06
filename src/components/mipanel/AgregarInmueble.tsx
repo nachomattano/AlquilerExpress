@@ -12,12 +12,13 @@ export default function AgregarInmueble() {
     const [cantidadHuespedes, setCantHuespedes] = useState("")
     const [direccion, setDireccion] = useState("")
     const [tipo, setTipo] = useState("")
+    const [imagen, setImagen] = useState("")
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         const res = await fetch('/api/inmueble', {
             method: 'POST',
-            body: JSON.stringify({cantidadhuespedes:cantidadHuespedes,titulo, espaciocochera:espacioCochera, dpto , direccion, localidad, ciudad, tipo, descripcion}),
+            body: JSON.stringify({cantidadhuespedes:cantidadHuespedes,titulo, espaciocochera:espacioCochera, dpto , direccion, localidad, ciudad, tipo, imagen, descripcion}),
             headers: { 'Content-Type': 'application/json' }
         });
 
@@ -164,6 +165,20 @@ export default function AgregarInmueble() {
                                 placeholder=""
                                 value={tipo}
                                 onChange={(e) => setTipo(e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            />
+                        </div>
+
+                    <div className="space-y-2">
+                            <label htmlFor="imagen" className="text-sm font-medium text-gray-700">
+                                Imagen
+                            </label>
+                            <input
+                                id="imagen"
+                                type="text"
+                                placeholder="https://..."
+                                value={imagen}
+                                onChange={(e) => setImagen(e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             />
                         </div>
