@@ -32,7 +32,12 @@ export async function modificarContraseña ( contraseña:string , id: number ){
     await supabase.from("cliente").update({ contraseña: contraseña }).eq("id", id)
 }
 
-export async function deleteCliente ( id: number ){
+export async function deleteCliente ( id: string ){
     const supabase = await createClient()
     await supabase.from("empleado").update({ estado: estadoUser.inactivo }).eq("id", id)
+}
+
+export async function setClienteActivo ( id: string ){
+    const supabase = await createClient()
+    await supabase.from("empleado").update({ estado: estadoUser.activo }).eq("id", id)
 }

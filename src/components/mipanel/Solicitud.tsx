@@ -20,33 +20,50 @@ export default function Solicitud({solicitud}:{solicitud:solicitud}){
         fetchCliente();
     }, [solicitud]);
     const handleAccept = async() => {
-        await fetch(`/api/solicitudes/${solicitud.id}`, {
+        const res= await fetch(`/api/solicitudes/${solicitud.id}`, {
             method:'POST',
             headers:{
                 'Content-Type':'application/json'
             },
             body: JSON.stringify({estado:estadoSolicitud.Aceptada})
         })
+        if (res.ok) {
+            alert ('Cancelacion de Solicitud Exitosa!')// o a donde quieras ir
+        } else {
+            alert(await res.text());
+        }
+
     }
 
     const handleReject = async() => {
-        await fetch(`/api/solicitudes/${solicitud.id}`, {
+        const res=await fetch(`/api/solicitudes/${solicitud.id}`, {
             method:'POST',
             headers:{
                 'Content-Type':'application/json'
             },
             body: JSON.stringify({estado:estadoSolicitud.Rechazada})
         })
+        if (res.ok) {
+            alert ('Cancelacion de Solicitud Exitosa!')// o a donde quieras ir
+        } else {
+            alert(await res.text());
+        }
+
     }
 
     const handleCancelar = async() => {
-        await fetch(`/api/solicitudes/${solicitud.id}`, {
+        const res= await fetch(`/api/solicitudes/${solicitud.id}`, {
             method:'POST',
             headers:{
                 'Content-Type':'application/json'
             },
             body: JSON.stringify({estado:estadoSolicitud.Rechazada})
         })
+        if (res.ok) {
+            alert ('Cancelacion de Solicitud Exitosa!')// o a donde quieras ir
+        } else {
+            alert(await res.text());
+        }
 
     }
     return (<>

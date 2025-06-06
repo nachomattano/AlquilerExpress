@@ -3,7 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { user } from "@/types/user";
-import VerClientes from "@/components/mipanel/administrador/VerClientes";
+import VerClientes from "@/components/mipanel/VerClientes";
 
 export default function VerCliente() {
   const [clientes, setClientes] = useState<user[]>([]);

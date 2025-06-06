@@ -1,3 +1,3 @@
 export enum estadoUser{
-    inactivo, activo
+    inactivo = 'inactivo', activo = 'activo'
 }
