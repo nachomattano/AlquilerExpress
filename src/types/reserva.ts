@@ -9,5 +9,6 @@ export type reserva ={
         solicitante:string|null|undefined,
         acompañantesid:string[]|null|undefined,
         pagoid:string|null|undefined,
-        estado: estadoReserva |null|undefined
+        estado: estadoReserva |null|undefined,
+        inmuebleid: string|null|undefined
 }

@@ -3,13 +3,19 @@ import { reserva } from '@/types/reserva';
 import { createClient } from './server';
 import { estadoReserva } from '@/types/estado-reservas';
 
-export async function getReservas (){
+export async function getReservas ():Promise<reserva[]|null|undefined>{
     const supabase = await createClient();
     const { data: reserva } = await supabase.from("reserva").select();
-    return JSON.stringify(reserva)
+    return reserva
 }
 
-export async function getReserva( id:number ) {
+export async function getReservasPorInmueble (id:string):Promise<reserva[]|null|undefined>{
+    const supabase = await createClient();
+    const { data: reserva } = (await supabase.from("reserva").select().eq( "inmuebleid", id ).single());
+    return reserva
+}
+
+export async function getReserva( id:string ) {
     const supabase = await createClient();
     const { data: reserva } = (await supabase.from("reserva").select().eq( "id", id ).single());
     return JSON.stringify(reserva)

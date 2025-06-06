@@ -138,7 +138,8 @@ export default function AgregarInmueble() {
                             </label>
                             <input
                             id="titulo"
-                            type="time"
+                            type="number"
+                            min={1}
                             placeholder=""
                             required
                             value={fechaMaxima}
