@@ -10,7 +10,10 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
         return ''
     }
     const creds = await inicarSesion(contraseña,mail)
-    console.log(creds.correct)
+    if (!creds.user){
+        res.status(404).send(`Cliente con mail ${mail} no existe en el sistema`)
+        return
+    }
     if (creds.correct){
         if (creds.userType === typeUser.administrador){
             await sendVerificationEmail(mail, '1111')
@@ -18,5 +21,5 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
         res.status(200).send(JSON.stringify({correct:creds.correct,user:creds.user, userType:creds.userType}))
         return 
     }
-    res.status(402).send('credenciales incorrectas')
+    res.status(402).send(`contraseña incorrecta para cuenta con mail ${mail}`)
 }

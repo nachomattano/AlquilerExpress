@@ -1,9 +1,11 @@
 'use client'
 
+import Solicitudes from "@/components/mipanel/Solicitudes"
 import AgregarInmueble from "@/components/mipanel/AgregarInmueble"
 import InicioEmpleado from "@/components/mipanel/empleado/InicioEmpleado"
-import { ChartColumnBig, House, HousePlus } from "lucide-react"
+import { ChartColumnBig, House, HousePlus, User } from "lucide-react"
 import { useState } from "react"
+import VerCliente from "../verclientes/page"
 
 const empleadoItems = [
     {
@@ -17,6 +19,18 @@ const empleadoItems = [
       title: "Agregar Inmueble",
       icon: HousePlus,
       component: AgregarInmueble
+    },
+    {
+      id: "Solicitudes",
+      title: "Ver Solicitudes",
+      icon: HousePlus,
+      component: Solicitudes
+    },
+    {
+        id: "verclientes",
+        title: "Ver Clientes",
+        icon: User,
+        component: VerCliente
     }
 ]
 

@@ -31,7 +31,7 @@ export default function LogIn({ onSwitchToRegister, onLoginSubmit } : LoginFormP
 
  // o a donde quieras ir
         } else {
-            alert('Credenciales incorrectas');
+            alert(await res.text());
         }
         // Logica de inicio de sesion
         

@@ -49,7 +49,7 @@ export default function Reservar ({id}:{id:string}){
             window.location.replace('/')
             alert ('Solicitud enviada!')// o a donde quieras ir
         } else {
-            alert('no se pudo crear la cuenta');
+            alert(await res.text());
         }
     }
 
