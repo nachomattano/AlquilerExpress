@@ -1,4 +1,4 @@
-import { deleteEmpleado, getEmpleado, setEmpleadoActivo } from '@/lib/db/usuarios/empleados'
+import { deleteEmpleado, getEmpleado, getEmpleadoPorId, setEmpleadoActivo } from '@/lib/db/usuarios/empleados'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { user } from '@/types/user'
 import { changeState } from '@/lib/usuarios'
@@ -9,7 +9,7 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
 
 
     if (method == 'GET'){
-        const resp = await getEmpleado (id as string)
+        const resp = await getEmpleadoPorId (id as string)
         res.send(JSON.stringify({resp}))
     }else{
         if (estadoUser.activo == estado as string){

@@ -2,6 +2,7 @@
 
 import { user } from '@/types/user'
 import { useState } from 'react'
+import Link from 'next/link';
 
 export default function VerEmpleado({ empleado }: { empleado: user }) {
   const [estado, setEstado] = useState('')
@@ -34,6 +35,11 @@ export default function VerEmpleado({ empleado }: { empleado: user }) {
         <option value='activo'>Activo</option>
         <option value="inactivo">Inactivo</option>
       </select>
+      <Link href={`/empleado/${empleado?.id}`}>
+                            <button className="bg-black hover:bg-gray-700 text-white w-48 py-2 rounded-xl">
+                                Ver Empleado
+            </button>
+      </Link>
     </div> 
   )
 }

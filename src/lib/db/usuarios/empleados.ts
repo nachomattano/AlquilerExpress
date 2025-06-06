@@ -14,6 +14,12 @@ export async function getEmpleado( mail:string ): Promise<user> {
     return empleado
 }
 
+export async function getEmpleadoPorId( id:string ): Promise<user> {
+    const supabase = await createClient();
+    const { data: empleado } = (await supabase.from("empleado").select().eq( "id", id ).single());
+    return empleado
+}
+
 export async function createEmpleado ( empleado: user ){
     const supabase = await createClient();
     const { id, ...empSinId } = empleado

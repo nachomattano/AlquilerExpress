@@ -1,6 +1,6 @@
 "use client";
 import { getUsuarioPorMail } from '@/lib/db/usuarios/usuarios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DayPicker, DateRange } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 
@@ -17,7 +17,7 @@ export default function Reservar ({id}:{id:string}){
     const [emailAcom, setEmailAcom] = useState("")
     const [dni, setDni] = useState("")
     const [cantidadacompañantes, setCantidadAcompañantes] = useState("")
-
+    const [disponibilidad, setDisponibilidad] = useState<DateRange[]>([]);
     const [acompanantes, setAcompanantes] = useState<string[]>([]);
 
     const agregarAcompanante = () => {
@@ -26,6 +26,25 @@ export default function Reservar ({id}:{id:string}){
     setEmailAcom("");
     setIsOp(false);
   };
+
+  useEffect(() => {
+    const fetchClientes = async () => {
+      try {
+        const res = await fetch(`http://localhost:3000/api/inmueble/${id}/disponibilidad`);
+        const data = await res.json();
+        const rangosNoDisponibles = data.disponibilidad?.map((rango: { desde: string; hasta: string }) => ({
+        from: new Date(rango.desde),
+        to: new Date(rango.hasta)
+      })) ?? [];
+        setDisponibilidad(rangosNoDisponibles);
+      } catch (error) {
+        console.error("Error al obtener clientes:", error);
+      } finally {
+      }
+    };
+ 
+    fetchClientes();
+  }, []);
 
    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -162,22 +181,26 @@ return <>
 
 
                                     <div className="mt-6">
-                                    <h3 className="text-md font-medium text-gray-700 mb-2">Seleccionar fechas de reserva</h3>
+                                        <h3 className="text-md font-medium text-gray-700 mb-2">Seleccionar fechas de reserva</h3>
                                         <DayPicker
                                             mode="range"
                                             selected={rangoFechas}
                                             onSelect={setRangoFechas}
+                                            disabled={[
+                                                { before: new Date() }, 
+                                                ...disponibilidad 
+                                            ]}
                                             className="rounded-md shadow"
                                         />
 
-                                    {rangoFechas?.from && rangoFechas?.to && (
-                                    <p className="mt-2 text-green-700 font-medium">
+                                        {rangoFechas?.from && rangoFechas?.to && (
+                                        <p className="mt-2 text-green-700 font-medium">
                                         Fechas seleccionadas:{" "}
-                                    <span className="font-semibold">
-                                    {rangoFechas.from.toLocaleDateString()} – {rangoFechas.to.toLocaleDateString()}
-                                    </span>
-                                    </p>
-                                    )}
+                                        <span className="font-semibold">
+                                        {rangoFechas.from.toLocaleDateString()} – {rangoFechas.to.toLocaleDateString()}
+                                        </span>
+                                        </p>
+                                        )}
                                     </div>
                                     
                                     <button
