@@ -11,6 +11,11 @@ type CuadradoAlquilerProps = {
 export default function CuadradoInmueble({inmueble}:{inmueble:inmueble}) {
     return <>
                 <div className="shadow-md rounded-lg h-110 w-90 text-lg ">
+                  <img
+                    src={inmueble.imagen ?? ""}
+                    alt="Imagen del inmueble"
+                    className="w-full h-60 rounded-t-lg"
+                  />
                   <div className="grid mt-6">
                     <label className="px-6">Nombre:{inmueble.titulo} </label>
                     <label className="px-6">Ciudad:{inmueble.ciudad}</label>

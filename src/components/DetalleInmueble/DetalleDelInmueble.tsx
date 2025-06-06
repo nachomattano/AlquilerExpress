@@ -16,6 +16,11 @@ export default function DetalleDelInmueble({inmueble}:{inmueble:string}){
 
                 <div className="flex justify-center items-center min-h-screen bg-gray-50">
                     <div className="bg-white rounded-xl shadow-md p-8 space-y-4 w-full ">
+                        <img
+                            src={inmuebles.imagen ?? ""}
+                            alt="Imagen del inmueble"
+                            className="w-100 h-100 rounded-t-lg"
+                        />
                         <div className="space-y-4">
                             <label className="block shadow-md bg-orange-100 px-4 py-2 rounded-md text-base">Título: {inmuebles?.titulo}</label>
                             <label className="block shadow-md bg-orange-100 px-4 py-2 rounded-md text-base">Ciudad: {inmuebles?.ciudad}</label>
