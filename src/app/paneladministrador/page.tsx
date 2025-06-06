@@ -40,7 +40,7 @@ const adminItems = [
         icon: User,
         component: VerCliente
     },
-
+    {
       id: "Solicitudes",
       title: "Ver Solicitudes",
       icon: HousePlus,

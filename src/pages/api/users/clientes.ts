@@ -14,7 +14,7 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
     }
     if (method == 'POST'){
         const checkMail = await getUsuarioPorMail(mail)
-        if (!checkMail){
+        if (!checkMail.user){
             const user :user = {id:undefined,nombre,contraseña,dni,edad,mail,estado:estadoUser.activo}
             const resp = await createCliente(user)
             res.status(200).send(JSON.stringify(resp))

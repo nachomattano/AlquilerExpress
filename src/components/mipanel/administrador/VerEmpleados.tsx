@@ -1,8 +1,23 @@
 'use client'
 
 import { user } from '@/types/user'
+import { useState } from 'react'
 
 export default function VerEmpleado({ empleado }: { empleado: user }) {
+  const [estado, setEstado] = useState('')
+
+  const handleChangeState = async (e:any) => {
+    console.log(e)
+    await fetch (`http://localhost:3000/api/users/empleados/${empleado.id}`, {
+      method: 'POST',
+      headers:{
+        'Content-Type':'application/json'
+      },
+      body: JSON.stringify({ id: empleado.id, estado: e })
+    })
+  }
+
+
   return (
     <div className="shadow-md rounded-lg h-20 flex items-center justify-between m-8 px-8">
       <label className="text-black text-xl">Nombre: {empleado.nombre}</label>
@@ -11,6 +26,14 @@ export default function VerEmpleado({ empleado }: { empleado: user }) {
       <label className="text-black text-xl">Edad: {empleado.edad}</label>
       <label className="text-black text-xl">Email: {empleado.mail}</label>
       <label className="text-black text-xl">Id: {empleado.id}</label>
+
+      <select 
+        className='select select-sm w-1/3 max-w-xs focus:outline-none mx-2' 
+        onChange={(e) => handleChangeState(e.target.value)}
+      >
+        <option value='activo'>Activo</option>
+        <option value="inactivo">Inactivo</option>
+      </select>
     </div> 
   )
 }

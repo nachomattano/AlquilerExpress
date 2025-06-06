@@ -17,7 +17,10 @@ export default function TwoFactor({ onVerify, onBack, userEmail }: TwoFactorProp
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         console.log(code.length)
-        if (code.length !== 4) return
+        if (code.length !== 4) {
+            alert ('codigo incorrecto')    
+            return
+        }
         if (code == '1111'){
             console.log('ENTRE ACA')
             router.push("/")

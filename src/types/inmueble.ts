@@ -14,5 +14,9 @@ export type inmueble = {
     estado: estadoInmueble|null|undefined,
     tipo:string|null|undefined,
     descripcion:string|null|undefined,
-    semanaanterior:string|null|undefined, diasanteriores:string|null|undefined, mismodia:string|null|undefined, fechamaxima:string|null|undefined
+    semanaanterior:string|null|undefined, 
+    diasanteriores:string|null|undefined, 
+    mismodia:string|null|undefined, 
+    fechamaxima:string|null|undefined,
+    
 }

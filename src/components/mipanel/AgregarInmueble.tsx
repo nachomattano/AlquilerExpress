@@ -28,7 +28,7 @@ export default function AgregarInmueble() {
         if (res.ok) {
             alert ('Empleado Creado con Exito!')// o a donde quieras ir
         } else {
-            alert('no se pudo crear la cuenta');
+            alert(await res.text());
         }
     }
     
