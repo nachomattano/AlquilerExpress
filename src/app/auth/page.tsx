@@ -27,11 +27,7 @@ export default function Auth() {
 
     const handle2FAVerify = (code: string) => {
         // Logica de verificacion de codigo e inicio de sesion de admin}
-        console.log(code == '1111')
-        if (code == '1111'){
-            console.log('ENTRE ACA')
-            window.location.replace('/')
-        }
+        window.location.replace('/')
 
     }
 

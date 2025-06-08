@@ -8,6 +8,13 @@ export async function getClientes (): Promise<user[]|null>{
     return cliente
 }
 
+
+export async function getClienteDNI( DNI:string|null|undefined ): Promise<user> {
+    const supabase = await createClient();
+    const { data: cliente } = (await supabase.from("cliente").select().eq( "dni", DNI ).single());
+    return cliente
+}
+
 export async function getClienteMail( mail:string|null|undefined ): Promise<user> {
     const supabase = await createClient();
     const { data: cliente } = (await supabase.from("cliente").select().eq( "mail", mail ).single());

@@ -8,7 +8,14 @@ export async function getEmpleados ():Promise<user[]|null>{
     return empleado
 }
 
-export async function getEmpleado( mail:string ): Promise<user> {
+
+export async function getEmpleadoDNI( DNI:string ): Promise<user> {
+    const supabase = await createClient();
+    const { data: empleado } = (await supabase.from("empleado").select().eq( "dni", DNI ).single());
+    return empleado
+}
+
+export async function getEmpleadoMail( mail:string ): Promise<user> {
     const supabase = await createClient();
     const { data: empleado } = (await supabase.from("empleado").select().eq( "mail", mail ).single());
     return empleado

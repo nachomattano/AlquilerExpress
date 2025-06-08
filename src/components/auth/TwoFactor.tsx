@@ -15,15 +15,22 @@ export default function TwoFactor({ onVerify, onBack, userEmail }: TwoFactorProp
     const router = useRouter()
  
     const handleSubmit = async (e: React.FormEvent) => {
+        const storedUser = localStorage.getItem("user")
+        const admin = JSON.parse(storedUser? storedUser: "")
         e.preventDefault()
+        const res = await fetch('/api/users/fa', {
+            method: 'POST',
+            body: JSON.stringify({ code: code, id:admin?.id}),
+            headers: { 'Content-Type': 'application/json' }
+        });
+
         console.log(code.length)
-        if (code.length !== 4) {
-            alert ('codigo incorrecto')    
+        if (res.ok) {
+            window.location.replace('/')    
             return
-        }
-        if (code == '1111'){
-            console.log('ENTRE ACA')
-            router.push("/")
+        }else {
+            alert(await res.text());
+            return
         }
 
     }
