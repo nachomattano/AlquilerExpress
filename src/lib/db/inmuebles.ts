@@ -1,9 +1,8 @@
-
 import { createClient } from './server';
 import { estadoInmueble } from '../../types/estado-inmueble';
 import { inmueble } from '@/types/inmueble';
 
-export async function getInmuebles (): Promise<inmueble[]|null|undefined>{
+export async function getInmuebles(): Promise<inmueble[]|null|undefined>{
     const supabase = await createClient();
     const { data: inmueble } = await supabase.from("inmueble").select();
     return inmueble

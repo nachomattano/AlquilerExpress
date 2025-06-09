@@ -1,21 +1,20 @@
 'use client'
 
 import { useState } from "react"
-import { useRouter } from "next/router"
 interface SignUpFormProps {
     onSwitchToLogin?: () => void
+    onBack?: () => void
 }
 
-export default function SignUp({ onSwitchToLogin }: SignUpFormProps = {}) {
-  const [fullName, setFullName] = useState("")
-  const [email, setEmail] = useState("")
-  const [dni, setDni] = useState("")
-  const [age, setAge] = useState("")
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
-  const [ isLoading, setIsLoading ] = useState<boolean>(false)
-  const router = useRouter()
-   const handleSubmit = async (e: React.FormEvent) => {
+export default function SignUp({ onSwitchToLogin, onBack }: SignUpFormProps = {}) {
+    const [fullName, setFullName] = useState("")
+    const [email, setEmail] = useState("")
+    const [dni, setDni] = useState("")
+    const [age, setAge] = useState("")
+    const [password, setPassword] = useState("")
+    const [ isLoading, setIsLoading ] = useState<boolean>(false)
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setIsLoading(true)
 
@@ -26,17 +25,13 @@ export default function SignUp({ onSwitchToLogin }: SignUpFormProps = {}) {
         });
 
         if (res.ok) {
-            
-            router.push('/auth'); // o a donde quieras ir
+            alert('Usuario creado con exito')
+            onBack?.()
         } else {
             alert(await res.text());
         }
-        // Logica de inicio de sesion
         setIsLoading(false)
-
-   }
-
-
+    }
 
     return (
         <div className="mx-auto max-w-sm bg-white rounded-lg border border-gray-200 shadow-sm">
@@ -118,25 +113,11 @@ export default function SignUp({ onSwitchToLogin }: SignUpFormProps = {}) {
                         <input
                         id="password"
                         type="password"
-                        placeholder="Mínimo 8 caracteres"
+                        placeholder="Mínimo 4 caracteres"
                         required
+                        minLength={4}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        />
-                    </div>
-
-                    <div className="space-y-2">
-                        <label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700">
-                            Confirmar Contraseña
-                        </label>
-                        <input
-                        id="confirmPassword"
-                        type="password"
-                        placeholder="Repite tu contraseña"
-                        required
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         />
                     </div>

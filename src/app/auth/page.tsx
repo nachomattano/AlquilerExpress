@@ -11,7 +11,6 @@ import Recuperar from "@/components/auth/Recuperar"
 export default function Auth() {
     const [ currentView, setCurrentView ] = useState<"login" | "register" | "2fa" | "recuperar">("login")
     const [ userEmail, setUserEmail ] = useState<string>("")
-    const router = useRouter()
 
     const handleLoginSubmit = async (email:string, password: string) => {
         const userType = localStorage.getItem('userType') as typeUser | null
@@ -45,7 +44,7 @@ export default function Auth() {
                     <LogIn onSwitchToRegister={() => setCurrentView("register")} onSwitchToRecuperar={() => setCurrentView("recuperar")} onLoginSubmit={handleLoginSubmit} />
                 )}
                 {currentView == "register" && (
-                    <SignUp onSwitchToLogin={() => setCurrentView("login")}/>
+                    <SignUp onSwitchToLogin={() => setCurrentView("login")} onBack={handleBackToLogin}/>
                 )}
                 {currentView == "2fa" && (
                     <TwoFactor onVerify={handle2FAVerify} onBack={handleBackToLogin} userEmail={userEmail} />

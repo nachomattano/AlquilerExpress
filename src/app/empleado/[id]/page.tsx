@@ -1,4 +1,4 @@
-import DetalleEmpleado from "@/components/verEmpleado";
+import DetalleEmpleado from "@/components/mipanel/VerEmpleado";
 
 interface PageProps {
   params: { id: string };

@@ -8,10 +8,11 @@ export default function AgregarEmpleado() {
     const [dni, setDni] = useState("")
     const [age, setAge] = useState("")
     const [password, setPassword] = useState("")
-    const [confirmPassword, setConfirmPassword] = useState("")
+    const [ isLoading, setIsLoading ] = useState<boolean>(false)
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        setIsLoading(true)
         const res = await fetch('/api/users/empleados', {
             method: 'POST',
             body: JSON.stringify({ mail:email, contraseña:password, dni, edad:age, nombre:fullName }),
@@ -19,10 +20,11 @@ export default function AgregarEmpleado() {
         });
 
         if (res.ok) {
-            alert ('Empleado Creado con Exito!')// o a donde quieras ir
+            alert('Empleado Creado con Exito!')
         } else {
             alert(await res.text());
         }
+        setIsLoading(false)
     }
     
     return (
@@ -104,31 +106,17 @@ export default function AgregarEmpleado() {
                         <input
                         id="password"
                         type="password"
-                        placeholder="Mínimo 8 caracteres"
+                        placeholder="Mínimo 4 caracteres"
                         required
+                        minLength={4}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         />
                     </div>
-
-                    <div className="space-y-2">
-                        <label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700">
-                            Confirmar Contraseña
-                        </label>
-                        <input
-                        id="confirmPassword"
-                        type="password"
-                        placeholder="Repite tu contraseña"
-                        required
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        />
-                    </div>
-
                     <button
                         type="submit"
+                        disabled={isLoading}
                         className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                     >
                         Crear Cuenta de Empleado

@@ -1,7 +1,4 @@
-
 import { createClient } from './server';
-
-
 
 export async function getDisponibilidad( id:number ) {
     const supabase = await createClient();

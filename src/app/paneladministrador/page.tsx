@@ -3,7 +3,7 @@
 import Solicitudes from "@/components/mipanel/Solicitudes"
 import AgregarEmpleado from "@/components/mipanel/administrador/AgregarEmpleado"
 import InicioAdmin from "@/components/mipanel/administrador/InicioAdmin"
-import AgregarInmueble from "@/components/mipanel/AgregarInmueble"
+import AgregarInmueble from "@/components/mipanel/administrador/AgregarInmueble"
 import { ChartColumnBig, House, HousePlus, User, UserPlus } from "lucide-react"
 import { useState } from "react"
 import VerEmpleados from "../verempleados/page"

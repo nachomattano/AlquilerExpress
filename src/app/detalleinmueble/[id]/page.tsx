@@ -13,9 +13,8 @@ export default async function detalleinmueble ({ params }: PageProps){
     const inmueble = await inmueblesRaw.json()
     return (
         <div>
-            
             <DetalleDelInmueble 
-            inmueble={inmueble}     
+                inmueble={inmueble}     
             />
         </div>
 

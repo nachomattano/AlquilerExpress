@@ -29,14 +29,10 @@ export default function LogIn({ onSwitchToRegister, onLoginSubmit, onSwitchToRec
             const data = await res.json();
             localStorage.setItem('user', JSON.stringify(data.user));
             localStorage.setItem('userType', data.userType);
-
- // o a donde quieras ir
+            onLoginSubmit?.(email, password)
         } else {
             alert(await res.text());
         }
-        // Logica de inicio de sesion
-        
-        onLoginSubmit?.(email, password)
         setIsLoading(false)
     }
 
@@ -89,7 +85,6 @@ export default function LogIn({ onSwitchToRegister, onLoginSubmit, onSwitchToRec
                         </a>
                     </div>
                     <div className="mt-4 text-center text-sm text-gray-600">
-                
                         <a onClick={onSwitchToRecuperar} className="text-blue-600 hover:text-blue-500 hover:cursor-pointer underline">
                             Olvide mi contraseña
                         </a>

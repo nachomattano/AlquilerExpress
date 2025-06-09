@@ -7,7 +7,6 @@ interface PageProps {
 export default async function solicitudDeReserva ({ params }: PageProps){
   const {id} =  await params
 
-
   return (<>
       <Reservar id={id}/>
   </>)
