@@ -6,9 +6,10 @@ import TwoFactor from "@/components/auth/TwoFactor"
 import { typeUser } from "@/types/user"
 import { useRouter } from 'next/navigation'
 import { useState } from "react"
+import Recuperar from "@/components/auth/Recuperar"
 
 export default function Auth() {
-    const [ currentView, setCurrentView ] = useState<"login" | "register" | "2fa">("login")
+    const [ currentView, setCurrentView ] = useState<"login" | "register" | "2fa" | "recuperar">("login")
     const [ userEmail, setUserEmail ] = useState<string>("")
     const router = useRouter()
 
@@ -36,17 +37,21 @@ export default function Auth() {
         setUserEmail("")
     }
 
+
     return (
         <div className="flex items-center justify-center p-4">
             <div className="w-full max-w-md">
                 {currentView == "login" && (
-                    <LogIn onSwitchToRegister={() => setCurrentView("register")} onLoginSubmit={handleLoginSubmit} />
+                    <LogIn onSwitchToRegister={() => setCurrentView("register")} onSwitchToRecuperar={() => setCurrentView("recuperar")} onLoginSubmit={handleLoginSubmit} />
                 )}
                 {currentView == "register" && (
                     <SignUp onSwitchToLogin={() => setCurrentView("login")}/>
                 )}
                 {currentView == "2fa" && (
                     <TwoFactor onVerify={handle2FAVerify} onBack={handleBackToLogin} userEmail={userEmail} />
+                )}
+                {currentView == "recuperar" && (
+                    <Recuperar />
                 )}
             </div>
         </div>

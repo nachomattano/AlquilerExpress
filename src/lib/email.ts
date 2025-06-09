@@ -15,3 +15,19 @@ export async function sendVerificationEmail(to: string, code: string) {
     throw new Error('No se pudo enviar el correo')
   }
 }
+
+const resendForRecuperar = new Resend('re_Rz2GzGLj_AbxUS1eFsgqfhpv1bqVUFiwg')
+
+export async function sendRecuperarEmail(to: string, message: string) {
+  const { error } = await resendForRecuperar.emails.send({
+    from: 'onboarding@resend.dev', // o un dominio verificado por Resend
+    to,
+    subject: 'Recuperar Contraseña',
+    html: `<p>${message}></p>`
+  })
+
+  if (error) {
+    console.error("Error al enviar correo:", error)
+    throw new Error('No se pudo enviar el correo')
+  }
+}

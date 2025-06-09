@@ -34,7 +34,7 @@ export async function createCliente ( cliente: user ){
     console.log(JSON.stringify(resp))
 }
 
-export async function modificarContraseña ( contraseña:string , id: number ){
+export async function modificarContraseñaCliente ( contraseña:string | null |undefined , id: string | null |undefined ){
     const supabase = await createClient()
     await supabase.from("cliente").update({ contraseña: contraseña }).eq("id", id)
 }

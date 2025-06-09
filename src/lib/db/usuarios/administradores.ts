@@ -28,7 +28,7 @@ export async function createAdministrador ( administrador: user ){
     
 }
 
-export async function modificarContraseña ( contraseña:string, id: number ){
+export async function modificarContraseñaAdministrador ( contraseña:string, id: string|null|undefined ){
     const supabase = await createClient()
     await supabase.from("administrador").update({ contraseña: contraseña }).eq("id", id)
 }

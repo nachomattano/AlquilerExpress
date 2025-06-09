@@ -15,7 +15,7 @@ export async function getEmpleadoDNI( DNI:string ): Promise<user> {
     return empleado
 }
 
-export async function getEmpleadoMail( mail:string ): Promise<user> {
+export async function getEmpleadoMail( mail:string|null|undefined ): Promise<user> {
     const supabase = await createClient();
     const { data: empleado } = (await supabase.from("empleado").select().eq( "mail", mail ).single());
     return empleado
@@ -33,7 +33,7 @@ export async function createEmpleado ( empleado: user ){
     await supabase.from("empleado").insert(empSinId)
 }
 
-export async function modificarContraseña ( contraseña: string, id: number ){
+export async function modificarContraseñaEmpleado ( contraseña: string, id: string|null|undefined ){
     const supabase = await createClient()
     await supabase.from("empleado").update({ contraseña: contraseña }).eq("id", id)
 }

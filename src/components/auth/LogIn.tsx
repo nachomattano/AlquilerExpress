@@ -7,9 +7,10 @@ import { typeUser } from "@/types/user"
 interface LoginFormProps {
   onSwitchToRegister?: () => void
   onLoginSubmit?: (email: string, password: string) => void
+  onSwitchToRecuperar?: () => void
 }
 
-export default function LogIn({ onSwitchToRegister, onLoginSubmit } : LoginFormProps = {}) {
+export default function LogIn({ onSwitchToRegister, onLoginSubmit, onSwitchToRecuperar } : LoginFormProps = {}) {
     const [ email, setEmail ] = useState<string>("")
     const [ password, setPassword ] = useState<string>("")
     const [ isLoading, setIsLoading ] = useState<boolean>(false)
@@ -85,6 +86,12 @@ export default function LogIn({ onSwitchToRegister, onLoginSubmit } : LoginFormP
                         ¿No estás registrado?{" "}
                         <a onClick={onSwitchToRegister} className="text-blue-600 hover:text-blue-500 hover:cursor-pointer underline">
                             Registrate
+                        </a>
+                    </div>
+                    <div className="mt-4 text-center text-sm text-gray-600">
+                
+                        <a onClick={onSwitchToRecuperar} className="text-blue-600 hover:text-blue-500 hover:cursor-pointer underline">
+                            Olvide mi contraseña
                         </a>
                     </div>
                 </form>
