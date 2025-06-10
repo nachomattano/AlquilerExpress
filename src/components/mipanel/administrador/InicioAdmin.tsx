@@ -1,11 +1,24 @@
+'use Client'
+
+import { user } from "@/types/user";
+import { useEffect, useState } from "react";
+
+
+
 export default function InicioAdmin() {
+    const [user, setUser] = useState<user>();
+
+  useEffect(() => {
     const userString = localStorage.getItem('user');
-    const user = userString ? JSON.parse(userString) : null;
+    const parsedUser = userString ? JSON.parse(userString) : null;
+    setUser(parsedUser);
+  }, []);
+
     
     return (
         <div>
             <h1 className="text-xl mb-4">
-                ¡Bienvenido {user.nombre}!
+                ¡Bienvenido {user?.nombre}!
             </h1>
             <div className="grid grid-cols-4 gap-6">
                 <div className="bg-white rounded-md shadow-md p-6 border border-gray-200">

@@ -7,7 +7,7 @@ import { estadoInmueble } from '@/types/estado-inmueble'
 
 export default async function handler(req:NextApiRequest,res:NextApiResponse){
 
-    const {method, query:{ id }, body: { cantidadhuespedes,titulo, espaciocochera, dpto , direccion, estado, localidad, ciudad, tipo, descripcion, semanaanterior, diasanteriores, mismodia, fechamaxima, imagen}} = req
+    const {method, query:{ id }, body: { cantidadhuespedes,titulo, espaciocochera, dpto , direccion, estado, localidad, ciudad, tipo, descripcion, semanaanterior, diasanteriores, mismodia, duracionminima, preciopordia, imagen}} = req
 
     
     if (method == 'GET'){
@@ -18,7 +18,7 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
     }
   
     if (method == 'POST'){
-        const inmueble : inmueble = { id:null, titulo, espaciocochera, cantidadhuespedes, estado:estadoInmueble.disponible, dpto,direccion,localidad, ciudad, tipo, descripcion, semanaanterior, diasanteriores, mismodia, fechamaxima, imagen }
+        const inmueble : inmueble = { id:null, titulo, espaciocochera, cantidadhuespedes, estado:estadoInmueble.disponible, dpto,direccion,localidad, ciudad, tipo, descripcion, semanaanterior, diasanteriores, mismodia, periodominimo:3, preciopordia, duracionminima, imagen }
 
         await createInmueble(inmueble)
         res.send('OK')

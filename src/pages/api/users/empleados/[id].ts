@@ -1,4 +1,4 @@
-import { deleteEmpleado, getEmpleado, getEmpleadoPorId, setEmpleadoActivo } from '@/lib/db/usuarios/empleados'
+import { deleteEmpleado, getEmpleadoPorId, setEmpleadoActivo } from '@/lib/db/usuarios/empleados'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { user } from '@/types/user'
 import { changeState } from '@/lib/usuarios'

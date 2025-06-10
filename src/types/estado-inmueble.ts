@@ -1,4 +1,4 @@
 
 export enum estadoInmueble{
-    reservado, alquilado, noDisponible, enMantenimiento,disponible
+    reservado = "reservado", alquilado = "alquilado", noDisponible = "noDisponible", enMantenimiento = "enMantenimiento",disponible="disponible"
 }

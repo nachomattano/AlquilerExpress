@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
-export default function AgregarInmueble() {
+export default function AgregarInmueble({id}:{id?: string | undefined}) {
     const [titulo, setTitulo] = useState("")
     const [ciudad, setCiudad] = useState("")
     const [localidad, setLocalidad] = useState("")
@@ -20,13 +20,42 @@ export default function AgregarInmueble() {
     const [mismoDia, setMismoDia] = useState("")
     const [periodominimo, setFechaMaxima] = useState("")
     const [preciopordia, setPrecio] = useState("")
+    const isEditing = Boolean(id)
+useEffect(() => {
+    if (!isEditing) return;
+    console.log(id)
+    const fetchInmueble = async () => {
+        const res = await fetch(`/api/inmueble/${id}`);
+        const data = await res.json();
+        
+        setTitulo(data.titulo);
+        setCiudad(data.ciudad);
+        setLocalidad(data.localidad);
+        setDescripcion(data.descripcion);
+        setDpto(data.dpto);
+        setEspacioCochera(data.espaciocochera);
+        setCantHuespedes(data.cantidadhuespedes);
+        setDireccion(data.direccion);
+        setTipo(data.tipo);
+        setImagen(data.imagen);
+        setSemanaAnterior(data.semanaanterior);
+        setdiasAnteriores(data.diasanteriores);
+        setMismoDia(data.mismodia);
+        setFechaMaxima(data.duracionminima);
+        setPrecio(data.preciopordia);
+        console.log("TITULOOOOO", data.titulo)
+    };
 
+    fetchInmueble();
+}, [id]);
+ 
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        if(!isEditing){
         const res = await fetch('/api/inmueble', {
             method: 'POST',
-            body: JSON.stringify({cantidadhuespedes:cantidadHuespedes,titulo, espaciocochera:espacioCochera, dpto , direccion, localidad, ciudad, tipo, descripcion, semanaanterior:semanaAnterior, diasanteriores:diasAnteriores, mismodia:mismoDia, periodominimo: periodominimo, preciopordia, imagen}),
+            body: JSON.stringify({cantidadhuespedes:cantidadHuespedes,titulo, espaciocochera:espacioCochera, dpto , direccion, localidad, ciudad, tipo, descripcion, semanaanterior:semanaAnterior, diasanteriores:diasAnteriores, mismodia:mismoDia, duracionminima: periodominimo, preciopordia, imagen}),
             headers: { 'Content-Type': 'application/json' }
         });
 
@@ -34,6 +63,9 @@ export default function AgregarInmueble() {
             alert ('Empleado Creado con Exito!')// o a donde quieras ir
         } else {
             alert(await res.text());
+        }
+        }else{
+
         }
     }
     
@@ -54,7 +86,8 @@ export default function AgregarInmueble() {
                         type="text"
                         placeholder=""
                         required
-                        value={titulo}
+                        value={titulo ?? ''}
+                        
                         onChange={(e) => setTitulo(e.target.value)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         />
@@ -69,7 +102,7 @@ export default function AgregarInmueble() {
                         type="text"
                         placeholder=""
                         required
-                        value={ciudad}
+                        value={ciudad ?? ''}
                         onChange={(e) => setCiudad(e.target.value)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         />
@@ -85,11 +118,27 @@ export default function AgregarInmueble() {
                                 type="text"
                                 placeholder=""
                                 required
-                                value={localidad}
+                                value={localidad ?? ''}
                                 onChange={(e) => setLocalidad(e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             />
                         </div>
+
+                        <div className="space-y-2">
+                            <label htmlFor="preciopordia" className="text-sm font-medium text-gray-700">
+                            Precio Por Dia
+                            </label>
+                            <input
+                            id="preciopordia"
+                            type="number"
+                            min={1}
+                            placeholder=""
+                            required
+                            value={preciopordia ?? ''}
+                            onChange={(e) => setPrecio(e.target.value)}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            />
+                        </div>  
 
                         <div className="space-y-2">
                             <label htmlFor="semanaAnterior" className="text-sm font-medium text-gray-700">
@@ -101,7 +150,7 @@ export default function AgregarInmueble() {
                             max="100"
                             placeholder=""
                             required
-                            value={semanaAnterior}
+                            value={semanaAnterior ?? ''}
                             onChange={(e) => setSemanaAnterior(e.target.value)}
                             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             />
@@ -116,7 +165,7 @@ export default function AgregarInmueble() {
                             type="number"
                             max="100"
                             required
-                            value={diasAnteriores}
+                            value={diasAnteriores ?? ''}
                             onChange={(e) => setdiasAnteriores(e.target.value)}
                             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             />
@@ -131,7 +180,7 @@ export default function AgregarInmueble() {
                             type="number"
                             max="100"
                             required
-                            value={mismoDia}
+                            value={mismoDia ?? ''}
                             onChange={(e) => setMismoDia(e.target.value)}
                             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             />
@@ -139,15 +188,15 @@ export default function AgregarInmueble() {
 
                         <div className="space-y-2">
                             <label htmlFor="" className="text-sm font-medium text-gray-700">
-                            Periodo Maximo a Solicitar una Reserva Inmueble (ejemplo "1 mes")
+                            Duracion minima de una Reserva (en dias)
                             </label>
                             <input
                             id="titulo"
                             type="number"
-                            min={periodominimo}
+                            min={2}
                             placeholder=""
                             required
-                            value={periodominimo}
+                            value={periodominimo ?? ''}
                             onChange={(e) => setFechaMaxima(e.target.value)}
                             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             />
@@ -162,7 +211,7 @@ export default function AgregarInmueble() {
                                 type="text"
                                 placeholder=""
                                 required
-                                value={descripcion}
+                                value={descripcion ?? ''}
                                 onChange={(e) => setDescripcion(e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             />
@@ -176,7 +225,7 @@ export default function AgregarInmueble() {
                                 id="dpto"
                                 type="text"
                                 placeholder=""
-                                value={dpto}
+                                value={dpto ?? ''}
                                 onChange={(e) => setDpto(e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             />
@@ -190,7 +239,7 @@ export default function AgregarInmueble() {
                                 id="cantidadHuespedes"
                                 type="number"
                                 placeholder=""
-                                value={cantidadHuespedes}
+                                value={cantidadHuespedes ?? ''}
                                 onChange={(e) => setCantHuespedes(e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             />
@@ -205,7 +254,7 @@ export default function AgregarInmueble() {
                                 id="espacioCochera"
                                 type="number"
                                 placeholder=""
-                                value={espacioCochera}
+                                value={espacioCochera ?? ''}
                                 onChange={(e) => setEspacioCochera(e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             />
@@ -219,7 +268,7 @@ export default function AgregarInmueble() {
                                 id="direccion"
                                 type="text"
                                 placeholder=""
-                                value={direccion}
+                                value={direccion ?? ''}
                                 onChange={(e) => setDireccion(e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             />
@@ -233,7 +282,7 @@ export default function AgregarInmueble() {
                                 id="tipo"
                                 type="text"
                                 placeholder=""
-                                value={tipo}
+                                value={tipo ?? ''}
                                 onChange={(e) => setTipo(e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             />
@@ -247,7 +296,7 @@ export default function AgregarInmueble() {
                                 id="imagen"
                                 type="text"
                                 placeholder="https://..."
-                                value={imagen}
+                                value={imagen ?? ''}
                                 onChange={(e) => setImagen(e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             />
@@ -257,7 +306,7 @@ export default function AgregarInmueble() {
                         type="submit"
                         className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                     >
-                        Crear Inmueble
+                    {isEditing && "Modificar Inmueble"}    {!isEditing && "Crear Inmueble"}
                     </button>
                 </form>
             </div>
