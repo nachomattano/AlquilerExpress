@@ -4,6 +4,7 @@ import { useState } from "react"
 import Router from "next/router"
 import { typeUser } from "@/types/user"
 import { sendRecuperarEmail, sendVerificationEmail } from "@/lib/email"
+import { getUsuarioPorMail } from "@/lib/db/usuarios/usuarios"
 
 
 
@@ -14,7 +15,8 @@ export default function Recuperar() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setIsLoading(true)
-         const res = await fetch('/api/users/sendrecuperar', {
+        const user = await getUsuarioPorMail(email)
+         const res = await fetch(`/api/users/sendrecuperar/${email}`, {
             method: 'POST',
             body: JSON.stringify({ mail:email}),
             headers: { 'Content-Type': 'application/json' }

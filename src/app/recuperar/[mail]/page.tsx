@@ -7,18 +7,25 @@ import { typeUser } from "@/types/user"
 import { useRouter } from 'next/navigation'
 import { useState } from "react"
 
-export default function Recuperar() {
+interface PageProps {
+  params: { mail: string };
+}
+
+export default function Recuperar({ params }: PageProps) {
+    
     const [ currentView, setCurrentView ] = useState<"login" | "register" | "2fa">("login")
     const [ newPassword, setNewPassword ] = useState<string>("")
     const [ confirm, setConfirm ] = useState<string>("")
-    const [ mail, setMail ] = useState<string>("")
+    
     const router = useRouter()
 
     const handleNewPassword = async () => {
+        const {mail} = await params
+        const email = decodeURIComponent(mail)
         if (newPassword == confirm){
             const res = await fetch('/api/users/recuperar', {
             method: 'POST',
-            body: JSON.stringify({ password:newPassword, mail}),
+            body: JSON.stringify({ password:newPassword,mail:email}),
             headers: { 'Content-Type': 'application/json' }
             });
             if (res.ok){
@@ -33,20 +40,6 @@ export default function Recuperar() {
     return (
         <div className="flex items-center justify-center p-4">
             <div className="w-full max-w-md">
-                <div className="space-y-2">
-                        <label htmlFor="mail" className="text-sm font-medium text-gray-700">
-                            Correo Electrónico
-                        </label>
-                        <input
-                            id="mail"
-                            type="email"
-                            placeholder="correo@ejemplo.com"
-                            required
-                            value={mail}
-                            onChange={(e) => setMail(e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2"
-                        />
-                    </div>
                 <div className="space-y-2">
                         <label htmlFor="password" className="text-sm font-medium text-gray-700">
                             Nueva Contraseña

@@ -20,6 +20,8 @@ export type inmueble = {
     semanaanterior:string|null|undefined, 
     diasanteriores:string|null|undefined, 
     mismodia:string|null|undefined, 
-    fechamaxima:string|null|undefined,
+    duracionminima:string|null|undefined,
+    periodominimo:3,
+    preciopordia:number|null|undefined
 
 }

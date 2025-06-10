@@ -18,14 +18,15 @@ export default function AgregarInmueble() {
     const [semanaAnterior, setSemanaAnterior] = useState("")
     const [diasAnteriores, setdiasAnteriores] = useState("")
     const [mismoDia, setMismoDia] = useState("")
-    const [fechaMaxima, setFechaMaxima] = useState("")
+    const [periodominimo, setFechaMaxima] = useState("")
+    const [preciopordia, setPrecio] = useState("")
 
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         const res = await fetch('/api/inmueble', {
             method: 'POST',
-            body: JSON.stringify({cantidadhuespedes:cantidadHuespedes,titulo, espaciocochera:espacioCochera, dpto , direccion, localidad, ciudad, tipo, descripcion, semanaanterior:semanaAnterior, diasanteriores:diasAnteriores, mismodia:mismoDia, fechamaxima: fechaMaxima, imagen}),
+            body: JSON.stringify({cantidadhuespedes:cantidadHuespedes,titulo, espaciocochera:espacioCochera, dpto , direccion, localidad, ciudad, tipo, descripcion, semanaanterior:semanaAnterior, diasanteriores:diasAnteriores, mismodia:mismoDia, periodominimo: periodominimo, preciopordia, imagen}),
             headers: { 'Content-Type': 'application/json' }
         });
 
@@ -143,10 +144,10 @@ export default function AgregarInmueble() {
                             <input
                             id="titulo"
                             type="number"
-                            min={1}
+                            min={periodominimo}
                             placeholder=""
                             required
-                            value={fechaMaxima}
+                            value={periodominimo}
                             onChange={(e) => setFechaMaxima(e.target.value)}
                             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             />
