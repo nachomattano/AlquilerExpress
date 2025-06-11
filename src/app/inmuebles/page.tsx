@@ -11,94 +11,133 @@ type Disponibilidad = {
   disponibilidad: { desde: string; hasta: string }[]
 }
 
+const tipos = ["Todos", "Casa", "Departamento", "Cochera"]
+
 export default function Alquiler() {
   const [inmuebles, setInmuebles] = useState<inmueble[]>([])
   const [disponibilidad, setDisponibilidad] = useState<Disponibilidad[]>([])
   const [filtrados, setFiltrados] = useState<inmueble[]>([])
   const [range, setRange] = useState<DateRange | undefined>()
-  const [loading, setLoading] = useState(true);
+  const [tipo, setTipo] = useState("Todos")
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchInmuebles = async () => {
       try {
-        const res = await fetch("http://localhost:3000/api/inmueble");
-        const data = await res.json();
-        setInmuebles(data);
+        const res = await fetch("http://localhost:3000/api/inmueble")
+        const data = await res.json()
+        console.log(data)
+        setInmuebles(data)
+        setFiltrados(data)
       } catch (error) {
-        console.error("Error al obtener clientes:", error);
+        console.error("Error al obtener inmuebles:", error)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
- 
-    console.log(inmuebles)
-    fetchInmuebles();
-  }, []);
+    }
+    fetchInmuebles()
+  }, [])
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchDisponibilidad = async () => {
       try {
         const resDisp = await fetch("/api/disponibilidad")
         const disponibilidadJson = await resDisp.json()
         setDisponibilidad(JSON.parse(disponibilidadJson))
       } catch (err) {
-        console.error("Error al obtener datos:", err)
+        console.error("Error al obtener disponibilidad:", err)
       }
     }
-    console.log(disponibilidad)
-
-    fetchData()
+    fetchDisponibilidad()
   }, [])
 
   const aplicarFiltro = () => {
-    if (!range?.from || !range?.to) return
+    let filtradosTemp = [...inmuebles]
 
-    const desde = new Date(range.from)
-    const hasta = new Date(range.to)
+    if (tipo !== "Todos") {
+      filtradosTemp = filtradosTemp.filter(inmueble => inmueble.tipo === tipo)
+    }
 
-    const disponibles = inmuebles.filter(inmueble => {
-      const reservasInmueble = disponibilidad.find(d => d.id === inmueble.id)
-      if (!reservasInmueble) return true
+    if (range?.from && range?.to) {
+      const desde = new Date(range.from)
+      const hasta = new Date(range.to)
 
-      const tieneConflicto = reservasInmueble.disponibilidad?.some(res => {
-        const desdeRes = new Date(res.desde)
-        const hastaRes = new Date(res.hasta)
-        return !(hasta < desdeRes || desde > hastaRes)
+      filtradosTemp = filtradosTemp.filter(inmueble => {
+        const reservasInmueble = disponibilidad.find(d => d.id === inmueble.id)
+        if (!reservasInmueble) return true
+
+        const tieneConflicto = reservasInmueble.disponibilidad?.some(res => {
+          const desdeRes = new Date(res.desde)
+          const hastaRes = new Date(res.hasta)
+          return !(hasta < desdeRes || desde > hastaRes)
+        })
+
+        return !tieneConflicto
       })
+    }
 
-      return !tieneConflicto
-    })
-
-    setFiltrados(disponibles)
+    setFiltrados(filtradosTemp)
   }
 
-  if (loading) return <div className="flex justify-center mx-auto mt-10">Cargando inmuebles...</div>
+  if (loading) {
+    return (
+      <div className="flex justify-center mx-auto mt-10 text-lg text-gray-600">
+        Cargando inmuebles...
+      </div>
+    )
+  }
 
   return (
-    <div className="p-6">
-      <h1 className="text-4xl font-bold mt-10 mb-8 text-center">Inmuebles en Alquiler</h1>
+    <div className="p-6 max-w-7xl mx-auto">
+      <h1 className="text-4xl font-bold mt-10 mb-8 text-center text-gray-800">
+        Inmuebles en Alquiler
+      </h1>
 
-      <div className="flex flex-col items-center gap-4 mb-6">
-        <DayPicker
-          mode="range"
-          selected={range}
-          onSelect={setRange}
-        />
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 mb-10">
+        <div>
+          <label className="block mb-1 font-medium text-gray-700">Tipo de Inmueble</label>
+          <select
+            value={tipo}
+            onChange={e => setTipo(e.target.value)}
+            className="border border-gray-300 rounded px-4 py-2 w-60"
+          >
+            {tipos.map((t, idx) => (
+              <option key={idx} value={t}>{t}</option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label className="block mb-2 font-medium text-gray-700">Seleccionar Rango de Fechas</label>
+          <DayPicker
+            mode="range"
+            selected={range}
+            onSelect={setRange}
+            className="bg-white rounded border border-gray-300 p-2 shadow"
+          />
+        </div>
+
         <button
           onClick={aplicarFiltro}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          className="bg-blue-600 text-white px-6 py-3 mt-4 lg:mt-0 rounded hover:bg-blue-700 transition"
         >
-          Filtrar por Fechas
+          Aplicar Filtros
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {inmuebles.map((element: inmueble) => (
-          <div key={element.id}>
-            <CuadradoInmueble inmueble={element} />
-          </div>
-        ))}
-      </div>
+      {filtrados.length === 0 ? (
+        <div className="text-center text-gray-500 text-lg">
+          No se encontraron inmuebles con los filtros aplicados.
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filtrados.map((element: inmueble) => (
+            <div key={element.id}>
+              <CuadradoInmueble inmueble={element} />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
