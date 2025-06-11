@@ -16,6 +16,24 @@ export default function Alquiler() {
   const [disponibilidad, setDisponibilidad] = useState<Disponibilidad[]>([])
   const [filtrados, setFiltrados] = useState<inmueble[]>([])
   const [range, setRange] = useState<DateRange | undefined>()
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchInmuebles = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/api/inmueble");
+        const data = await res.json();
+        setInmuebles(data);
+      } catch (error) {
+        console.error("Error al obtener clientes:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+ 
+    console.log(inmuebles)
+    fetchInmuebles();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,6 +45,7 @@ export default function Alquiler() {
         console.error("Error al obtener datos:", err)
       }
     }
+    console.log(disponibilidad)
 
     fetchData()
   }, [])
@@ -53,6 +72,8 @@ export default function Alquiler() {
     setFiltrados(disponibles)
   }
 
+  if (loading) return <div className="flex justify-center mx-auto mt-10">Cargando inmuebles...</div>
+
   return (
     <div className="p-6">
       <h1 className="text-4xl font-bold mt-10 mb-8 text-center">Inmuebles en Alquiler</h1>
@@ -72,7 +93,7 @@ export default function Alquiler() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filtrados.map((element: inmueble) => (
+        {inmuebles.map((element: inmueble) => (
           <div key={element.id}>
             <CuadradoInmueble inmueble={element} />
           </div>
