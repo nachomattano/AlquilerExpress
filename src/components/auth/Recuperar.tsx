@@ -16,11 +16,15 @@ export default function Recuperar() {
         e.preventDefault()
         setIsLoading(true)
         const user = await getUsuarioPorMail(email)
+        if(user){
          const res = await fetch(`/api/users/sendrecuperar/${email}`, {
             method: 'POST',
             body: JSON.stringify({ mail:email}),
             headers: { 'Content-Type': 'application/json' }
         });
+        }else{
+            alert ('mail no existente en el sistema')
+        }
         
         // onLoginSubmit?.(email)
         setIsLoading(false)

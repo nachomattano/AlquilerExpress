@@ -1,8 +1,9 @@
-import { getInmueble, updateStateInmueble } from '@/lib/db/inmuebles' 
+import { getInmueble, modifyInmueble, updateStateInmueble } from '@/lib/db/inmuebles' 
 import { estadoInmueble } from '@/types/estado-inmueble'
+import { inmueble } from '@/types/inmueble'
 import type { NextApiRequest, NextApiResponse } from 'next'
 export default async function handler(req:NextApiRequest,res:NextApiResponse){
-    const {method, query: { id,cantidadhuespedes,titulo, espaciocochera, dpto , direccion, estado, localidad, ciudad, tipo, descripcion, semanaanterior, diasanteriores, mismodia, duracionminima, preciopordia, imagen }} = req
+    const {method, query: { id }, body:{cantidadhuespedes,titulo, espaciocochera, dpto , direccion, estado, localidad, ciudad, tipo, descripcion, semanaanterior, diasanteriores, mismodia, duracionminima, preciopordia, imagen}} = req
 
 
     if (method == 'GET'){
@@ -29,7 +30,8 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
     }
 
     if (method == 'PUT'){
-
+        const inmueble : inmueble = { id: id as string, titulo, espaciocochera, cantidadhuespedes, estado:estadoInmueble.disponible, dpto,direccion,localidad, ciudad, tipo, descripcion, semanaanterior, diasanteriores, mismodia, periodominimo:3, preciopordia, duracionminima, imagen }
+        await modifyInmueble(inmueble)
     }
     
 }

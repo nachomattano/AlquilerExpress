@@ -46,3 +46,9 @@ export async function getEstadoInmueble (id:number){
 export async function setEstadoInmueble (id:number){
 
 }
+
+export async function existeNombre (nombre:string|null|undefined){
+    const supabase = await createClient()
+    const {data:inmueble} = await supabase.from("inmueble").select().eq("titulo", nombre)
+    return inmueble? true : false
+}

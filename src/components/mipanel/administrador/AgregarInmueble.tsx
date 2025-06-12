@@ -1,5 +1,6 @@
 'use client'
 
+import { existeNombre } from "@/lib/db/inmuebles"
 import { useEffect, useState } from "react"
 
 export default function AgregarInmueble({id}:{id?: string | undefined}) {
@@ -53,19 +54,34 @@ useEffect(() => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         if(!isEditing){
-        const res = await fetch('/api/inmueble', {
-            method: 'POST',
+        const res = await fetch(`/api/inmueble/${id}`, {
+            method: 'PUT',
             body: JSON.stringify({cantidadhuespedes:cantidadHuespedes,titulo, espaciocochera:espacioCochera, dpto , direccion, localidad, ciudad, tipo, descripcion, semanaanterior:semanaAnterior, diasanteriores:diasAnteriores, mismodia:mismoDia, duracionminima: periodominimo, preciopordia, imagen}),
             headers: { 'Content-Type': 'application/json' }
         });
 
         if (res.ok) {
-            alert ('Empleado Creado con Exito!')// o a donde quieras ir
+            alert ('Inmueble Creado con Exito!')// o a donde quieras ir
         } else {
             alert(await res.text());
         }
         }else{
+            const existeInmueble = await existeNombre(titulo)
+            if (!existeInmueble){
+                const res = await fetch('/api/inmueble', {
+                method: 'POST',
+                body: JSON.stringify({cantidadhuespedes:cantidadHuespedes,titulo, espaciocochera:espacioCochera, dpto , direccion, localidad, ciudad, tipo, descripcion, semanaanterior:semanaAnterior, diasanteriores:diasAnteriores, mismodia:mismoDia, duracionminima: periodominimo, preciopordia, imagen}),
+                headers: { 'Content-Type': 'application/json' }
+                });
 
+                if (res.ok) {
+                    alert ('Inmueble Creado con Exito!')// o a donde quieras ir
+                } else {
+                    alert(await res.text());
+                }
+            }else{
+                alert("El nombre ingresado para el inmueble ya se encuentra registrado en el sistema")
+            }
         }
     }
     
