@@ -12,7 +12,7 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
        return ''
     }
     if (method == 'POST'){
-        const solicitud :solicitud = {id:null,fechadesde, fechahasta, cantidad, solicitante, acompañantesid, inmuebleid, estado:estadoSolicitud.Pendiente}
+        const solicitud :solicitud = {id:null,fechadesde, fechahasta, cantidad, solicitante, acompañantesid, inmuebleid, estado:estadoSolicitud.Pendiente, pagoid:undefined}
         const resp = await createSolicitud(solicitud)
         res.send(JSON.stringify(resp))
     }

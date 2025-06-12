@@ -4,9 +4,10 @@ import { useState } from 'react';
 import { Eye, EyeOff, Library } from 'lucide-react'; // Si usás Lucide o algún ícono SVG
 import { estadoPago } from '@/types/estado-pago';
 import { pago } from '@/types/pago';
+import { getSolicitudReserva } from '@/lib/db/solicitudes-reservas';
 
 
-export default function Pagar() {
+export default function Pagar( {id} : {id?:string|null|undefined} ) {
   const [fullname, setFullName] = useState("");
   const [numerotarjeta, setNum] = useState("");
   const [numeroseguridad, setCod] = useState("");
@@ -15,8 +16,8 @@ export default function Pagar() {
 
   const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-       
-        const res = await fetch(`/api/pagos`, {
+       const solicitud = await getSolicitudReserva(id)
+        const res = await fetch(`/api/pagos/${solicitud?.pagoid}`, {
             method: 'POST',
             body: JSON.stringify({fullname,numerotarjeta, numeroseguridad}),
             headers: { 'Content-Type': 'application/json' }

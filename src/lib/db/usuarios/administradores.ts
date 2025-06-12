@@ -14,6 +14,13 @@ export async function getAdministradorDNI( DNI:string ): Promise<user> {
     return administrador
 }
 
+export async function getAdministrador( id:string ): Promise<user> {
+    const supabase = await createClient();
+    const { data: administrador } = (await supabase.from("administrador").select().eq( "id", id ).single());
+    console.log(JSON.stringify(await supabase.from("administrador").select().eq( "id", id ).single()))
+    return administrador
+}
+
 export async function getAdministradorMail( mail:string ): Promise<user> {
     const supabase = await createClient();
     const { data: administrador } = (await supabase.from("administrador").select().eq( "mail", mail ).single());

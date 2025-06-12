@@ -28,6 +28,11 @@ export async function updateStateSolicitud ( state: estadoSolicitud, id: string|
     await supabase.from("solicitudreserva").update({ estado: state }).eq("id", id)
 }
 
+export async function updatePagoId (id:string|null|undefined, pagoid: string|null|undefined){
+  const supabase = await createClient()
+  await supabase.from("solicitudreserva").update({ pagoid:pagoid }).eq("id", id)
+}
+
 export async function getSolicitudesReservaFilters(
   desde?: Date|null|undefined,
   hasta?: Date|null|undefined,
