@@ -6,6 +6,7 @@ import TwoFactor from "@/components/auth/TwoFactor"
 import { typeUser } from "@/types/user"
 import { useRouter } from 'next/navigation'
 import { useState } from "react"
+import toast from "react-hot-toast"
 import Recuperar from "@/components/auth/Recuperar"
 
 export default function Auth() {
@@ -20,6 +21,7 @@ export default function Auth() {
             setCurrentView("2fa")
         } else {
             // Logica de inicio de sesión normal
+            toast.success("Bienvenidx!")
             window.location.replace('/')
             
         }
@@ -27,6 +29,7 @@ export default function Auth() {
 
     const handle2FAVerify = (code: string) => {
         // Logica de verificacion de codigo e inicio de sesion de admin}
+        toast.success("Bienvenidx!")
         window.location.replace('/')
 
     }

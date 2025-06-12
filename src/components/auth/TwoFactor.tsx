@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from 'next/navigation'
+import toast from "react-hot-toast"
 
 interface TwoFactorProps {
     onVerify?: (code: string) => void
@@ -26,10 +27,11 @@ export default function TwoFactor({ onVerify, onBack, userEmail }: TwoFactorProp
 
         console.log(code.length)
         if (res.ok) {
+            toast.success("Bienvenidx!")
             window.location.replace('/')    
             return
         }else {
-            alert(await res.text());
+            toast.error(await res.text());
             return
         }
 

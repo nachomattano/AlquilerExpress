@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Router from "next/router"
 import { typeUser } from "@/types/user"
-
+import toast from "react-hot-toast"
 interface LoginFormProps {
   onSwitchToRegister?: () => void
   onLoginSubmit?: (email: string, password: string) => void
@@ -31,7 +31,7 @@ export default function LogIn({ onSwitchToRegister, onLoginSubmit, onSwitchToRec
             localStorage.setItem('userType', data.userType);
             onLoginSubmit?.(email, password)
         } else {
-            alert(await res.text());
+            toast.error(await res.text());
         }
         setIsLoading(false)
     }
