@@ -7,7 +7,7 @@ export type solicitud ={
     cantidad:number|null|undefined,
     solicitante:string|null|undefined,
     acompañantesid:string[]|null|undefined,
-    inmuebleid: number|null|undefined,
+    inmuebleid: string|null|undefined,
     estado: estadoSolicitud|null|undefined,
     pagoid: string|null|undefined
 }

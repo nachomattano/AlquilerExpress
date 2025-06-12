@@ -1,4 +1,5 @@
 import { updateStatePago, getPago, updatePago } from '@/lib/db/pago'
+import { pagoExitoso } from '@/lib/pagos'
 import { estadoPago } from '@/types/estado-pago'
 import type { NextApiRequest, NextApiResponse } from 'next'
 export default async function handler(req:NextApiRequest,res:NextApiResponse){
@@ -17,6 +18,8 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
         if (tarjetaValida) {
             const update = await updatePago (id as string, numerotarjeta as string ,numeroseguridad as string,fullname as string)
             const resp = await updateStatePago (estadoPago[estado as keyof typeof estadoPago],id as string)
+            const pago = await getPago(id as string)
+            const pagoexitoso = await pagoExitoso(pago)
             res.status(200).json({ message: 'El pago fue realizado con éxito' });
             return
         } else if (fondosInsuficientes) {

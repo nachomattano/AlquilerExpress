@@ -17,7 +17,8 @@ export async function pagoExitoso (pago:pago|null|undefined){
         solicitante:solicitud?.solicitante,
         acompañantesid:solicitud?.acompañantesid,
         pagoid:pago?.id,
-        estado: estadoReserva.Vigente
+        estado: estadoReserva.Vigente,
+        inmuebleid: solicitud?.inmuebleid
     }
 
     
