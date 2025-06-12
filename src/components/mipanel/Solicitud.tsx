@@ -30,6 +30,7 @@ export default function Solicitud({ solicitud }: { solicitud: solicitud }) {
         if (res.ok) {
             setEstadoLocal(estadoSolicitud.Aceptada);
             setMensaje(' Solicitud aceptada con éxito.');
+            window.location.reload()
         } else {
             alert(await res.text());
         }
@@ -45,6 +46,7 @@ export default function Solicitud({ solicitud }: { solicitud: solicitud }) {
         if (res.ok) {
             setEstadoLocal(estadoSolicitud.Rechazada);
             setMensaje(' Solicitud rechazada con éxito.');
+            window.location.reload()
         } else {
             alert(await res.text());
         }
@@ -60,6 +62,7 @@ export default function Solicitud({ solicitud }: { solicitud: solicitud }) {
         if (res.ok) {
             setEstadoLocal(estadoSolicitud.Rechazada);
             setMensaje(' Solicitud cancelada con éxito.');
+            window.location.reload()
         } else {
             alert(await res.text());
         }
