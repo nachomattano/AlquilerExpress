@@ -9,5 +9,6 @@ export type solicitud ={
     acompañantesid:string[]|null|undefined,
     inmuebleid: string|null|undefined,
     estado: estadoSolicitud|null|undefined,
-    pagoid: string|null|undefined
+    pagoid: string|null|undefined,
+    monto: number|null|undefined
 }

@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { DayPicker, DateRange } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { user } from '@/types/user'; // Asegurate de tener este import
+import { inmueble } from '@/types/inmueble';
+import { getInmueble } from '@/lib/db/inmuebles';
 
 export default function Reservar ({id}:{id:string}){
 
@@ -20,7 +22,7 @@ export default function Reservar ({id}:{id:string}){
     const [cantidadacompañantes, setCantidadAcompañantes] = useState("")
     const [disponibilidad, setDisponibilidad] = useState<DateRange[]>([]);
     const [acompanantes, setAcompanantes] = useState<string[]>([]);
-
+    const [ inmueble, setInmueble ] = useState<inmueble|null|undefined>()
     const [usuario, setUsuario] = useState<user | null>(null); 
 
     useEffect(() => {
@@ -37,6 +39,8 @@ export default function Reservar ({id}:{id:string}){
                     from: new Date(rango.desde),
                     to: new Date(rango.hasta)
                 })) ?? [];
+                const inmu = await getInmueble(id as string)
+                setInmueble(inmu)
                 setDisponibilidad(rangosNoDisponibles);
             } catch (error) {
                 console.error("Error al obtener disponibilidad:", error);
@@ -95,7 +99,8 @@ export default function Reservar ({id}:{id:string}){
                 nombre: fullName,
                 inmuebleid: id,
                 solicitante: usuario.id, 
-                cantidad: parseInt(cantidadacompañantes || "0") + 1
+                cantidad: parseInt(cantidadacompañantes || "0") + 1,
+                monto: inmueble? inmueble.preciopordia : 3 * Math.floor(((rangoFechas && rangoFechas.to? rangoFechas.to.getTime(): 2) - (rangoFechas && rangoFechas?.from?  rangoFechas.from.getTime() : 1))/(1000 * 60 * 60 * 24))
             }),
             headers: { 'Content-Type': 'application/json' }
         });
@@ -273,6 +278,7 @@ return <>
                                         <span className="font-semibold">
                                         {rangoFechas.from.toLocaleDateString()} – {rangoFechas.to.toLocaleDateString()}
                                         </span>
+                                        <p>Monto final de la Reserva: {inmueble? inmueble.preciopordia : 3 * Math.floor((rangoFechas.to.getTime() - rangoFechas.from.getTime())/(1000 * 60 * 60 * 24))}  </p>
                                         </p>
                                         )}
                                     </div>
