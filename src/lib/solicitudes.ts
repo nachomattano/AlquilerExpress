@@ -16,5 +16,6 @@ export async function solicitudAccepted(solicitud:solicitud|null){
     }
     
     let resp = await createPago(pago)
+    console.log(JSON.stringify(resp))
     await updatePagoId(resp?.solicitudid, resp?.id)
 }

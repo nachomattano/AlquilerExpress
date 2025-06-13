@@ -6,8 +6,10 @@ import "react-day-picker/dist/style.css";
 import { user } from '@/types/user'; // Asegurate de tener este import
 import { inmueble } from '@/types/inmueble';
 import { getInmueble } from '@/lib/db/inmuebles';
+import { addDays, startOfDay } from "date-fns"
+import toast from 'react-hot-toast';
 
-export default function Reservar ({id}:{id:string}){
+export default  function Reservar ({id}:{id:string}){
 
     const [rangoFechas, setRangoFechas] = useState<DateRange | undefined>();
     const [isOp, setIsOp] = useState(false);
@@ -24,21 +26,37 @@ export default function Reservar ({id}:{id:string}){
     const [acompanantes, setAcompanantes] = useState<string[]>([]);
     const [ inmueble, setInmueble ] = useState<inmueble|null|undefined>()
     const [usuario, setUsuario] = useState<user | null>(null); 
-
+    const hoy = startOfDay(new Date())
+    const minFecha = addDays(hoy, 3)
     useEffect(() => {
         const usuarioActual = localStorage.getItem("user");
         if (usuarioActual) {
             setUsuario(JSON.parse(usuarioActual));
         }
+        console.log('aquiii')
 
         const fetchClientes = async () => {
             try {
-                const res = await fetch(`http://localhost:3000/api/inmueble/${id}/disponibilidad`);
+                console.log("No asdasd")
+                const res = await fetch(`http://localhost:3000/api/inmueble/${id}/disponibilidad`, {
+                    cache: "no-store",
+                    headers: {
+                        "Cache-Control": "no-cache"
+                    }
+                });
                 const data = await res.json();
-                const rangosNoDisponibles = data.disponibilidad?.map((rango: { desde: string; hasta: string }) => ({
-                    from: new Date(rango.desde),
-                    to: new Date(rango.hasta)
-                })) ?? [];
+                console.log("DATAAAAA", JSON.stringify(data))
+                const rangosNoDisponibles = Array.isArray(data.disponibilidad)
+    ? data.disponibilidad.map((rango: { desde: string; hasta: string }) => ({
+        from: new Date(rango.desde),
+        to: new Date(rango.hasta)
+      }))
+    : data.disponibilidad
+    ? [{
+        from: new Date(data.disponibilidad.desde),
+        to: new Date(data.disponibilidad.hasta)
+      }]
+    : [];
                 const inmu = await getInmueble(id as string)
                 setInmueble(inmu)
                 setDisponibilidad(rangosNoDisponibles);
@@ -56,7 +74,7 @@ export default function Reservar ({id}:{id:string}){
         const acomp = await getUsuarioPorMail(emailAcom);
 
         if (!acomp.user) {
-            alert("El email ingresado no está registrado en el sistema");
+            toast.error("El email ingresado no está registrado en el sistema");
             return;
         }
 
@@ -77,7 +95,7 @@ export default function Reservar ({id}:{id:string}){
         e.preventDefault();
 
         if (!usuario?.id) {
-            alert("No se pudo identificar al usuario actual.");
+            toast.error("No se pudo identificar al usuario actual.");
             return;
         }
 
@@ -107,9 +125,9 @@ export default function Reservar ({id}:{id:string}){
 
         if (res.ok) {
             window.location.replace('/');
-            alert('Solicitud enviada!');
+            toast.success('Solicitud enviada!');
         } else {
-            alert(await res.text());
+            toast.error(await res.text());
         }
     };
 
@@ -266,21 +284,22 @@ return <>
                                             selected={rangoFechas}
                                             onSelect={setRangoFechas}
                                             disabled={[
-                                                { before: new Date() }, 
+                                                { before: minFecha}, 
                                                 ...disponibilidad 
                                             ]}
                                             className="rounded-md shadow"
                                         />
 
-                                        {rangoFechas?.from && rangoFechas?.to && (
+                                        {rangoFechas?.from && rangoFechas?.to && (<div>
                                         <p className="mt-2 text-green-700 font-medium">
                                         Fechas seleccionadas:{" "}
                                         <span className="font-semibold">
                                         {rangoFechas.from.toLocaleDateString()} – {rangoFechas.to.toLocaleDateString()}
                                         </span>
-                                        <p>Monto final de la Reserva: {inmueble? inmueble.preciopordia : 3 * Math.floor((rangoFechas.to.getTime() - rangoFechas.from.getTime())/(1000 * 60 * 60 * 24))}  </p>
+                                        
                                         </p>
-                                        )}
+                                        <p>Monto final de la Reserva: <span>{inmueble? inmueble.preciopordia : 3 * Math.floor((rangoFechas.to.getTime() - rangoFechas.from.getTime())/(1000 * 60 * 60 * 24))}</span>  </p>
+                                        </div>)}
                                     </div>
                                     
                                     <button

@@ -5,7 +5,7 @@ import { Eye, EyeOff, Library } from 'lucide-react'; // Si usás Lucide o algún
 import { estadoPago } from '@/types/estado-pago';
 import { pago } from '@/types/pago';
 import { getSolicitudReserva } from '@/lib/db/solicitudes-reservas';
-
+import toast from 'react-hot-toast';
 
 export default function Pagar( {id} : {id?:string|null|undefined} ) {
   const [fullname, setFullName] = useState("");
@@ -16,7 +16,9 @@ export default function Pagar( {id} : {id?:string|null|undefined} ) {
 
   const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        console.log("IDDDDDDDDDDDDDDDDDDD",id)
        const solicitud = await getSolicitudReserva(id)
+       console.log(JSON.stringify(solicitud))
         const res = await fetch(`/api/pagos/${solicitud?.pagoid}`, {
             method: 'POST',
             body: JSON.stringify({fullname,numerotarjeta, numeroseguridad}),
@@ -24,9 +26,9 @@ export default function Pagar( {id} : {id?:string|null|undefined} ) {
         });
         const data = await res.json();
         if (res.ok){
-          alert(`${data.message}`);
+          toast.success(`${data.message}`);
         } else {
-          alert(`${data.message}`);
+          toast.error(`${data.message}`);
   }
         
     }

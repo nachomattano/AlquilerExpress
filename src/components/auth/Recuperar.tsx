@@ -5,7 +5,7 @@ import Router from "next/router"
 import { typeUser } from "@/types/user"
 import { sendRecuperarEmail, sendVerificationEmail } from "@/lib/email"
 import { getUsuarioPorMail } from "@/lib/db/usuarios/usuarios"
-
+import toast from "react-hot-toast"
 
 
 export default function Recuperar() {
@@ -23,7 +23,7 @@ export default function Recuperar() {
             headers: { 'Content-Type': 'application/json' }
         });
         }else{
-            alert ('mail no existente en el sistema')
+            toast.error ('mail no existente en el sistema')
         }
         
         // onLoginSubmit?.(email)

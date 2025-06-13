@@ -1,5 +1,5 @@
 'use client'
-
+import toast from "react-hot-toast"
 import { useState } from "react"
 interface SignUpFormProps {
     onSwitchToLogin?: () => void
@@ -25,10 +25,10 @@ export default function SignUp({ onSwitchToLogin, onBack }: SignUpFormProps = {}
         });
 
         if (res.ok) {
-            alert('Usuario creado con exito')
+            toast.success('Usuario creado con exito')
             onBack?.()
         } else {
-            alert(await res.text());
+            toast.error(await res.text());
         }
         setIsLoading(false)
     }

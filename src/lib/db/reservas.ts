@@ -23,7 +23,9 @@ export async function getReserva( id:string ) {
 
 export async function createReserva ( reserva: reserva ){
     const supabase = await createClient();
-    await supabase.from("reserva").insert(reserva)
+    const {id, ...sinId} = reserva
+    const {error} = await supabase.from("reserva").insert(sinId)
+    console.log("ERROR", error)
 }
 
 export async function updateStateReserva ( state: estadoReserva, id: number ){

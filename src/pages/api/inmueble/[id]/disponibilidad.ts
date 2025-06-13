@@ -9,14 +9,20 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
         const resp = await getInmueble(id as string)
 
         console.log(JSON.stringify(resp))
-        const reservas = await getReservasPorInmueble(id as string);
+        const rawReservas = await getReservasPorInmueble(id as string);
+        const reservas = Array.isArray(rawReservas) ? rawReservas : [rawReservas];
 
         const disponibilidadInmueble = {
         id: id,
-        disponibilidad: reservas?.map(reserva => ({
-            desde: reserva.fechadesde,
-            hasta: reserva.fechahasta
-        }))
+        disponibilidad: reservas.length > 1
+            ? reservas.map(reserva => ({
+                desde: reserva?.fechadesde,
+                hasta: reserva?.fechahasta
+            }))
+            : {
+                desde: reservas[0]?.fechadesde ?? null,
+                hasta: reservas[0]?.fechahasta ?? null
+            }
         };
         if (!resp){
             res.status(404).send('no se encontro el inmueble sugerido')

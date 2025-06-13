@@ -5,6 +5,7 @@ import { estadoSolicitud } from "@/types/estado-solicitud"
 import { solicitud } from "@/types/solicitud"
 import { user } from "@/types/user"
 import Link from "next/link"
+import toast from "react-hot-toast"
 import { useEffect, useState } from "react"
 
 export default function Solicitud({ solicitud }: { solicitud: solicitud }) {
@@ -32,7 +33,7 @@ export default function Solicitud({ solicitud }: { solicitud: solicitud }) {
             setMensaje(' Solicitud aceptada con éxito.');
             window.location.reload()
         } else {
-            alert(await res.text());
+            toast.error(await res.text());
         }
     };
 
@@ -48,7 +49,7 @@ export default function Solicitud({ solicitud }: { solicitud: solicitud }) {
             setMensaje(' Solicitud rechazada con éxito.');
             window.location.reload()
         } else {
-            alert(await res.text());
+            toast.error(await res.text());
         }
     };
 
@@ -64,7 +65,7 @@ export default function Solicitud({ solicitud }: { solicitud: solicitud }) {
             setMensaje(' Solicitud cancelada con éxito.');
             window.location.reload()
         } else {
-            alert(await res.text());
+            toast.error(await res.text());
         }
     };
 

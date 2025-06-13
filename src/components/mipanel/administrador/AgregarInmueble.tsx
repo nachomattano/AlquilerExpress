@@ -103,7 +103,7 @@ useEffect(() => {
                         placeholder=""
                         required
                         value={titulo ?? ''}
-                        
+                        disabled={isEditing}
                         onChange={(e) => setTitulo(e.target.value)}
                         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         />
@@ -152,52 +152,6 @@ useEffect(() => {
                             required
                             value={preciopordia ?? ''}
                             onChange={(e) => setPrecio(e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                            />
-                        </div>  
-
-                        <div className="space-y-2">
-                            <label htmlFor="semanaAnterior" className="text-sm font-medium text-gray-700">
-                            Porcentaje de devolucion Semana Anterior
-                            </label>
-                            <input
-                            id="semanaAnterior"
-                            type="number"
-                            max="100"
-                            placeholder=""
-                            required
-                            value={semanaAnterior ?? ''}
-                            onChange={(e) => setSemanaAnterior(e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                            />
-                        </div>  
-
-                        <div className="space-y-2">
-                            <label htmlFor="diasAnteriores" className="text-sm font-medium text-gray-700">
-                            Porcentaje de devolucion Dias Anteriores 
-                            </label>
-                            <input
-                            id="diasAnteriores"
-                            type="number"
-                            max="100"
-                            required
-                            value={diasAnteriores ?? ''}
-                            onChange={(e) => setdiasAnteriores(e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                            />
-                        </div>  
-
-                        <div className="space-y-2">
-                            <label htmlFor="mismoDia" className="text-sm font-medium text-gray-700">
-                            Porcentaje de devolucion Mismo Dia de Reserva
-                            </label>
-                            <input
-                            id="mismoDia"
-                            type="number"
-                            max="100"
-                            required
-                            value={mismoDia ?? ''}
-                            onChange={(e) => setMismoDia(e.target.value)}
                             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                             />
                         </div>  

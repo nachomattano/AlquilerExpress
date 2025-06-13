@@ -2,17 +2,23 @@
 
 import { inmueble } from "@/types/inmueble"
 import Link from "next/link"
+import toast from "react-hot-toast"
 
 export default function VerInmueble({ inmueble }: { inmueble: inmueble }) {
 
   const handleChangeState = async (estado:any) => {
-      await fetch (`http://localhost:3000/api/inmueble/${inmueble.id}`, {
+      const resp = await fetch (`http://localhost:3000/api/inmueble/${inmueble.id}`, {
       method: 'POST',
       headers:{
         'Content-Type':'application/json'
       },
       body: JSON.stringify({ id: inmueble.id, estado })
     })
+    if (resp.ok){
+      toast.success("Se cambio el estado con exito")
+    }else{
+      toast.error(await resp.text())
+    }
   }
 
 

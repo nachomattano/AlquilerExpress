@@ -3,19 +3,23 @@
 import { user } from '@/types/user'
 import { useState } from 'react'
 import Link from 'next/link';
+import toast from 'react-hot-toast';
 
 export default function VerEmpleado({ empleado }: { empleado: user }) {
   const [estado, setEstado] = useState('')
 
   const handleChangeState = async (e:any) => {
     console.log(e)
-    await fetch (`http://localhost:3000/api/users/empleados/${empleado.id}`, {
+    const res = await fetch (`http://localhost:3000/api/users/empleados/${empleado.id}`, {
       method: 'POST',
       headers:{
         'Content-Type':'application/json'
       },
       body: JSON.stringify({ id: empleado.id, estado: e })
     })
+    if (res.ok){
+      toast.success("Se cambio el estado del empleado con exito")
+    }
   }
 
 

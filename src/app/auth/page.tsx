@@ -21,9 +21,9 @@ export default function Auth() {
             setCurrentView("2fa")
         } else {
             // Logica de inicio de sesión normal
-            toast.success("Bienvenidx!")
-            window.location.replace('/')
             
+            window.location.replace('/')
+            toast.success("Bienvenidx!")
         }
     }
 

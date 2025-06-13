@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from "react"
-
+import toast from "react-hot-toast"
 export default function AgregarEmpleado() {
     const [fullName, setFullName] = useState("")
     const [email, setEmail] = useState("")
@@ -20,9 +20,9 @@ export default function AgregarEmpleado() {
         });
 
         if (res.ok) {
-            alert('Empleado Creado con Exito!')
+            toast.success('Empleado Creado con Exito!')
         } else {
-            alert(await res.text());
+            toast.error(await res.text());
         }
         setIsLoading(false)
     }
