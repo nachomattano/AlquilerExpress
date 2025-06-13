@@ -222,7 +222,6 @@ return <>
                                             id="fullName"
                                             type="text"
                                             placeholder="...@gmail.com"
-                                            required
                                             value={emailAcom}
                                             onChange={(e) => setEmailAcom(e.target.value)}
                                             className="w-50 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"/>
@@ -249,7 +248,6 @@ return <>
                                                     id="nombreAcom"
                                                     type="text"
                                                     placeholder="Ej: María Gómez"
-                                                    required
                                                     value={nombreAcom}
                                                     onChange={(e) => setNombreAcom(e.target.value)}
                                                     className="w-50 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -261,7 +259,6 @@ return <>
                                                     id="dniAcom"
                                                     type="number"
                                                     placeholder="Ej: 444444"
-                                                    required
                                                     value={dniAcom}
                                                     onChange={(e) => setDniAcom(e.target.value)}
                                                     className="w-50 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -300,7 +297,7 @@ return <>
                                         </span>
                                         
                                         </p>
-                                        <p>Monto final de la Reserva: <span>{inmueble? inmueble.preciopordia : 3 * Math.floor((rangoFechas.to.getTime() - rangoFechas.from.getTime())/(1000 * 60 * 60 * 24))}</span>  </p>
+                                        <p>Monto por dia: <span>{inmueble && inmueble.preciopordia? inmueble.preciopordia : 3}$</span>  </p>
                                         </div>)}
                                     </div>
                                     
