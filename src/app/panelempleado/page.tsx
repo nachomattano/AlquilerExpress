@@ -1,18 +1,12 @@
 'use client'
 
 import Solicitudes from "@/components/mipanel/Solicitudes"
-import InicioEmpleado from "@/components/mipanel/empleado/InicioEmpleado"
+
 import { ChartColumnBig, HousePlus, User } from "lucide-react"
 import { useState } from "react"
 import VerCliente from "../verclientes/page"
 
 const empleadoItems = [
-    {
-        id: "inicio",
-        title: "Inicio",
-        icon: ChartColumnBig,
-        component: InicioEmpleado
-    },
     {
       id: "Solicitudes",
       title: "Ver Solicitudes",
@@ -31,7 +25,7 @@ export default function PanelEmpleado() {
   const [activeItem, setActiveItem] = useState("inicio")
 
   const activeMenuItem = empleadoItems.find((item) => item.id === activeItem)
-  const ActiveComponent = activeMenuItem?.component || InicioEmpleado
+  const ActiveComponent = activeMenuItem?.component || Solicitudes
 
   return (
     <div className="flex h-screen bg-gray-100">

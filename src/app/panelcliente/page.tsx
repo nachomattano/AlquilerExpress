@@ -1,16 +1,10 @@
 'use client'
 import Solicitudes from "@/components/mipanel/Solicitudes"
-import InicioUsuario from "@/components/mipanel/usuario/InicioUsuario"
+
 import { ChartColumnBig, House } from "lucide-react"
 import { useState } from "react"
 
 const usuarioItems = [
-    {
-        id: "inicio",
-        title: "Inicio",
-        icon: ChartColumnBig,
-        component: InicioUsuario
-    },
     {
       id: "Solicitudes",
       title: "Ver Solicitudes",
@@ -23,7 +17,7 @@ export default function PanelUsuario() {
   const [activeItem, setActiveItem] = useState("inicio")
 
   const activeMenuItem = usuarioItems.find((item) => item.id === activeItem)
-  const ActiveComponent = activeMenuItem?.component || InicioUsuario
+  const ActiveComponent = activeMenuItem?.component || Solicitudes
 
   return (
     <div className="flex h-screen bg-gray-100">
