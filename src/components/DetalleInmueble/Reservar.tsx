@@ -3,7 +3,7 @@ import { getUsuarioPorMail } from '@/lib/db/usuarios/usuarios';
 import { useEffect, useState } from 'react';
 import { DayPicker, DateRange } from "react-day-picker";
 import "react-day-picker/dist/style.css";
-import { user } from '@/types/user'; // Asegurate de tener este import
+import { user } from '@/types/user';
 import { inmueble } from '@/types/inmueble';
 import { getInmueble } from '@/lib/db/inmuebles';
 import { addDays, startOfDay } from "date-fns"
@@ -92,12 +92,20 @@ export default  function Reservar ({id}:{id:string}){
     };
 
     const agregarAcompananteSinCuenta = () => {
-        if (!nombreAcom.trim()) return;
+        if (!nombreAcom.trim() || !dniAcom.trim()) return;
 
-        setAcompanantes((prev) => [...prev, nombreAcom]);
+        const acompananteInfo = `${nombreAcom} (DNI: ${dniAcom})`;
+        setAcompanantes((prev) => [...prev, acompananteInfo]);
         setCantidad(cantidadTotal +1)
         setNombreAcom("");
+        setDniAcom("");
         setIsSinCuenta(false);
+    };
+
+    const eliminarAcompanante = (index: number) => {
+        setAcompanantes((prev) => prev.filter((_, i) => i !== index));
+        setCantidad(cantidadTotal - 1);
+        toast.success("Acompañante eliminado");
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -107,15 +115,18 @@ export default  function Reservar ({id}:{id:string}){
             toast.error("No se pudo identificar al usuario actual.");
             return;
         }
-        if(inmueble? inmueble.cantidadhuespedes : 1 <= parseInt(cantidadacompañantes || "0") + 1){
-           toast.error("")
+        if(inmueble? inmueble.cantidadhuespedes : 1 <= cantidadTotal){
+           toast.error("Excede la cantidad máxima de huéspedes permitida para este inmueble");
            return; 
         }
 
         const acompañantesId = await Promise.all(
             acompanantes.map(async (acomp) => {
-                const acompañante = await getUsuarioPorMail(acomp);
-                return acompañante.user?.id ?? '1';
+                if (acomp.includes("@") && !acomp.includes("DNI:")) {
+                    const acompañante = await getUsuarioPorMail(acomp);
+                    return acompañante.user?.id ?? '1';
+                }
+                return '1';
             })
         );
 
@@ -130,7 +141,7 @@ export default  function Reservar ({id}:{id:string}){
                 nombre: fullName,
                 inmuebleid: id,
                 solicitante: usuario.id, 
-                cantidad: parseInt(cantidadacompañantes || "0") + 1,
+                cantidad: cantidadTotal,
                 monto: inmueble? inmueble.preciopordia : 3 * Math.floor(((rangoFechas && rangoFechas.to? rangoFechas.to.getTime(): 2) - (rangoFechas && rangoFechas?.from?  rangoFechas.from.getTime() : 1))/(1000 * 60 * 60 * 24))
             }),
             headers: { 'Content-Type': 'application/json' }
@@ -165,11 +176,11 @@ return <>
                                     </div>
 
                                     <div className="space-y-2">
-                                    <label htmlFor="fullName" className="text-sm font-medium text-gray-700">
+                                    <label htmlFor="email" className="text-sm font-medium text-gray-700">
                                     Email
                                     </label>
                                     <input
-                                    id="fullName"
+                                    id="email"
                                     type="text"
                                     placeholder="...@gmail.com"
                                     required
@@ -193,19 +204,33 @@ return <>
                                         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"/>
                                     </div>
                                     
+                                    <div className="bg-blue-50 p-3 rounded-md">
+                                        <p className="text-sm text-blue-800">
+                                            <span className="font-semibold">Huéspedes:</span> {cantidadTotal} de {cantidadPermitida} máximo
+                                        </p>
+                                    </div>
         
                                     
                                     <div className="max-w-md mx-auto bg-white shadow-lg rounded-xl p-6 mt-6">
                                     {acompanantes.length > 0 && (
                                     <div className="mb-4">
-                                        <h3 className="font-semibold text-lg text-green-700">Acompañantes agregados:</h3>
-                                        <ul className="list-disc list-inside text-gray-800 mt-2">
+                                        <h3 className="font-semibold text-lg text-green-700 mb-3">Acompañantes agregados:</h3>
+                                        <div className="space-y-2">
                                         {acompanantes.map((acomp, index) => (
-                                            <li key={index}>
-                                            {acomp.includes("@") ? `✔️ ${acomp} (con cuenta)` : `👤 ${acomp} (sin cuenta)`}
-                                            </li>
+                                            <div key={index} className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
+                                                <span className="text-gray-800">
+                                                    {acomp.includes("@") && !acomp.includes("DNI:") ? `✔️ ${acomp} (con cuenta)` : `👤 ${acomp} (sin cuenta)`}
+                                                </span>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => eliminarAcompanante(index)}
+                                                    className="ml-2 bg-red-500 hover:bg-red-600 text-white text-sm px-3 py-1 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500"
+                                                >
+                                                    Eliminar
+                                                </button>
+                                            </div>
                                         ))}
-                                        </ul>
+                                        </div>
                                     </div>
                                     )}
 
@@ -213,25 +238,24 @@ return <>
                                     
                                     
                                     
-                                    <div  className="space-y-4">
+                                    <div className="space-y-4">
                                             <div className="space-y-2">
-                                            <label htmlFor="fullName" className=" flex font-medium text-gray-700">
+                                            <label htmlFor="emailAcom" className="flex font-medium text-gray-700">
                                             Email Acompañante
                                             </label>
                                             <input
-                                            id="fullName"
+                                            id="emailAcom"
                                             type="text"
                                             placeholder="...@gmail.com"
-                                            required
                                             value={emailAcom}
                                             onChange={(e) => setEmailAcom(e.target.value)}
                                             className="w-50 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"/>
                                             
                                             <button
-                                            onClick={agregarAcompanante} // no necesita type="button" porque ya lo tiene implícito
+                                            onClick={agregarAcompanante}
                                             type="button"
-                                            disabled= {cantidadPermitida < cantidadTotal+1}
-                                            className="ml-4 w-50 bg-black hover:bg-orange-500 text-white py-2 px-2 rounded-md"
+                                            disabled={cantidadPermitida < cantidadTotal + 1}
+                                            className="ml-4 w-50 bg-black hover:bg-orange-500 text-white py-2 px-2 rounded-md disabled:bg-gray-400 disabled:cursor-not-allowed"
                                             >
                                             Confirmar acompañante
                                             </button>
@@ -249,19 +273,17 @@ return <>
                                                     id="nombreAcom"
                                                     type="text"
                                                     placeholder="Ej: María Gómez"
-                                                    required
                                                     value={nombreAcom}
                                                     onChange={(e) => setNombreAcom(e.target.value)}
                                                     className="w-50 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                                 />
                                                 <label htmlFor="dniAcom" className="flex font-medium text-gray-700">
-                                                    Dni del acompañante
+                                                    DNI del acompañante
                                                 </label>
                                                 <input
                                                     id="dniAcom"
-                                                    type="number"
-                                                    placeholder="Ej: 444444"
-                                                    required
+                                                    type="text"
+                                                    placeholder="Ej: 44444444"
                                                     value={dniAcom}
                                                     onChange={(e) => setDniAcom(e.target.value)}
                                                     className="w-50 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -270,8 +292,8 @@ return <>
                                                 <button
                                                     onClick={agregarAcompananteSinCuenta}
                                                     type="button"
-                                                    disabled= {cantidadPermitida < cantidadTotal+1}
-                                                    className="ml-4 w-50 bg-black hover:bg-orange-500 text-white py-2 px-2 rounded-md"
+                                                    disabled={cantidadPermitida < cantidadTotal + 1}
+                                                    className="ml-4 w-50 bg-black hover:bg-orange-500 text-white py-2 px-2 rounded-md disabled:bg-gray-400 disabled:cursor-not-allowed"
                                                 >
                                                     Confirmar acompañante
                                                 </button>
