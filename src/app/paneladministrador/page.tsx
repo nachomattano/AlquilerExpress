@@ -2,7 +2,7 @@
 
 import Solicitudes from "@/components/mipanel/Solicitudes"
 import AgregarEmpleado from "@/components/mipanel/administrador/AgregarEmpleado"
-import InicioAdmin from "@/components/mipanel/administrador/InicioAdmin"
+
 import AgregarInmueble from "@/components/mipanel/administrador/AgregarInmueble"
 import VerInmueble from "@/components/mipanel/VerInmuebles"
 import { ChartColumnBig, House, HousePlus, User, UserPlus } from "lucide-react"
@@ -12,12 +12,7 @@ import VerCliente from "../verclientes/page"
 import VerInmuebles from "../verInmuebles/page"
 
 const adminItems = [
-    {
-        id: "inicio",
-        title: "Inicio",
-        icon: ChartColumnBig ,
-        component: InicioAdmin
-    },
+
     {
         id: "agregarEmpleado",
         title: "Agregar Empleado",
@@ -61,7 +56,7 @@ export default function PanelAdmin() {
   const [activeItem, setActiveItem] = useState("inicio")
 
   const activeMenuItem = adminItems.find((item) => item.id === activeItem)
-  const ActiveComponent = activeMenuItem?.component || InicioAdmin
+  const ActiveComponent = activeMenuItem?.component || AgregarEmpleado
 
   return (
     <div className="flex h-screen bg-gray-100">

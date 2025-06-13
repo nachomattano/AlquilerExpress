@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { DayPicker, DateRange } from "react-day-picker"
+import { addDays, startOfDay } from "date-fns"
 import 'react-day-picker/dist/style.css'
 import CuadradoInmueble from "@/components/inmuebles/CuadradoInmueble"
 import { inmueble } from "@/types/inmueble"
@@ -13,6 +14,7 @@ type Disponibilidad = {
 
 const tipos = ["Todos", "Casa", "Departamento", "Cochera"]
 
+
 export default function Alquiler() {
   const [inmuebles, setInmuebles] = useState<inmueble[]>([])
   const [disponibilidad, setDisponibilidad] = useState<Disponibilidad[]>([])
@@ -20,6 +22,9 @@ export default function Alquiler() {
   const [range, setRange] = useState<DateRange | undefined>()
   const [tipo, setTipo] = useState("Todos")
   const [loading, setLoading] = useState(true)
+    const hoy = startOfDay(new Date())
+  const minFecha = addDays(hoy, 3)
+
 
   useEffect(() => {
     const fetchInmuebles = async () => {
@@ -107,15 +112,20 @@ export default function Alquiler() {
           </select>
         </div>
 
-        <div>
-          <label className="block mb-2 font-medium text-gray-700">Seleccionar Rango de Fechas</label>
-          <DayPicker
-            mode="range"
-            selected={range}
-            onSelect={setRange}
-            className="bg-white rounded border border-gray-300 p-2 shadow"
-          />
-        </div>
+        {/* Selector de fechas */}
+    <div className="md:col-span-2 lg:col-span-1">
+      <label className="block text-sm font-medium text-gray-700 mb-2">
+        Rango de Fechas
+      </label>
+      <div className="border border-gray-300 rounded-lg p-2 bg-white shadow-sm">
+        <DayPicker
+          mode="range"
+          selected={range}
+          onSelect={setRange}
+          disabled={{ before: minFecha }}
+        />
+      </div>
+    </div>
 
         <button
           onClick={aplicarFiltro}

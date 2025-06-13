@@ -28,10 +28,10 @@ export default function VerInmuebles() {
 
   return (
     <>
-      <h1 className="text-4xl font-bold mt-10 mb-8 text-center">CLIENTES</h1>
+      <h1 className="text-4xl font-bold mt-10 mb-8 text-center">Inmuebles</h1>
       <div>
         {loading ? (
-          <p className="text-center">Cargando clientes...</p>
+          <p className="text-center">Cargando Inmuebles...</p>
         ) : (
           inmuebles.map((element) => (
             <div key={element.id}>

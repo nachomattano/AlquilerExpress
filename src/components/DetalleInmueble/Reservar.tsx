@@ -15,6 +15,7 @@ export default  function Reservar ({id}:{id:string}){
     const [isOp, setIsOp] = useState(false);
 
     const [nombreAcom, setNombreAcom] = useState("");
+    const [dniAcom, setDniAcom] = useState("");
     const [isSinCuenta, setIsSinCuenta] = useState(false);
 
     const [fullName, setFullName] = useState("")
@@ -28,6 +29,10 @@ export default  function Reservar ({id}:{id:string}){
     const [usuario, setUsuario] = useState<user | null>(null); 
     const hoy = startOfDay(new Date())
     const minFecha = addDays(hoy, 3)
+    const [cantidadTotal, setCantidad] = useState<number> (1); 
+    const [cantidadPermitida, setCantidadP] = useState<number> (1); 
+
+
     useEffect(() => {
         const usuarioActual = localStorage.getItem("user");
         if (usuarioActual) {
@@ -58,6 +63,8 @@ export default  function Reservar ({id}:{id:string}){
       }]
     : [];
                 const inmu = await getInmueble(id as string)
+                const cantidad = inmu?.cantidadhuespedes? inmu.cantidadhuespedes:1
+                setCantidadP(cantidad) 
                 setInmueble(inmu)
                 setDisponibilidad(rangosNoDisponibles);
             } catch (error) {
@@ -79,6 +86,7 @@ export default  function Reservar ({id}:{id:string}){
         }
 
         setAcompanantes((prev) => [...prev, emailAcom]);
+        setCantidad(cantidadTotal +1)
         setEmailAcom("");
         setIsOp(false);
     };
@@ -87,6 +95,7 @@ export default  function Reservar ({id}:{id:string}){
         if (!nombreAcom.trim()) return;
 
         setAcompanantes((prev) => [...prev, nombreAcom]);
+        setCantidad(cantidadTotal +1)
         setNombreAcom("");
         setIsSinCuenta(false);
     };
@@ -97,6 +106,10 @@ export default  function Reservar ({id}:{id:string}){
         if (!usuario?.id) {
             toast.error("No se pudo identificar al usuario actual.");
             return;
+        }
+        if(inmueble? inmueble.cantidadhuespedes : 1 <= parseInt(cantidadacompañantes || "0") + 1){
+           toast.error("")
+           return; 
         }
 
         const acompañantesId = await Promise.all(
@@ -180,20 +193,8 @@ return <>
                                         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"/>
                                     </div>
                                     
-                                    <div className="space-y-2">
-                                    <label htmlFor="cantidadacompañantes" className="text-sm font-medium text-gray-700">
-                                     Cantidad de Acompañantes
-                                    </label>
-                                    <input
-                                        id="cantidadacompañantes"
-                                        type="number"
-                                        placeholder=""
-                                        required
-                                        value={cantidadacompañantes}
-                                        onChange={(e) => setCantidadAcompañantes(e.target.value)}
-                                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"/>
-                                    </div>
-
+        
+                                    
                                     <div className="max-w-md mx-auto bg-white shadow-lg rounded-xl p-6 mt-6">
                                     {acompanantes.length > 0 && (
                                     <div className="mb-4">
@@ -213,10 +214,6 @@ return <>
                                     
                                     
                                     <div  className="space-y-4">
-                                        <button   type="button" onClick={() => setIsOp(!isOp)} className='w-50 bg-black hover:bg-orange-600 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2'>
-                                        Agregar acompañante con cuenta 
-                                        </button>
-                                        {isOp && (
                                             <div className="space-y-2">
                                             <label htmlFor="fullName" className=" flex font-medium text-gray-700">
                                             Email Acompañante
@@ -233,24 +230,17 @@ return <>
                                             <button
                                             onClick={agregarAcompanante} // no necesita type="button" porque ya lo tiene implícito
                                             type="button"
+                                            disabled= {cantidadPermitida < cantidadTotal+1}
                                             className="ml-4 w-50 bg-black hover:bg-orange-500 text-white py-2 px-2 rounded-md"
                                             >
                                             Confirmar acompañante
                                             </button>
                                             </div>
-                                        )}
                                     </div>
 
                                     <div className="space-y-4">
-                                        <button
-                                            type="button"
-                                            onClick={() => setIsSinCuenta(!isSinCuenta)}
-                                            className='w-50 bg-black hover:bg-orange-600 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2'
-                                        >
-                                            Agregar acompañante sin cuenta
-                                        </button>
 
-                                        {isSinCuenta && (
+                    
                                             <div className="space-y-2">
                                                 <label htmlFor="nombreAcom" className="flex font-medium text-gray-700">
                                                     Nombre del Acompañante
@@ -264,16 +254,28 @@ return <>
                                                     onChange={(e) => setNombreAcom(e.target.value)}
                                                     className="w-50 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                                 />
+                                                <label htmlFor="dniAcom" className="flex font-medium text-gray-700">
+                                                    Dni del acompañante
+                                                </label>
+                                                <input
+                                                    id="dniAcom"
+                                                    type="number"
+                                                    placeholder="Ej: 444444"
+                                                    required
+                                                    value={dniAcom}
+                                                    onChange={(e) => setDniAcom(e.target.value)}
+                                                    className="w-50 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                                />
 
                                                 <button
                                                     onClick={agregarAcompananteSinCuenta}
                                                     type="button"
+                                                    disabled= {cantidadPermitida < cantidadTotal+1}
                                                     className="ml-4 w-50 bg-black hover:bg-orange-500 text-white py-2 px-2 rounded-md"
                                                 >
                                                     Confirmar acompañante
                                                 </button>
                                             </div>
-                                        )}
                                     </div>
 
 

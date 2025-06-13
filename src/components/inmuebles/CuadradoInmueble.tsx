@@ -18,8 +18,8 @@ export default function CuadradoInmueble({inmueble}:{inmueble:inmueble}) {
                   />
                   <div className="grid mt-6">
                     <label className="px-6">Nombre:{inmueble.titulo} </label>
-                    <label className="px-6">Ciudad:{inmueble.ciudad}</label>
-                    <label className="px-6">Localidad:{inmueble.localidad}</label>
+                    <label className="px-6">Precio por día:${inmueble.preciopordia}</label>
+                    <label className="px-6">Ciudad:{inmueble.localidad},{inmueble.ciudad}</label>
                   </div>
                  <Link href={`/detalleinmueble/${inmueble.id}`}>
                     <div className="flex mt-3">
