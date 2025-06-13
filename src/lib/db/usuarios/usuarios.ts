@@ -3,14 +3,17 @@ import { getAdministradorDNI, getAdministradorMail, modificarContraseñaAdminist
 import { getEmpleadoDNI, getEmpleadoMail, modificarContraseñaEmpleado } from "./empleados";
 import { typeUser, user } from "@/types/user";
 
-export async function getUsuarioPorMail( mail:string ): Promise<{user: user| undefined,userType:typeUser|undefined}> {
-    let cuenta : {user: user | undefined, userType:typeUser | undefined} = {
+export async function getUsuarioPorMail( mail:string ): Promise<{user: user| undefined|null,userType:typeUser|undefined}> {
+    let cuenta : {user: user | undefined|null, userType:typeUser | undefined} = {
     user: undefined,
     userType: undefined
 }
+console.log("mail", mail)
     cuenta.user = await getClienteMail(mail)
     cuenta.userType = typeUser.cliente
-    if (!cuenta.user){
+    console.log(cuenta.user)
+    if (cuenta.user == null){
+        console.log("entre aca")
         cuenta.user = await getEmpleadoMail(mail)
         cuenta.userType = typeUser.empleado
         if (!cuenta.user){
@@ -18,6 +21,7 @@ export async function getUsuarioPorMail( mail:string ): Promise<{user: user| und
             cuenta.userType = typeUser.administrador
         }
     }
+    console.log(cuenta.user)
     return cuenta
 }
 
@@ -42,7 +46,7 @@ export async function getUsuarioPorDNI( DNI:string ): Promise<{user: user| undef
 
 
 export async function modificarContraseña ( contraseña: string , id: string|null|undefined, mail: string ){
-        let cuenta : {user: user | undefined, userType:typeUser | undefined} = {
+        let cuenta : {user: user | undefined|null, userType:typeUser | undefined} = {
     user: undefined,
     userType: undefined
 }

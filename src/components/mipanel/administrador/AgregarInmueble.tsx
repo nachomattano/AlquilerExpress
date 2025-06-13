@@ -2,6 +2,7 @@
 
 import { existeNombre } from "@/lib/db/inmuebles"
 import { useEffect, useState } from "react"
+import toast from "react-hot-toast"
 
 export default function AgregarInmueble({id}:{id?: string | undefined}) {
     const [titulo, setTitulo] = useState("")
@@ -53,10 +54,11 @@ useEffect(() => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        if(!isEditing){
+        if(isEditing){
+        console.log("estoy editando")
         const res = await fetch(`/api/inmueble/${id}`, {
             method: 'PUT',
-            body: JSON.stringify({cantidadhuespedes:cantidadHuespedes,titulo, espaciocochera:espacioCochera, dpto , direccion, localidad, ciudad, tipo, descripcion, semanaanterior:semanaAnterior, diasanteriores:diasAnteriores, mismodia:mismoDia, duracionminima: periodominimo, preciopordia, imagen}),
+            body: JSON.stringify({cantidadhuespedes:cantidadHuespedes,titulo, espaciocochera:espacioCochera, dpto , direccion, localidad, ciudad, tipo, descripcion, semanaanterior:0, diasanteriores:0, mismodia:0, duracionminima: periodominimo, preciopordia, imagen}),
             headers: { 'Content-Type': 'application/json' }
         });
 
@@ -67,20 +69,21 @@ useEffect(() => {
         }
         }else{
             const existeInmueble = await existeNombre(titulo)
+            console.log(JSON.stringify(existeInmueble))
             if (!existeInmueble){
                 const res = await fetch('/api/inmueble', {
                 method: 'POST',
-                body: JSON.stringify({cantidadhuespedes:cantidadHuespedes,titulo, espaciocochera:espacioCochera, dpto , direccion, localidad, ciudad, tipo, descripcion, semanaanterior:semanaAnterior, diasanteriores:diasAnteriores, mismodia:mismoDia, duracionminima: periodominimo, preciopordia, imagen}),
+                body: JSON.stringify({cantidadhuespedes:cantidadHuespedes,titulo, espaciocochera:espacioCochera, dpto , direccion, localidad, ciudad, tipo, descripcion, semanaanterior:0, diasanteriores:0, mismodia:0, duracionminima: periodominimo, preciopordia, imagen}),
                 headers: { 'Content-Type': 'application/json' }
                 });
 
                 if (res.ok) {
-                    alert ('Inmueble Creado con Exito!')// o a donde quieras ir
+                    toast.success ('Inmueble Creado con Exito!')// o a donde quieras ir
                 } else {
-                    alert(await res.text());
+                    toast.error(await res.text());
                 }
             }else{
-                alert("El nombre ingresado para el inmueble ya se encuentra registrado en el sistema")
+                toast.error("El nombre ingresado para el inmueble ya se encuentra registrado en el sistema")
             }
         }
     }
@@ -209,6 +212,7 @@ useEffect(() => {
                                 id="cantidadHuespedes"
                                 type="number"
                                 placeholder=""
+                                min={1}
                                 value={cantidadHuespedes ?? ''}
                                 onChange={(e) => setCantHuespedes(e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -224,6 +228,7 @@ useEffect(() => {
                                 id="espacioCochera"
                                 type="number"
                                 placeholder=""
+                                min={0}
                                 value={espacioCochera ?? ''}
                                 onChange={(e) => setEspacioCochera(e.target.value)}
                                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"

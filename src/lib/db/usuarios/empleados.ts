@@ -30,7 +30,8 @@ export async function getEmpleadoPorId( id:string ): Promise<user> {
 export async function createEmpleado ( empleado: user ){
     const supabase = await createClient();
     const { id, ...empSinId } = empleado
-    await supabase.from("empleado").insert(empSinId)
+    const { error} =  await supabase.from("empleado").insert(empSinId)
+    console.log("ERRORRR", JSON.stringify(error))
 }
 
 export async function modificarContraseñaEmpleado ( contraseña: string, id: string|null|undefined ){

@@ -15,9 +15,11 @@ export async function getClienteDNI( DNI:string|null|undefined ): Promise<user> 
     return cliente
 }
 
-export async function getClienteMail( mail:string|null|undefined ): Promise<user> {
+export async function getClienteMail( mail:string|null|undefined ): Promise<user|null|undefined> {
     const supabase = await createClient();
+    console.log(mail)
     const { data: cliente } = (await supabase.from("cliente").select().eq( "mail", mail ).single());
+    console.log(JSON.stringify(cliente))
     return cliente
 }
 

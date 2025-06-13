@@ -13,6 +13,7 @@ export default function AgregarEmpleado() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         setIsLoading(true)
+        console.log("entre a crear")
         const res = await fetch('/api/users/empleados', {
             method: 'POST',
             body: JSON.stringify({ mail:email, contraseña:password, dni, edad:age, nombre:fullName }),
@@ -116,7 +117,7 @@ export default function AgregarEmpleado() {
                     </div>
                     <button
                         type="submit"
-                        disabled={isLoading}
+                        
                         className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                     >
                         Crear Cuenta de Empleado

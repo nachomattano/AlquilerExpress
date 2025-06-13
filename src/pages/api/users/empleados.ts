@@ -13,14 +13,16 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
        res.send(JSON.stringify(resp))
     }
     if (method == 'POST'){
+        console.log("mail",mail)
         const checkMail = await getUsuarioPorMail(mail)
-        if (!checkMail){
+        console.log(JSON.stringify(checkMail))
+        if (!checkMail.user){
             const user :user = {id:undefined,nombre,contraseña,dni,edad,mail,estado:estadoUser.activo}
             const resp = await createEmpleado(user)
             res.status(200).send(JSON.stringify(resp))
             return 
         }
-        res.status(400)
+        res.status(400).send("mail ya registrado en el sistema")
     }
     
 }
