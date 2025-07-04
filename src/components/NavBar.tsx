@@ -9,10 +9,13 @@ export default function NavBar() {
     const [ isOpen, setIsOpen ] = useState(false)
     const [rol, setRol] = useState<typeUser | null>(null)
 
+    const [nombre, setNombre] = useState<string | null>(null)
+
     useEffect(() => {
         const storedRol = localStorage.getItem('userType') as typeUser | null
+        const storedNombre = localStorage.getItem('userName')
         setRol(storedRol)
-        console.log(storedRol)
+        setNombre(storedNombre)
     }, [])
 
     const handleClose = async () => {
@@ -40,30 +43,47 @@ export default function NavBar() {
                     {!rol && 
                     <Link href="/auth">
                         <button>
-                            Iniciar sesión
+                            Iniciar sesion
                         </button>
                     </Link>
                     }
                 </div>
-                {rol &&
+              {(rol ) && (
                     <div className="relative">
+                        <div className="flex items-center gap-2 justify-end">
+                        <div className="text-right leading-tight text-sm text-black">
+                            <div className="font-semibold">
+                            Bienvenido <span className="capitalize">{nombre}!!</span>
+                            </div>
+                            <div className="text-xs text-gray-700 capitalize">({rol})</div>
+                        </div>
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="inline-flex  w-full px-4 py-2 bg-orange-400 text-sm font-medium text-gray-700 hover:bg-orange-300">
-                                <img src="https://cdn-icons-png.flaticon.com/128/15218/15218567.png" className="w-10 h-10" />
+                            className="inline-flex px-2 py-2 bg-orange-400 text-sm font-medium text-gray-700 hover:bg-orange-300 rounded"
+                        >
+                            <img
+                            src="https://cdn-icons-png.flaticon.com/128/15218/15218567.png"
+                            alt="Perfil"
+                            className="w-10 h-10 rounded-full"
+                            />
                         </button>
+                        </div>
 
                         {isOpen && (
-                        <div className="absolute right-0 z-10 mt-2 w-56  rounded-md shadow-lg ">
+                        <div className="absolute right-0 z-10 mt-2 w-56 rounded-md shadow-lg">
                             <div className="py-1 bg-black">
-                                <button className="py-3 text-sm bg-black hover:bg-gray-300 w-full text-left" onClick={handleClose}>
-                                    Cerrar Sesion
-                                </button>
+                            <button
+                                className="py-3 text-sm bg-black hover:bg-gray-300 w-full text-left"
+                                onClick={handleClose}
+                            >
+                                Cerrar Sesion
+                            </button>
                             </div>
                         </div>
-                    )}
+                        )}
                     </div>
-                }
+                    )}
+
             </div>    
         </nav>
     )

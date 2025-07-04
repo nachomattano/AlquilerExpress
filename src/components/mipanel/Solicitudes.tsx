@@ -30,6 +30,7 @@ export default function SolicitudesReserva() {
             } finally {
             setLoading(false);
             }
+
         };
 
         cargarDatos();
