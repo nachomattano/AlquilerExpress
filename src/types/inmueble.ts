@@ -1,7 +1,5 @@
 import { estadoInmueble } from "./estado-inmueble"
 
-
-
 export type inmueble = {
     id: string|null|undefined,
     titulo: string|null|undefined,
@@ -13,9 +11,7 @@ export type inmueble = {
     ciudad: string|null|undefined,
     estado: estadoInmueble|null|undefined,
     tipo:string|null|undefined,
-
     imagen?: string|null|undefined,
-
     descripcion:string|null|undefined,
     semanaanterior:string|null|undefined, 
     diasanteriores:string|null|undefined, 
@@ -23,5 +19,4 @@ export type inmueble = {
     duracionminima:string|null|undefined,
     periodominimo:3,
     preciopordia:number|null|undefined
-
 }

@@ -13,11 +13,8 @@ export default async function detalleSolicitud ({ params }: PageProps){
     const solicitud = await solicitudesRaw.json()
 
     return (<>
-        <div>
-                    
-                    <DetalleSolicitud
-                    solicitud={solicitud}      
-                    />
+        <div>  
+            <DetalleSolicitud solicitud={solicitud}/>
         </div>
     </>)
 }
