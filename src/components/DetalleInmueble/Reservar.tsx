@@ -126,7 +126,7 @@ return <>
         
                                     
                                     <div className="max-w-md mx-auto bg-white shadow-lg rounded-xl p-6 mt-6">
-                                    {acompanantes.length > 0 && (
+                                    {cantidadTotal > 0 && (
                                     <div className="mb-4">
                                         <h3 className="font-semibold text-lg text-green-700">Acompañantes agregados:</h3>
                                         <ul className="list-disc list-inside text-gray-800 mt-2">
@@ -157,9 +157,9 @@ return <>
                                                     id="cantidadMayores"
                                                     type="number"
                                                     min={0}
-                                                    max={cantidadTotal+1}
-                                                    placeholder="2"
-                                                    value={cantidadMenores}
+                                                    max={cantidadPermitida-cantidadTotal}
+                                                    placeholder="0"
+                                                    value={cantidadMayores}
                                                     onChange={(e) => setCantidadMayores(parseInt(e.target.value))}
                                                     className="w-50 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                                 />
@@ -185,8 +185,8 @@ return <>
                                                     id="cantidadMenores"
                                                     type="number"
                                                     min={0}
-                                                    max={cantidadTotal+1}
-                                                    placeholder="2"
+                                                    max={cantidadPermitida-cantidadTotal}
+                                                    placeholder=""
                                                     value={cantidadMenores}
                                                     onChange={(e) => setCantidadMenores(parseInt(e.target.value))}
                                                     className="w-50 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"

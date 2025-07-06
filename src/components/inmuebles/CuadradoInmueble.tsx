@@ -23,7 +23,7 @@ export default function CuadradoInmueble({inmueble}:{inmueble:inmueble}) {
                   </div>
                  <Link href={`/detalleinmueble/${inmueble.id}`}>
                     <div className="flex mt-3">
-                      <button className=" bg-black hover:bg-gray-300 text-white w-200 rounded-xl w-1/6 h-13 mx-5">Reservar </button>
+                      <button className=" bg-black hover:bg-gray-300 text-white w-200 rounded-xl w-1/6 h-13 mx-5">Ver Detalle </button>
                     </div>
                   </Link>
                 </div>  
