@@ -6,6 +6,6 @@ export type alquiler = {
     checkoutid:string|null|undefined,
     checkinid:string|null|undefined,
     costo:number|null|undefined,
-    cantidadhuespedes:number|null|undefined
-
+    cantidadhuespedes:number|null|undefined,
+    inmuebleid:string|null|undefined
 }

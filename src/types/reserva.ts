@@ -10,5 +10,6 @@ export type reserva ={
         acompañantesid:string[]|null|undefined,
         pagoid:string|null|undefined,
         estado: estadoReserva |null|undefined,
-        inmuebleid: string|null|undefined
+        inmuebleid: string|null|undefined,
+        costo: number|null|undefined
 }

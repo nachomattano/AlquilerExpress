@@ -1,29 +1,27 @@
 
 import { createClient } from './server';
-import { estadoInmueble } from '../../types/estado-inmueble';
+import { alquiler } from '@/types/alquiler';
 
-export async function getAlquileres (){
+export async function getAlquileres (): Promise<alquiler[]|null|undefined>{
     const supabase = await createClient();
     const { data: alquiler } = await supabase.from("alquiler").select();
-    return JSON.stringify(alquiler)
+    return alquiler
 }
 
-export async function getAlquileresParaInmueble( id:number ) {
+export async function getAlquileresParaInmueble( id:string ):Promise<alquiler[]|null|undefined> {
     const supabase = await createClient();
     const { data: alquiler } = (await supabase.from("alquiler").select().eq( "inmuebleid", id ));
-    return JSON.stringify(alquiler)
+    return alquiler
 }
 
-export async function createAlquiler ( alquiler: {
-    fechadesde:Date,
-    fechahasta:Date,
-    cantidadHuespedes:number,
-    clientid:number[],
-    checkinid:string,
-    checkoutid:string,
-    inmuebleid:number,
-    costo: number
-} ){
+export async function getAlquiler( id:string ):Promise<alquiler|null|undefined> {
     const supabase = await createClient();
-    await supabase.from("alquiler").insert(alquiler)
+    const { data: alquiler } = (await supabase.from("alquiler").select().eq( "id", id ).single());
+    return alquiler
+}
+
+export async function createAlquiler ( alquiler: alquiler ){
+    const supabase = await createClient();
+    const { id, ...sinId } = alquiler
+    const { error } =  await supabase.from("alquiler").insert(sinId)
 }

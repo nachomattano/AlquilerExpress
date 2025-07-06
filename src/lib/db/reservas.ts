@@ -15,10 +15,10 @@ export async function getReservasPorInmueble (id:string):Promise<reserva[]|null|
     return reserva
 }
 
-export async function getReserva( id:string ) {
+export async function getReserva( id:string|null|undefined ):Promise<reserva|null|undefined> {
     const supabase = await createClient();
     const { data: reserva } = (await supabase.from("reserva").select().eq( "id", id ).single());
-    return JSON.stringify(reserva)
+    return reserva
 }
 
 export async function createReserva ( reserva: reserva ){
@@ -26,6 +26,7 @@ export async function createReserva ( reserva: reserva ){
     const {id, ...sinId} = reserva
     const {error} = await supabase.from("reserva").insert(sinId)
     console.log("ERROR", error)
+    return error
 }
 
 export async function updateStateReserva ( state: estadoReserva, id: number ){
