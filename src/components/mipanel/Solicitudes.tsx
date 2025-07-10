@@ -5,7 +5,9 @@ import { getSolicitudesReserva } from "@/lib/db/solicitudes-reservas"
 import { estadoSolicitud } from "@/types/estado-solicitud"
 import { inmueble } from "@/types/inmueble"
 import { solicitud } from "@/types/solicitud"
+import { user } from "@/types/user"
 import { useState, useEffect } from "react"
+import toast from "react-hot-toast"
 
 export default function SolicitudesReserva() {
     const [inmuebles, setInmuebles] = useState<inmueble[]>([])
@@ -13,8 +15,18 @@ export default function SolicitudesReserva() {
     const [inmuebleSeleccionado, setInmuebleSeleccionado] = useState<string>("")
     const [solicitudesFiltradas, setSolicitudesFiltradas] = useState<solicitud[]>([])
     const [loading, setLoading] = useState(true)
+    const [cliente, setCliente] = useState<user | null>(null);
+    const [mensaje, setMensaje] = useState<string | null>(null);
+    const [estadoLocal, setEstadoLocal] = useState<estadoSolicitud>(estadoSolicitud.Pendiente);
 
     useEffect(() => {
+        const usuarioActual = localStorage.getItem("user");
+        if (usuarioActual) {
+            setCliente(JSON.parse(usuarioActual));
+        }else{
+            window.location.replace("/")
+            toast.error('No hay sesion iniciada actualmente')
+        }
         const cargarDatos = async () => {
             try {
             const [inmueblesData, solicitudesData] = await Promise.all([
@@ -35,6 +47,54 @@ export default function SolicitudesReserva() {
 
         cargarDatos();
     }, []);
+
+    const handleAccept = async (solicitud:solicitud) => {
+        const res = await fetch(`/api/solicitudes/${solicitud.id}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ estado: estadoSolicitud.Aceptada }),
+        });
+
+        if (res.ok) {
+            setEstadoLocal(estadoSolicitud.Aceptada);
+            setMensaje(' Solicitud aceptada con éxito.');
+            window.location.reload()
+        } else {
+            toast.error(await res.text());
+        }
+    };
+
+    const handleReject = async (solicitud:solicitud) => {
+        const res = await fetch(`/api/solicitudes/${solicitud.id}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ estado: estadoSolicitud.Rechazada }),
+        });
+
+        if (res.ok) {
+            setEstadoLocal(estadoSolicitud.Rechazada);
+            setMensaje(' Solicitud rechazada con éxito.');
+            window.location.reload()
+        } else {
+            toast.error(await res.text());
+        }
+    };
+
+    const handleCancelar = async (solicitud:solicitud) => {
+        const res = await fetch(`/api/solicitudes/${solicitud.id}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ estado: estadoSolicitud.Rechazada }),
+        });
+
+        if (res.ok) {
+            setEstadoLocal(estadoSolicitud.Rechazada);
+            setMensaje(' Solicitud cancelada con éxito.');
+            window.location.reload()
+        } else {
+            toast.error(await res.text());
+        }
+    };
 
     console.log(inmuebleSeleccionado)
 
@@ -169,19 +229,37 @@ export default function SolicitudesReserva() {
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">{getEstadoBadge(solicitud.estado)}</td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                              {solicitud.estado === "Pendiente" && (
-                                <div className="flex gap-2">
+                              {solicitud.estado === "Pendiente" && (<>
+                                {!(localStorage.getItem('userType') === 'cliente') &&(
+
+                                  <div className="flex gap-2">
                                   <button
                                     className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200"
+                                    onClick={async () => handleAccept(solicitud)}
                                   >
                                     Aceptar
                                   </button>
                                   <button
                                     className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200"
+                                    onClick={async () => handleReject(solicitud)}
                                   >
                                     Rechazar
                                   </button>
                                 </div>
+                                )}
+                                
+                                {(localStorage.getItem('userType') === 'cliente') &&(
+
+                                  <div className="flex gap-2">
+                                  <button
+                                    className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200"
+                                    onClick={async () => handleCancelar(solicitud)}
+                                  >
+                                    Cancelar
+                                  </button>
+                                </div>
+                                )}
+                                </>
                               )}
                             </td>
                           </tr>
