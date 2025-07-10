@@ -39,6 +39,17 @@ export async function modificarContraseñaEmpleado ( contraseña: string, id: st
     await supabase.from("empleado").update({ contraseña: contraseña }).eq("id", id)
 }
 
+export async function modifyEmpleado (user:user){
+    const supabase = await createClient()
+    const { id, ...sinId } = user
+    const resp = await supabase
+        .from("empleado")
+        .update(sinId)
+        .eq("id", id);
+
+    console.log(resp)
+}
+
 export async function deleteEmpleado ( id: string ){
     const supabase = await createClient()
     await supabase.from("empleado").update({ estado: estadoUser.inactivo }).eq("id", id)

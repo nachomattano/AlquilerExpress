@@ -39,3 +39,14 @@ export async function modificarContraseñaAdministrador ( contraseña:string, id
     const supabase = await createClient()
     await supabase.from("administrador").update({ contraseña: contraseña }).eq("id", id)
 }
+
+export async function modifyAdmin (user:user){
+    const supabase = await createClient()
+    const { id, ...sinId } = user
+    const resp = await supabase
+        .from("administrador")
+        .update(sinId)
+        .eq("id", id);
+
+    console.log(resp)
+}

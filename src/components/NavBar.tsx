@@ -3,19 +3,22 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { typeUser } from "@/types/user";
+import { typeUser, user } from "@/types/user";
 
 export default function NavBar() {
     const [ isOpen, setIsOpen ] = useState(false)
     const [rol, setRol] = useState<typeUser | null>(null)
 
-    const [nombre, setNombre] = useState<string | null>(null)
+    const [usuario, setUsuario] = useState<user | null>(null); 
 
     useEffect(() => {
         const storedRol = localStorage.getItem('userType') as typeUser | null
         const storedNombre = localStorage.getItem('userName')
         setRol(storedRol)
-        setNombre(storedNombre)
+        const usuarioActual = localStorage.getItem("user");
+        if (usuarioActual) {
+            setUsuario(JSON.parse(usuarioActual));
+        }
     }, [])
 
     const handleClose = async () => {
@@ -53,7 +56,7 @@ export default function NavBar() {
                         <div className="flex items-center gap-2 justify-end">
                         <div className="text-right leading-tight text-sm text-black">
                             <div className="font-semibold">
-                            Bienvenido <span className="capitalize">{nombre}!!</span>
+                            Bienvenido <span className="capitalize">{usuario?.nombre}!!</span>
                             </div>
                             <div className="text-xs text-gray-700 capitalize">({rol})</div>
                         </div>
@@ -78,6 +81,15 @@ export default function NavBar() {
                             >
                                 Cerrar Sesion
                             </button>
+                            </div>
+                            <div className="py-1 bg-black">
+                            <Link href={`/modificar`}>
+                            <button
+                                className="py-3 text-sm bg-black hover:bg-gray-300 w-full text-left"
+                            >
+                                Modificar Perfil
+                            </button>
+                            </Link>
                             </div>
                         </div>
                         )}
