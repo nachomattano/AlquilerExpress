@@ -7,7 +7,9 @@ import { alquiler } from "@/types/alquiler"
 import { estadoSolicitud } from "@/types/estado-solicitud"
 import { inmueble } from "@/types/inmueble"
 import { solicitud } from "@/types/solicitud"
+import { user } from "@/types/user"
 import { useState, useEffect } from "react"
+import toast from 'react-hot-toast';
 
 export default function SolicitudesReserva() {
     const [inmuebles, setInmuebles] = useState<inmueble[]>([])
@@ -15,8 +17,16 @@ export default function SolicitudesReserva() {
     const [inmuebleSeleccionado, setInmuebleSeleccionado] = useState<string>("")
     const [alquileresFiltrados, setAlquileresFiltrados] = useState<alquiler[]>([])
     const [loading, setLoading] = useState(true)
+    const [usuario, setUsuario] = useState<user | null>(null); 
 
     useEffect(() => {
+        const usuarioActual = localStorage.getItem("user");
+        if (usuarioActual) {
+            setUsuario(JSON.parse(usuarioActual));
+        }else{
+            window.location.replace("/")
+            toast.error('No hay sesion iniciada actualmente')
+        }
         const cargarDatos = async () => {
             try {
             const [inmueblesData, alquileres] = await Promise.all([
@@ -37,8 +47,25 @@ export default function SolicitudesReserva() {
         cargarDatos();
     }, []);
 
-    const handleCheckout = async () => {
+    const handleCheckout = async (alquiler:alquiler|null|undefined) => {
+      const response = await fetch (`/api/reservas/${alquiler?.id}/checkout`,{
+        method:"POST",
+        headers:{
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          fecha: new Date(),
+          checkinid: alquiler?.checkinid,
+          comentario: "",
+          empleadoid: usuario?.id
+        })
+      })
 
+      if (response.ok){
+        toast.success('Check Out realizado con exito!')
+      }else{
+        toast.error('Se presento un error en la realizacion del checkout')
+      }
     }
     console.log(inmuebleSeleccionado)
 
@@ -142,7 +169,7 @@ export default function SolicitudesReserva() {
                                 <div className="flex gap-2">
                                   <button
                                     className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200"
-                                    onClick={handleCheckout}
+                                    onClick={async () => handleCheckout(alquiler)}
                                   >
                                     checkout
                                   </button>
