@@ -6,6 +6,7 @@ import { addDays, startOfDay } from "date-fns"
 import 'react-day-picker/dist/style.css'
 import CuadradoInmueble from "@/components/inmuebles/CuadradoInmueble"
 import { inmueble } from "@/types/inmueble"
+import { estadoInmueble } from "@/types/estado-inmueble"
 
 type Disponibilidad = {
   id: string
@@ -21,6 +22,10 @@ export default function Alquiler() {
   const [filtrados, setFiltrados] = useState<inmueble[]>([])
   const [range, setRange] = useState<DateRange | undefined>()
   const [tipo, setTipo] = useState("Todos")
+  const [ cantHosts, setCantHosts ] = useState<number>(0)
+  const [ minPrice, setMinPrice  ] = useState<number>(0)
+  const [ maxPrice, setMaxPrice  ] = useState<number>(0)
+  const [ localidad, setLocalidad ] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
     const hoy = startOfDay(new Date())
   const minFecha = addDays(hoy, 3)
@@ -81,6 +86,25 @@ export default function Alquiler() {
       })
     }
 
+    if ( minPrice > 0 ){
+      filtradosTemp = filtradosTemp.filter(inmueble => { return inmueble?.preciopordia? inmueble.preciopordia > minPrice: false })
+    }
+
+    if ( maxPrice > 0 ){
+      filtradosTemp = filtradosTemp.filter(inmueble => { return inmueble?.preciopordia? inmueble.preciopordia < maxPrice: false })
+    }
+
+    if (localidad.length>0){
+      filtradosTemp = filtradosTemp.filter(inmueble => {
+    
+        return inmueble?.localidad? localidad.join(' ').includes(inmueble.localidad): false 
+      })
+    }
+
+    if (cantHosts> 0){
+      filtradosTemp = filtradosTemp.filter(inmueble => { return inmueble?.preciopordia? inmueble.preciopordia = cantHosts: false })
+    }
+
     setFiltrados(filtradosTemp)
   }
 
@@ -112,6 +136,21 @@ export default function Alquiler() {
           </select>
         </div>
 
+      <div className="md:col-span-2 lg:col-span-1">
+      <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="localidad">
+        Localidad
+      </label>
+      <input 
+          id="localidad"
+          type="text"
+          placeholder="Localidad A Filtrar"
+          required={false}
+          value={localidad}
+          onChange={(e) => setLocalidad([...localidad, e.target.value])}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+      />
+    </div>
+
         {/* Selector de fechas */}
     <div className="md:col-span-2 lg:col-span-1">
       <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -127,6 +166,47 @@ export default function Alquiler() {
       </div>
     </div>
 
+    <div className="md:col-span-2 lg:col-span-1">
+      <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="cantHosts">
+        Cantidad De Huespedes
+      </label>
+      <input 
+          id="cantHosts"
+          type="number"
+          min={0}
+          placeholder="Cantidad Hosts"
+          required={false}
+          value={cantHosts}
+          onChange={(e) => setCantHosts(parseFloat(e.target.value))}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+      />
+    </div>
+
+    <div className="md:col-span-2 lg:col-span-1">
+      <label className="block text-sm font-medium text-gray-700 mb-2" htmlFor="preciopordia">
+        Rango de Precios
+      </label>
+      <input 
+          id="precioMin"
+          type="number"
+          min={0}
+          placeholder="precio minimo"
+          required={false}
+          value={minPrice}
+          onChange={(e) => setMinPrice(parseFloat(e.target.value))}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+      />
+      <input
+        id="precioMax"
+          type="number"
+          min={0}
+          placeholder="precio maximo"
+          required={false}
+          value={maxPrice}
+          onChange={(e) => setMaxPrice(parseFloat(e.target.value))}
+          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+      />
+    </div>
         <button
           onClick={aplicarFiltro}
           className="bg-blue-600 text-white px-6 py-3 mt-4 lg:mt-0 rounded hover:bg-blue-700 transition"
