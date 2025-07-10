@@ -11,7 +11,7 @@ import { user } from "@/types/user"
 import { useState, useEffect } from "react"
 import toast from 'react-hot-toast';
 
-export default function SolicitudesReserva() {
+export default function Alquileres() {
     const [inmuebles, setInmuebles] = useState<inmueble[]>([])
     const [alquileres, setAlquileres] = useState<alquiler[]>([])
     const [inmuebleSeleccionado, setInmuebleSeleccionado] = useState<string>("")

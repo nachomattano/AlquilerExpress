@@ -10,6 +10,8 @@ import { useState } from "react"
 import VerEmpleados from "../verempleados/page"
 import VerCliente from "../verclientes/page"
 import VerInmuebles from "../verInmuebles/page"
+import Alquileres from "@/components/mipanel/Alquileres"
+import Estadisticas from "@/components/mipanel/administrador/Estadisticas"
 
 const adminItems = [
 
@@ -49,6 +51,18 @@ const adminItems = [
       icon: HousePlus,
       component: Solicitudes
 
+    },
+    {
+      id: "Alquileres",
+      title: "Ver Alquileres",
+      icon: HousePlus,
+      component: Alquileres
+    },
+    {
+      id: "Estadisticas",
+      title: "Ver Estadisticas",
+      icon: HousePlus,
+      component: Estadisticas
     }
 ]
 
