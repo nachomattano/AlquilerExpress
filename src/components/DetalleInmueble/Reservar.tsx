@@ -84,7 +84,9 @@ export default  function Reservar ({id}:{id:string}){
             toast.error("No se pudo identificar al usuario actual.");
             return;
         }
-        if(cantidadPermitida < cantidadTotal+1){
+        let cantHuespedes = inmueble?.cantidadhuespedes? inmueble.cantidadhuespedes:3
+        console.log(cantHuespedes < cantidadTotal)
+        if(cantHuespedes < cantidadTotal){
            toast.error("Maximo de huespedes superado")
            return; 
         }
@@ -157,10 +159,10 @@ return <>
                                                     id="cantidadMayores"
                                                     type="number"
                                                     min={0}
-                                                    max={cantidadPermitida-cantidadTotal}
+                                                    max={cantidadPermitida}
                                                     placeholder="0"
                                                     value={cantidadMayores}
-                                                    onChange={(e) => setCantidadMayores(parseInt(e.target.value))}
+                                                    onChange={(e) => {setCantidadMayores(parseInt(e.target.value)); setCantidad(cantidadTotal+1); setCantidadP(cantidadPermitida-1)}}
                                                     className="w-50 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                                 />
                                                 <button
@@ -185,10 +187,10 @@ return <>
                                                     id="cantidadMenores"
                                                     type="number"
                                                     min={0}
-                                                    max={cantidadPermitida-cantidadTotal}
+                                                    max={cantidadPermitida}
                                                     placeholder=""
                                                     value={cantidadMenores}
-                                                    onChange={(e) => setCantidadMenores(parseInt(e.target.value))}
+                                                    onChange={(e) => {setCantidadMenores(parseInt(e.target.value)); setCantidad(cantidadTotal+1); setCantidadP(cantidadPermitida-1)}}
                                                     className="w-50 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                                 />
                                                 <button
