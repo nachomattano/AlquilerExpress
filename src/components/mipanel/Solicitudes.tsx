@@ -5,7 +5,7 @@ import { getSolicitudesReserva } from "@/lib/db/solicitudes-reservas"
 import { estadoSolicitud } from "@/types/estado-solicitud"
 import { inmueble } from "@/types/inmueble"
 import { solicitud } from "@/types/solicitud"
-import { user } from "@/types/user"
+import { typeUser, user } from "@/types/user"
 import { useState, useEffect } from "react"
 import toast from "react-hot-toast"
 
@@ -18,8 +18,11 @@ export default function SolicitudesReserva() {
     const [cliente, setCliente] = useState<user | null>(null);
     const [mensaje, setMensaje] = useState<string | null>(null);
     const [estadoLocal, setEstadoLocal] = useState<estadoSolicitud>(estadoSolicitud.Pendiente);
+     const [rol, setRol] = useState<typeUser | null>(null)
 
     useEffect(() => {
+      const storedRol = localStorage.getItem('userType') as typeUser | null
+        setRol(storedRol)
         const usuarioActual = localStorage.getItem("user");
         if (usuarioActual) {
             setCliente(JSON.parse(usuarioActual));
@@ -33,10 +36,13 @@ export default function SolicitudesReserva() {
                 getInmuebles(),
                 getSolicitudesReserva()
             ]);
+            
             setInmuebles(inmueblesData || []);
             setSolicitudes(solicitudesData || []);
-            console.log(solicitudesData)
-            console.log(inmueblesData)
+            console.log(storedRol)
+            if (storedRol == "cliente"){
+              
+            }
             } catch (error) {
             console.error("Error cargando datos:", error);
             } finally {
@@ -100,9 +106,20 @@ export default function SolicitudesReserva() {
 
     useEffect(() => {
         if (inmuebleSeleccionado) {
-            const filtradas = solicitudes.filter((solicitud) => String(solicitud.inmuebleid) === inmuebleSeleccionado)
+            let filtradas: solicitud[]
+            filtradas = solicitudes.filter((solicitud) => String(solicitud.inmuebleid) === inmuebleSeleccionado)
+            if (rol == "cliente"){
+              filtradas = solicitudes.filter((solicitud) => String(solicitud.inmuebleid) === inmuebleSeleccionado && solicitud.solicitante==cliente?.id)
+            }
             setSolicitudesFiltradas(filtradas)
         } else {
+          if (rol == "cliente"){
+              let filtradas = solicitudes.filter((solicitud) => String( solicitud.solicitante==cliente?.id))
+              console.log("estoy", filtradas)
+              let inmuebels = inmuebles.filter(inmueble => { let esta = filtradas?.find(soli => soli.inmuebleid == inmueble.id); if (esta) return true; else return false })
+              console.log("inmuebles con solis", inmuebels) 
+              setInmuebles(inmuebels || [])
+            }
             setSolicitudesFiltradas([]) 
         }
     }, [inmuebleSeleccionado, solicitudes])
@@ -247,7 +264,7 @@ export default function SolicitudesReserva() {
                                   </button>
                                 </div>
                                 )}
-                                
+
                                 {(localStorage.getItem('userType') === 'cliente') &&(
 
                                   <div className="flex gap-2">

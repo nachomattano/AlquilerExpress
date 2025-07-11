@@ -9,7 +9,7 @@ import { comentario } from '@/types/comentario'
 
 export default async function handler(req:NextApiRequest,res:NextApiResponse){
 
-    const {method, query: {id}, body: { comentario, comentarioid}} = req
+    const {method, query: {id}, body: { comentario, comentarioid, autorid}} = req
 
     
     if (method == 'GET'){
@@ -20,10 +20,14 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
     }
   
     if (method == 'POST'){
-        const comment : comentario = { id:null, comentario, inmuebleid: id as string, comentarioid:null  }
+        const comment : comentario = { id:null, comentario, inmuebleid: id as string, comentarioid:null, autorid:autorid  }
 
-        await createComentario(comment)
-        res.send('OK')
+        const error = await createComentario(comment)
+        if (error){
+            res.status(400)
+            return
+        }
+        res.status(200)
         return ''
     }
 }

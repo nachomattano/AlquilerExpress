@@ -10,7 +10,10 @@ export async function getComentarios( id:string |null| undefined ):Promise<comen
 
 export async function createComentario ( comentario:comentario){
     const supabase = await createClient();
-    await supabase.from("comentario").insert(comentario)
+    const { id, ...sinId } = comentario
+    const {error} = await supabase.from("comentario").insert(sinId)
+    console.log(error)
+    return error
 }
 
 
