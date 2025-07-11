@@ -120,6 +120,7 @@ export default function SolicitudesReserva() {
           <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200">
             Aprobada
           </span>
+          
         )
       case "Rechazada":
         return (
@@ -141,6 +142,7 @@ export default function SolicitudesReserva() {
         )
     }
   }
+  
 
   if (loading) {
     return (
@@ -260,6 +262,16 @@ export default function SolicitudesReserva() {
                                 </div>
                                 )}
                                 </>
+                              )}
+                              {solicitud.estado === "Aceptada" && localStorage.getItem('userType') === 'cliente' && (
+                                <button
+                                className="mt-2 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200"
+                                onClick={() => {
+                                  window.location.href = `/pago/${solicitud?.id}`;
+                                }}
+                                            >
+                                    Ir a pagar
+                                </button>
                               )}
                             </td>
                           </tr>

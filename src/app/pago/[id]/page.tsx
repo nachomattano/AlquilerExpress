@@ -1,3 +1,4 @@
+import Formulario from "@/components/Pago/Formulario";
 import Pagar from "@/components/Pago/Pagar"
 
 interface PageProps {
@@ -6,9 +7,12 @@ interface PageProps {
 
 export default async function pago ({ params }: PageProps){
     const {id} = await params
+    console.log(id);
     return (<>
             <div>
-                <Pagar id={id}/>    
+                <Formulario id= {id}/> 
+                <Pagar id={id}/>   
+                
             
             </div>    
             

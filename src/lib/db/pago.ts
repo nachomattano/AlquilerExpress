@@ -9,7 +9,7 @@ export async function getPagos (): Promise<pago[]|null>{
     return pago
 }
 
-export async function getPago( id:string ): Promise<pago|null> {
+export async function getPago( id:string | null | undefined): Promise<pago|null> {
     const supabase = await createClient();
     const { data: pago } = (await supabase.from("pagos").select().eq( "id", id ).single());
     return pago
