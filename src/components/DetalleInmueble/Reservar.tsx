@@ -20,7 +20,8 @@ export default  function Reservar ({id}:{id:string}){
     const hoy = startOfDay(new Date())
     const minFecha = addDays(hoy, 3)
     const [cantidadTotal, setCantidad] = useState<number> (1); 
-    const [cantidadPermitida, setCantidadP] = useState<number> (1); 
+    const [cantidadPermitida, setCantidadP] = useState<number> (1);
+    const [cantidadRestante, setCantRestante] = useState<number> (1);  
     const [ cantidadMenores, setCantidadMenores ] = useState<number>(0)
     const [ cantidadMayores, setCantidadMayores ] = useState<number>(0)
 
@@ -58,6 +59,8 @@ export default  function Reservar ({id}:{id:string}){
                 const inmu = await getInmueble(id as string)
                 const cantidad = inmu?.cantidadhuespedes? inmu.cantidadhuespedes:1
                 setCantidadP(cantidad) 
+                setCantRestante(cantidad-cantidadTotal)
+                console.log(cantidadRestante)
                 setInmueble(inmu)
                 setDisponibilidad(rangosNoDisponibles);
             } catch (error) {
@@ -68,14 +71,7 @@ export default  function Reservar ({id}:{id:string}){
         fetchClientes();
     }, []);
 
-    const agregarAcompanante = async () => {
-
-        setCantidad(cantidadTotal + cantidadMayores)
-    };
-
-    const agregarAcompananteSinCuenta = () => {
-        setCantidad(cantidadTotal + cantidadMenores)
-    };
+ 
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -159,20 +155,13 @@ return <>
                                                     id="cantidadMayores"
                                                     type="number"
                                                     min={0}
-                                                    max={cantidadPermitida}
-                                                    placeholder="0"
+                                                    disabled={cantidadRestante==0}
+                                                    placeholder=""
                                                     value={cantidadMayores}
-                                                    onChange={(e) => {setCantidadMayores(parseInt(e.target.value)); setCantidad(cantidadTotal+1); setCantidadP(cantidadPermitida-1)}}
+                                                    onChange={(e) => {let event; if (parseInt (e.target.value) < cantidadMayores ) event= -1; else event=+1; setCantidadMayores(parseInt(e.target.value)); setCantidad(cantidadTotal+event);  event == -1? setCantRestante(cantidadRestante+1) : setCantRestante(cantidadRestante-1);console.log(cantidadRestante)}}
                                                     className="w-50 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                                 />
-                                                <button
-                                                    onClick={agregarAcompanante}
-                                                    type="button"
-                                                    disabled= {cantidadPermitida < cantidadTotal+1}
-                                                    className="ml-4 w-50 bg-black hover:bg-orange-500 text-white py-2 px-2 rounded-md"
-                                                >
-                                                    Confirmar acompañantes
-                                                </button>
+                                               
                                             </div>
                                     </div>
 
@@ -187,20 +176,13 @@ return <>
                                                     id="cantidadMenores"
                                                     type="number"
                                                     min={0}
-                                                    max={cantidadPermitida}
+                                                    disabled={cantidadRestante==0}
                                                     placeholder=""
                                                     value={cantidadMenores}
-                                                    onChange={(e) => {setCantidadMenores(parseInt(e.target.value)); setCantidad(cantidadTotal+1); setCantidadP(cantidadPermitida-1)}}
+                                                    onChange={(e) => {let event; if (parseInt (e.target.value) < cantidadMenores ) event= -1; else event=+1; setCantidadMenores(parseInt(e.target.value)); setCantidad(cantidadTotal+event);  event == -1? setCantRestante(cantidadRestante+1) : setCantRestante(cantidadRestante-1);console.log(cantidadRestante)}}
                                                     className="w-50 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                                 />
-                                                <button
-                                                    onClick={agregarAcompananteSinCuenta}
-                                                    type="button"
-                                                    disabled= {cantidadPermitida < cantidadTotal+1}
-                                                    className="ml-4 w-50 bg-black hover:bg-orange-500 text-white py-2 px-2 rounded-md"
-                                                >
-                                                    Confirmar acompañantes
-                                                </button>
+                                                
                                             </div>
                                     </div>
 
