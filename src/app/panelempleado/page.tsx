@@ -2,9 +2,11 @@
 
 import Solicitudes from "@/components/mipanel/Solicitudes"
 
-import { ChartColumnBig, HousePlus, User } from "lucide-react"
+import { ChartColumnBig, House, HouseIcon, HousePlus, User } from "lucide-react"
 import { useState } from "react"
 import VerCliente from "../verclientes/page"
+import VerReservas from "@/components/mipanel/empleado/VerReservas"
+import CrearReserva from "@/components/mipanel/empleado/CrearReserva"
 
 const empleadoItems = [
     {
@@ -18,6 +20,18 @@ const empleadoItems = [
         title: "Ver Clientes",
         icon: User,
         component: VerCliente
+    },
+    {
+      id: "verReservas",
+      title: "Ver Reservas",
+      icon: House,
+      component: VerReservas
+    },
+    {
+      id: "crearReserva",
+      title: "Crear Reserva",
+      icon: HouseIcon,
+      component: CrearReserva
     }
 ]
 

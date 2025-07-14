@@ -8,15 +8,15 @@ import { typeUser, user } from "@/types/user";
 export default function NavBar() {
     const [ isOpen, setIsOpen ] = useState(false)
     const [rol, setRol] = useState<typeUser | null>(null)
-
     const [usuario, setUsuario] = useState<user | null>(null); 
 
     useEffect(() => {
         const storedRol = localStorage.getItem('userType') as typeUser | null
-        const storedNombre = localStorage.getItem('userName')
+        const usuarioActual = localStorage.getItem('user');
+        console.log(usuarioActual)
         setRol(storedRol)
-        const usuarioActual = localStorage.getItem("user");
         if (usuarioActual) {
+            console.log(JSON.parse(usuarioActual))
             setUsuario(JSON.parse(usuarioActual));
         }
     }, [])

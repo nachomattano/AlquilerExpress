@@ -2,6 +2,7 @@ import { updateStatePago, getPago, updatePago } from '@/lib/db/pago'
 import { pagoExitoso } from '@/lib/pagos'
 import { estadoPago } from '@/types/estado-pago'
 import type { NextApiRequest, NextApiResponse } from 'next'
+
 export default async function handler(req:NextApiRequest,res:NextApiResponse){
     const {method, query: { id }, body: { estado, numeroseguridad, numerotarjeta, fullname }} = req
 

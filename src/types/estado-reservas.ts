@@ -1,3 +1,3 @@
 export enum estadoReserva{
-    Efectuada, Cancelada, Vigente
+    Efectuada = "Efectuada", Cancelada = "Cancelada", Vigente = "Vigente"
 }

@@ -23,8 +23,8 @@ export async function getReserva( id:string|null|undefined ):Promise<reserva|nul
 
 export async function createReserva ( reserva: reserva ){
     const supabase = await createClient();
-    const {id, ...sinId} = reserva
-    const {error} = await supabase.from("reserva").insert(sinId)
+    const { id, ...sinId } = reserva
+    const { error } = await supabase.from("reserva").insert(sinId)
     console.log("ERROR", error)
     return error
 }

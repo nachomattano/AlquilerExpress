@@ -3,5 +3,4 @@ export type checkin = {
     fecha: Date|null|undefined,
     empleadoid:string|null|undefined,
     reservaid:string|null|undefined
-
 }

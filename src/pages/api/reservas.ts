@@ -9,16 +9,17 @@ import { createReserva, getReservas } from '@/lib/db/reservas'
 
 export default async function handler(req:NextApiRequest,res:NextApiResponse){
 
-    const {method, body: { fechadesde,
-            fechahasta,
-            cantidad,
-            solicitante,
-            acompañantesid,
-            pagoid,
-            estado,
-            inmuebleid,
-            costo
-        }} = req
+    const {method, body: { 
+        fechadesde,
+        fechahasta,
+        cantidad,
+        solicitante,
+        acompañantesid,
+        pagoid,
+        estado,
+        inmuebleid,
+        costo
+    }} = req
 
     
     if (method == 'GET'){
@@ -40,11 +41,13 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
             costo }
 
         const error = await createReserva(reserva)
-        if (!error){
-            res.status(200)
-            return 
+
+        console.log(error)
+        if (error){
+            res.status(400).send("Error")
+            return
         }
-        res.status(400)
-        
+        res.status(200).send("Correcto")
+        return
     }
 }

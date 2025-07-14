@@ -27,6 +27,7 @@ export default function LogIn({ onSwitchToRegister, onLoginSubmit, onSwitchToRec
 
         if (res.ok) {
             const data = await res.json();
+            console.log(data)
             localStorage.setItem('user', JSON.stringify(data.user));
             localStorage.setItem('userType', data.userType);
             onLoginSubmit?.(email, password)
