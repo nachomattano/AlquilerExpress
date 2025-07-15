@@ -8,7 +8,7 @@ import { checkin } from '@/types/check-in'
 
 
 export default async function handler(req:NextApiRequest,res:NextApiResponse){
-    const {method, query:{ id }, body: { fecha, empleadoid, reservaid }} = req
+    const {method, query:{ id }, body: { fecha, empleadoid }} = req
 
     
     if (method == 'GET'){
@@ -26,6 +26,7 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
             res.status(200).send("Correcto")
             return 
         }
+        console.log(JSON.stringify(error))
         res.status(400).send("Error")
     }
 }

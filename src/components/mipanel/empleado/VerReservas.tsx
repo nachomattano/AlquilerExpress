@@ -91,7 +91,7 @@ export default function VerReservas() {
     }
 
     const empleado = JSON.parse(empleadoStr)
-
+    console.log(`esta ensalada de mierda -> ${JSON.stringify(empleadoStr)} \n ${idReserva}`)
     try {
       const res = await fetch(`/api/reservas/${idReserva}/checkin`, {
         method: "POST",
@@ -100,8 +100,7 @@ export default function VerReservas() {
         },
         body: JSON.stringify({
           fecha: fecha,
-          empleadoid: empleado.id,
-          reservaid: idReserva,
+          empleadoid: empleado.id
         }),
       })
 

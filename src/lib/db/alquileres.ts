@@ -24,4 +24,5 @@ export async function createAlquiler ( alquiler: alquiler ){
     const supabase = await createClient();
     const { id, ...sinId } = alquiler
     const { error } =  await supabase.from("alquiler").insert(sinId)
+    console.log(`error creando alquiler -> ${ JSON.stringify(error) }`)
 }
