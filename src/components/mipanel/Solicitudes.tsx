@@ -47,7 +47,8 @@ export default function SolicitudesReserva() {
               const solicitudesDelCliente = solicitudesData.filter(
                 (s) => s.solicitante === user.id
               );
-              const idsInmueblesSolicitados = [...new Set(solicitudesDelCliente.map(s => s.inmuebleid))];
+              const idsInmueblesSolicitados = solicitudesData.map(s => s.inmuebleid);
+
               const inmueblesFiltrados = inmueblesData.filter(
                 (inmueble) => idsInmueblesSolicitados.includes(inmueble.id)
               );

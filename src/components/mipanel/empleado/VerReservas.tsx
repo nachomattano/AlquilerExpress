@@ -48,7 +48,7 @@ export default function VerReservas() {
                 (r) => r.solicitante === user.id
               )
 
-              const idsInmueblesReservados = [...new Set(reservasCliente.map(r => r.inmuebleid))]
+              const idsInmueblesReservados = reservasCliente.map(r => r.inmuebleid)
               const inmueblesFiltrados = inmueblesData.filter(
                 (i) => idsInmueblesReservados.includes(i.id)
               )
