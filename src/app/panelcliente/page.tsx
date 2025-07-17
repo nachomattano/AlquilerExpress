@@ -1,4 +1,5 @@
 'use client'
+import VerReservas from "@/components/mipanel/empleado/VerReservas"
 import Solicitudes from "@/components/mipanel/Solicitudes"
 
 import { ChartColumnBig, House } from "lucide-react"
@@ -10,6 +11,12 @@ const usuarioItems = [
       title: "Ver Solicitudes",
       icon: House,
       component: Solicitudes
+    },
+    {
+      id: "verReservas",
+      title: "Ver Reservas",
+      icon: House,
+      component: VerReservas
     }
 ]
 

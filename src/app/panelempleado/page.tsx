@@ -7,6 +7,7 @@ import { useState } from "react"
 import VerCliente from "../verclientes/page"
 import VerReservas from "@/components/mipanel/empleado/VerReservas"
 import CrearReserva from "@/components/mipanel/empleado/CrearReserva"
+import Alquileres from "@/components/mipanel/Alquileres"
 
 const empleadoItems = [
     {
@@ -32,6 +33,12 @@ const empleadoItems = [
       title: "Crear Reserva",
       icon: HouseIcon,
       component: CrearReserva
+    },
+    {
+      id: "verAlquileres",
+      title: "Ver Alquileres",
+      icon: House,
+      component: Alquileres
     }
 ]
 

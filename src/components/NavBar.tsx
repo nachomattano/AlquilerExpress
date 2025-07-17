@@ -75,21 +75,12 @@ export default function NavBar() {
                         {isOpen && (
                         <div className="absolute right-0 z-10 mt-2 w-56 rounded-md shadow-lg">
                             <div className="py-1 bg-black">
-                            <button
-                                className="py-3 text-sm bg-black hover:bg-gray-300 w-full text-left"
-                                onClick={handleClose}
-                            >
-                                Cerrar Sesion
-                            </button>
-                            </div>
-                            <div className="py-1 bg-black">
-                            <Link href={`/modificar`}>
-                            <button
-                                className="py-3 text-sm bg-black hover:bg-gray-300 w-full text-left"
-                            >
-                                Modificar Perfil
-                            </button>
-                            </Link>
+                                <button
+                                    className="py-3 text-sm bg-black hover:bg-gray-300 w-full text-left"
+                                    onClick={handleClose}
+                                >
+                                    Cerrar Sesion
+                                </button>
                             </div>
                         </div>
                         )}

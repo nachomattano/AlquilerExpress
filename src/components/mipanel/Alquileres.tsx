@@ -129,6 +129,9 @@ export default function Alquileres() {
                             Cliente
                           </th>
                           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Inmueble
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Fecha Inicio
                           </th>
                           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -141,9 +144,6 @@ export default function Alquileres() {
                             Monto
                           </th>
                           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Estado
-                          </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Acciones
                           </th>
                         </tr>
@@ -153,6 +153,9 @@ export default function Alquileres() {
                           <tr key={alquiler.id} className="hover:bg-gray-50">
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                               {alquiler.clienteid}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                              {alquiler.inmuebleid}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                               {alquiler.fechadesde ? new Date(alquiler.fechadesde).toLocaleDateString() : "N/A"}
@@ -171,7 +174,7 @@ export default function Alquileres() {
                                     className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200"
                                     onClick={async () => handleCheckout(alquiler)}
                                   >
-                                    checkout
+                                    Check Out
                                   </button>
                                 </div>
                               )}

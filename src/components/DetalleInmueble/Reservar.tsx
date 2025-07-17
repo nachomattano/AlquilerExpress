@@ -99,7 +99,7 @@ export default  function Reservar ({id}:{id:string}){
                 nombre: usuario?.nombre,
                 inmuebleid: id,
                 solicitante: usuario?.id, 
-                cantidad: cantidadTotal+1,
+                cantidad: cantidadTotal,
                 monto: inmueble? inmueble.preciopordia : 3 * Math.floor(((rangoFechas && rangoFechas.to? rangoFechas.to.getTime(): 2) - (rangoFechas && rangoFechas?.from?  rangoFechas.from.getTime() : 1))/(1000 * 60 * 60 * 24))
             }),
             headers: { 'Content-Type': 'application/json' }

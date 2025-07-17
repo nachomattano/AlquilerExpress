@@ -31,24 +31,35 @@ export default function SolicitudesReserva() {
             toast.error('No hay sesion iniciada actualmente')
         }
         const cargarDatos = async () => {
-            try {
-            const [inmueblesData, solicitudesData] = await Promise.all([
-                getInmuebles(),
-                getSolicitudesReserva()
+          try {
+            const [inmueblesDataRaw, solicitudesDataRaw] = await Promise.all([
+              getInmuebles(),
+              getSolicitudesReserva()
             ]);
-            
-            setInmuebles(inmueblesData || []);
-            setSolicitudes(solicitudesData || []);
-            console.log(storedRol)
-            if (storedRol == "cliente"){
-              
-            }
-            } catch (error) {
-            console.error("Error cargando datos:", error);
-            } finally {
-            setLoading(false);
-            }
 
+            const inmueblesData = inmueblesDataRaw || [];
+            const solicitudesData = solicitudesDataRaw || [];
+
+            setSolicitudes(solicitudesData);
+
+            if (storedRol === "cliente" && usuarioActual) {
+              const user = JSON.parse(usuarioActual);
+              const solicitudesDelCliente = solicitudesData.filter(
+                (s) => s.solicitante === user.id
+              );
+              const idsInmueblesSolicitados = [...new Set(solicitudesDelCliente.map(s => s.inmuebleid))];
+              const inmueblesFiltrados = inmueblesData.filter(
+                (inmueble) => idsInmueblesSolicitados.includes(inmueble.id)
+              );
+              setInmuebles(inmueblesFiltrados);
+            } else {
+              setInmuebles(inmueblesData);
+            }
+          } catch (error) {
+            console.error("Error cargando datos:", error);
+          } finally {
+            setLoading(false);
+          }
         };
 
         cargarDatos();

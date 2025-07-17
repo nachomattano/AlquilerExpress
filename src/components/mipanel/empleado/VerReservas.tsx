@@ -5,6 +5,7 @@ import { getReservas } from "@/lib/db/reservas"
 import { estadoReserva } from "@/types/estado-reservas"
 import { inmueble } from "@/types/inmueble"
 import { reserva } from "@/types/reserva"
+import { typeUser, user } from "@/types/user"
 import { useState, useEffect } from "react"
 import toast from "react-hot-toast"
 
@@ -14,17 +15,48 @@ export default function VerReservas() {
     const [inmuebleSeleccionado, setInmuebleSeleccionado] = useState<string>("")
     const [reservasFiltradas, setReservasFiltradas] = useState<reserva[]>([])
     const [loading, setLoading] = useState(true)
+    const [ rol, setRol ] = useState<typeUser | null >(null)
+    const [ cliente, setCliente ] = useState<user | null>(null);
 
     useEffect(() => {
+      const storedRol = localStorage.getItem('userType') as typeUser | null
+      setRol(storedRol)
+
+      const usuarioActual = localStorage.getItem('user')
+      if (usuarioActual) {
+        setCliente(JSON.parse(usuarioActual))
+      } else {
+        window.location.replace("/")
+        toast.error('No hay sesion iniciada actualmente')
+      }
         const cargarDatos = async () => {
-            try {
-                const [inmueblesData, reservasData] = await Promise.all([
-                    getInmuebles(),
-                    getReservas()
-                ]);
-                setInmuebles(inmueblesData || []);
-                setReservas(reservasData || []);
-                console.log(reservasData)
+          try {
+            const [inmueblesDataRaw, reservasDataRaw] = await Promise.all([
+              getInmuebles(),
+              getReservas()
+            ]);
+
+            const inmueblesData = inmueblesDataRaw || [];
+            const reservasData = reservasDataRaw || [];
+
+            setReservas(reservasData || []);
+            console.log(reservasData)
+
+            if (storedRol == 'cliente' && usuarioActual) {
+              const user = JSON.parse(usuarioActual)
+              const reservasCliente = reservasData.filter(
+                (r) => r.solicitante === user.id
+              )
+
+              const idsInmueblesReservados = [...new Set(reservasCliente.map(r => r.inmuebleid))]
+              const inmueblesFiltrados = inmueblesData.filter(
+                (i) => idsInmueblesReservados.includes(i.id)
+              )
+              setInmuebles(inmueblesFiltrados)
+            } else {
+              setInmuebles(inmueblesData)
+            }
+
             } catch (error) {
                 console.error("Error cargando datos:", error);  
             } finally {
@@ -39,16 +71,17 @@ export default function VerReservas() {
 
     useEffect(() => {
         if (inmuebleSeleccionado) {
-            const filtradas = reservas
-                .filter((reserva) => String(reserva.inmuebleid) === inmuebleSeleccionado)
-                .sort((a, b) => {
-                    const fechaA = new Date(a.fechadesde || "").getTime()
-                    const fechaB = new Date(b.fechadesde || "").getTime()
-                    return fechaA - fechaB
-                })
-            setReservasFiltradas(filtradas)
-        } else {
-            setReservasFiltradas([]) 
+          let filtradas = reservas
+            .filter((reserva) => String(reserva.inmuebleid) === inmuebleSeleccionado)
+            .sort((a, b) => {
+              const fechaA = new Date(a.fechadesde || "").getTime()
+              const fechaB = new Date(b.fechadesde || "").getTime()
+              return fechaA - fechaB
+            })
+          if (rol == 'cliente') {
+            filtradas = reservas.filter((r) => String(r.inmuebleid) === inmuebleSeleccionado && r.solicitante == cliente?.id)
+          }
+          setReservasFiltradas(filtradas)
         }
     }, [inmuebleSeleccionado, reservas])
 
@@ -179,9 +212,11 @@ export default function VerReservas() {
                           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Estado
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Acciones
-                          </th>
+                          {rol !== 'cliente' &&
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Acciones
+                            </th>
+                          }
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
@@ -206,18 +241,20 @@ export default function VerReservas() {
                                 {reserva.solicitante}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">{getEstadoBadge(reserva.estado)}</td>
-                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                              {reserva.estado === "Vigente" && (
-                                <div className="flex gap-2">
-                                  <button
-                                    className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200"
-                                    onClick={() => checkIn(reserva.fechadesde, reserva.id)}
-                                  >
-                                    Check In
-                                  </button>
-                                </div>
-                              )}
-                            </td>
+                            {rol !== 'cliente' && (
+                              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                {reserva.estado === "Vigente" && (
+                                  <div className="flex gap-2">
+                                    <button
+                                      className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200"
+                                      onClick={() => checkIn(reserva.fechadesde, reserva.id)}
+                                    >
+                                      Check In
+                                    </button>
+                                  </div>
+                                )}
+                              </td>
+                            )}
                           </tr>
                         ))}
                       </tbody>
