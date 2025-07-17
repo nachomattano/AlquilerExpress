@@ -7,7 +7,7 @@ import { alquiler } from "@/types/alquiler"
 import { estadoSolicitud } from "@/types/estado-solicitud"
 import { inmueble } from "@/types/inmueble"
 import { solicitud } from "@/types/solicitud"
-import { user } from "@/types/user"
+import { typeUser, user } from "@/types/user"
 import { useState, useEffect } from "react"
 import toast from 'react-hot-toast';
 
@@ -17,34 +17,56 @@ export default function Alquileres() {
     const [inmuebleSeleccionado, setInmuebleSeleccionado] = useState<string>("")
     const [alquileresFiltrados, setAlquileresFiltrados] = useState<alquiler[]>([])
     const [loading, setLoading] = useState(true)
-    const [usuario, setUsuario] = useState<user | null>(null); 
+  const [usuario, setUsuario] = useState<user | null>(null); 
+  const [ rol, setRol ] = useState<typeUser | null>(null)
 
     useEffect(() => {
-        const usuarioActual = localStorage.getItem("user");
-        if (usuarioActual) {
-            setUsuario(JSON.parse(usuarioActual));
-        }else{
-            window.location.replace("/")
-            toast.error('No hay sesion iniciada actualmente')
+      const storedRol = localStorage.getItem('userType') as typeUser | null
+      setRol(storedRol)
+
+      const usuarioActual = localStorage.getItem("user");
+      if (usuarioActual) {
+        setUsuario(JSON.parse(usuarioActual));
+      } else {
+        window.location.replace("/")
+        toast.error('No hay sesion iniciada actualmente')
+      }
+
+      const cargarDatos = async () => {
+        try {
+          const [inmueblesDataRaw, alquileresDataRaw] = await Promise.all([
+            getInmuebles(),
+            getAlquileres()
+          ]);
+
+          const inmueblesData = inmueblesDataRaw || []
+          const alquileresData = alquileresDataRaw || []
+
+          setAlquileres(alquileres || []);
+
+          if (storedRol == 'cliente' && usuarioActual) {
+            const user = JSON.parse(usuarioActual)
+            const alquileresCliente = alquileresData.filter(
+              (a) => a.clienteid === user.id
+            )
+
+            const idsInmueblesAlquilados = [...new Set(alquileresCliente.map(a => a.inmuebleid))]
+            const inmueblesFiltrados = inmueblesData.filter(
+              (i) => idsInmueblesAlquilados.includes(i.id)
+            )
+            setInmuebles(inmueblesFiltrados)
+          } else {
+            setInmuebles(inmueblesData)
+          }
+          
+        } catch (error) {
+          console.error("Error cargando datos:", error);
+        } finally {
+          setLoading(false);
         }
-        const cargarDatos = async () => {
-            try {
-            const [inmueblesData, alquileres] = await Promise.all([
-                getInmuebles(),
-                getAlquileres()
-            ]);
-            setInmuebles(inmueblesData || []);
-            setAlquileres(alquileres || []);
-            console.log(inmueblesData)
-            } catch (error) {
-            console.error("Error cargando datos:", error);
-            } finally {
-            setLoading(false);
-            }
+      };
 
-        };
-
-        cargarDatos();
+      cargarDatos();
     }, []);
 
     const handleCheckout = async (alquiler:alquiler|null|undefined) => {
@@ -71,7 +93,12 @@ export default function Alquileres() {
 
     useEffect(() => {
         if (inmuebleSeleccionado) {
-            const filtradas = alquileres.filter((alquiler) => String(alquiler.inmuebleid) === inmuebleSeleccionado)
+            let filtradas = alquileres.filter((alquiler) => String(alquiler.inmuebleid) === inmuebleSeleccionado)
+            
+            if (rol == 'cliente') {
+              filtradas = alquileres.filter((a) => String(a.inmuebleid) === inmuebleSeleccionado && a.clienteid == usuario?.id)
+            }
+            
             setAlquileresFiltrados(filtradas)
         } else {
             setAlquileresFiltrados([]) 
@@ -92,7 +119,7 @@ export default function Alquileres() {
       <div className="max-w-7xl mx-auto space-y-6">
         <div className="bg-white rounded-lg shadow-md border border-gray-200">
           <div className="px-6 py-4 border-b border-gray-200">
-            <h1 className="text-2xl font-bold text-center text-gray-900">Gestión de Solicitudes de Reserva</h1>
+            <h1 className="text-2xl font-bold text-center text-gray-900">Gestión de Alquileres</h1>
           </div>
 
           <div className="p-6 space-y-6">
@@ -143,9 +170,11 @@ export default function Alquileres() {
                           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Monto
                           </th>
-                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Acciones
-                          </th>
+                          {rol == 'empleado' &&
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                              Acciones
+                            </th>
+                          }
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
@@ -167,6 +196,7 @@ export default function Alquileres() {
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                               ${alquiler.costo?.toLocaleString()}
                             </td>
+                            {rol == 'empleado' &&
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                               {!alquiler.checkoutid && (
                                 <div className="flex gap-2">
@@ -179,6 +209,7 @@ export default function Alquileres() {
                                 </div>
                               )}
                             </td>
+                            }
                           </tr>
                         ))}
                       </tbody>
