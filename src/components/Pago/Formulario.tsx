@@ -11,7 +11,8 @@ import toast from 'react-hot-toast';
 interface Acompanante {
   email: string;
   validado?: boolean;
-  titular?: boolean; // ✅ Nuevo campo para marcar al titular
+  titular?: boolean;
+  esMenor?: boolean;
 }
 
 export default function Formulario({ id }: { id?: string | null | undefined }) {
@@ -21,8 +22,6 @@ export default function Formulario({ id }: { id?: string | null | undefined }) {
   const [pago, setPago] = useState<pago | null>();
 
   const [ restantes, setRestantes ] = useState<number>(0)
-
-  // ✅ Cargar email del titular desde localStorage
  
 
   const redirigir = async () => {
@@ -32,7 +31,7 @@ export default function Formulario({ id }: { id?: string | null | undefined }) {
   const handleAddAcompanante = async() => {
     const totalPersonas = solicitud?.cantidad ?? 1;
     console.log(`totalPersonas ${totalPersonas}`)
-    const maxAcompanantes = totalPersonas -1; // ✅ Solo los acompañantes REALES
+    const maxAcompanantes = totalPersonas -1;
 
 
     if (maxAcompanantes <= 0) return;
@@ -100,6 +99,22 @@ export default function Formulario({ id }: { id?: string | null | undefined }) {
     }
   };
 
+  const handleToggleMenor = (index: number) => {
+    const nuevos = [...acompanantes];
+    const actual = nuevos[index];
+
+    if (actual.esMenor) {
+      actual.esMenor = false;
+      actual.email = "";
+    } else {
+      actual.esMenor = true;
+      actual.email = "menor@gmail.com";
+      actual.validado = false;
+    }
+
+    setAcompanantes(nuevos);
+  };
+
   return (
     <div className="h-full bg-white shadow-lg rounded-xl p-6">
       <h2 className="text-center text-2xl font-bold mb-4">Agregar acompañantes</h2>
@@ -129,27 +144,36 @@ export default function Formulario({ id }: { id?: string | null | undefined }) {
                   placeholder={acomp.titular ? "Titular (no editable)" : "Email del acompañante"}
                   value={acomp.email}
                   onChange={(e) => handleEmailChange(index, e.target.value)}
-                  disabled={acomp.validado || acomp.titular}
+                  disabled={acomp.validado || acomp.titular || acomp.esMenor}
                   className={`w-full px-3 py-2 border rounded-md shadow-sm ${
-                    acomp.validado || acomp.titular
+                    acomp.validado || acomp.titular || acomp.esMenor
                       ? "bg-gray-100 text-gray-500"
                       : "border-gray-300"
                   }`}
                 />
-                {true && (
-                  <button
-                    type="button"
-                    onClick={() => handleValidarOEliminar(index)}
-                    disabled={!acomp.email}
-                    className={`px-4 py-2 rounded-md text-white ${
-                      acomp.validado
-                        ? "bg-red-500 hover:bg-red-600"
-                        : "bg-green-500 hover:bg-green-600"
-                    }`}
-                  >
-                    {acomp.validado ? "Eliminar" : "Validar +"}
-                  </button>
-                )}
+
+                <label className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={acomp.esMenor || false}
+                    onChange={() => handleToggleMenor(index)}
+                    disabled={acomp.validado}
+                  />
+                  Es menor
+                </label>
+
+                <button
+                  type="button"
+                  onClick={() => handleValidarOEliminar(index)}
+                  disabled={!acomp.email}
+                  className={`px-4 py-2 rounded-md text-white ${
+                    acomp.validado
+                      ? "bg-red-500 hover:bg-red-600"
+                      : "bg-green-500 hover:bg-green-600"
+                  }`}
+                >
+                  {acomp.validado ? "Eliminar" : "Validar"}
+                </button>
               </div>
             ))}
           </div>
