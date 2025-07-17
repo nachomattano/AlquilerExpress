@@ -1,7 +1,7 @@
 "use client"
 
 import { getInmuebles } from "@/lib/db/inmuebles"
-import { getReservas } from "@/lib/db/reservas"
+import { getReserva, getReservas, updateStateReserva } from "@/lib/db/reservas"
 import { estadoReserva } from "@/types/estado-reservas"
 import { inmueble } from "@/types/inmueble"
 import { reserva } from "@/types/reserva"
@@ -113,6 +113,22 @@ export default function VerReservas() {
         )
     }
   }
+
+  const cancelar = async (idReserva: String | null | undefined) => {
+    const reserva = await getReserva(idReserva as string)
+    const diferenciaMs = Math.abs(new Date().getTime() - (reserva?.fechadesde? reserva?.fechadesde.getTime() : new Date().getTime()));
+    const diferenciaDias = Math.ceil(diferenciaMs / (1000 * 60 * 60 * 24));
+    await updateStateReserva(estadoReserva.Cancelada, idReserva as string)
+    if (diferenciaDias >= 7){
+      toast.success(`se ha devuelto ${(reserva?.costo || 100000) * 0.80}`)  
+    }
+
+    if(diferenciaDias >= 3){
+      toast.success(`se ha devuelto ${(reserva?.costo || 100000) * 0.50}`)  
+    }else{
+      toast.success(`se ha devuelto ${(reserva?.costo || 100000) * 0.20}`)  
+    }
+   }
 
   const checkIn = async (fecha: Date | null | undefined, idReserva: String | null | undefined) => {
     if (!fecha || !idReserva) return
@@ -250,6 +266,20 @@ export default function VerReservas() {
                                       onClick={() => checkIn(reserva.fechadesde, reserva.id)}
                                     >
                                       Check In
+                                    </button>
+                                  </div>
+                                )}
+                              </td>
+                            )}
+                            {rol == 'cliente' && (
+                              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                {reserva.estado === "Vigente" && (
+                                  <div className="flex gap-2">
+                                    <button
+                                      className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200"
+                                      onClick={() => cancelar(reserva.id)}
+                                    >
+                                      Cancelar
                                     </button>
                                   </div>
                                 )}
