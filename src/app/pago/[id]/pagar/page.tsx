@@ -12,8 +12,8 @@ export default async function pago ({ params }: PageProps){
     console.log(id);
     return (<>
             <div>
-                <Formulario id= {id}/>
 
+                <Pagar id={id}/>   
             
             </div>    
             

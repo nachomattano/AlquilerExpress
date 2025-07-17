@@ -4,11 +4,14 @@ import { getSolicitudReserva } from '@/lib/db/solicitudes-reservas';
 import { getUsuarioPorMail } from '@/lib/db/usuarios/usuarios';
 import { pago } from '@/types/pago';
 import { solicitud } from '@/types/solicitud';
+import { user } from '@/types/user';
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 interface Acompanante {
   email: string;
+  validado?: boolean;
+  titular?: boolean; // ✅ Nuevo campo para marcar al titular
 }
 
 export default function Formulario({ id }: { id?: string | null | undefined }) {
@@ -17,11 +20,31 @@ export default function Formulario({ id }: { id?: string | null | undefined }) {
   const [solicitud, setSolicitud] = useState<solicitud | null>();
   const [pago, setPago] = useState<pago | null>();
 
-  const handleAddAcompanante = () => {
-    const maxAcompanantes = solicitud?.cantidad ?? 0;
-    if (acompanantes.length < maxAcompanantes - 1) {
+  const [ restantes, setRestantes ] = useState<number>(0)
+
+  // ✅ Cargar email del titular desde localStorage
+ 
+
+  const redirigir = async () => {
+    window.location.replace(`/pago/${id}/pagar`)
+  }
+
+  const handleAddAcompanante = async() => {
+    const totalPersonas = solicitud?.cantidad ?? 1;
+    console.log(`totalPersonas ${totalPersonas}`)
+    const maxAcompanantes = totalPersonas -1; // ✅ Solo los acompañantes REALES
+
+
+    if (maxAcompanantes <= 0) return;
+
+    const faltantes = maxAcompanantes;
+    if (faltantes > 0) {
+      const nuevos = Array.from({ length: faltantes }, () => ({
+        email: "",
+        validado: false
+      }));
       setMostrarAcompanantes(true);
-      setAcompanantes([...acompanantes, { email: "" }]);
+      setAcompanantes([...acompanantes, ...nuevos]);
     }
   };
 
@@ -32,29 +55,48 @@ export default function Formulario({ id }: { id?: string | null | undefined }) {
         const pagosData = await getPago(solicitudesData?.pagoid?.toString());
         setPago(pagosData);
         setSolicitud(solicitudesData);
+        setRestantes(solicitudesData?.cantidad? solicitudesData.cantidad-1:0)
+        console.log("[DEBUG] Solicitud cargada:", solicitudesData);
+        console.log("[DEBUG] Pago cargado:", pagosData);
+        console.log(restantes)
       } catch (error) {
         console.error("Error cargando datos:", error);
       }
     };
     cargarDatos();
-  }, []);
+  }, [id]);
 
   const handleEmailChange = (index: number, value: string) => {
     const nuevos = [...acompanantes];
     nuevos[index].email = value;
+    nuevos[index].validado = false;
     setAcompanantes(nuevos);
   };
 
-  const handleAgregarAcompanante = async (index: number) => {
-    const email = acompanantes[index].email;
-    const usuario = await getUsuarioPorMail(email);
+  const handleValidarOEliminar = async (index: number) => {
+    const acomp = acompanantes[index];
+
+
+    if (acomp.validado) {
+      const nuevos = acompanantes.filter((_, i) => i !== index);
+      setAcompanantes(nuevos);
+      setRestantes(restantes+1)
+      toast.success(`Acompañante eliminado`);
+      return;
+    }
+
+    const usuario = await getUsuarioPorMail(acomp.email);
     if (!usuario.user) {
-      toast.error(`El email ${email} no está registrado en el sistema`);
+      toast.error(`El email ${acomp.email} no está registrado en el sistema`);
       const nuevos = [...acompanantes];
       nuevos[index].email = "";
       setAcompanantes(nuevos);
     } else {
-      toast.success(`Acompañante ${email} válido`);
+      toast.success(`Acompañante ${acomp.email} válido`);
+      setRestantes(restantes-1)
+      const nuevos = [...acompanantes];
+      nuevos[index].validado = true;
+      setAcompanantes(nuevos);
     }
   };
 
@@ -67,14 +109,14 @@ export default function Formulario({ id }: { id?: string | null | undefined }) {
           <button
             type="button"
             onClick={handleAddAcompanante}
-            disabled={acompanantes.length >= (solicitud.cantidad - 1)}
+            disabled={restantes == 0}
             className={`text-sm ${
               acompanantes.length >= (solicitud.cantidad - 1)
                 ? "text-gray-400 cursor-not-allowed"
                 : "text-blue-600 hover:underline"
             }`}
           >
-            Agregar acompañante ({acompanantes.length}/{solicitud.cantidad - 1})
+            Agregar acompañantes ({acompanantes.filter(a => !a.titular).length}/{solicitud.cantidad - 1})
           </button>
         )}
 
@@ -84,23 +126,41 @@ export default function Formulario({ id }: { id?: string | null | undefined }) {
               <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
                 <input
                   type="email"
-                  placeholder="Email del acompañante"
+                  placeholder={acomp.titular ? "Titular (no editable)" : "Email del acompañante"}
                   value={acomp.email}
                   onChange={(e) => handleEmailChange(index, e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm"
+                  disabled={acomp.validado || acomp.titular}
+                  className={`w-full px-3 py-2 border rounded-md shadow-sm ${
+                    acomp.validado || acomp.titular
+                      ? "bg-gray-100 text-gray-500"
+                      : "border-gray-300"
+                  }`}
                 />
-                <button
-                  type="button"
-                  onClick={() => handleAgregarAcompanante(index)}
-                  disabled={!acomp.email}
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
-                >
-                  Validar +
-                </button>
+                {true && (
+                  <button
+                    type="button"
+                    onClick={() => handleValidarOEliminar(index)}
+                    disabled={!acomp.email}
+                    className={`px-4 py-2 rounded-md text-white ${
+                      acomp.validado
+                        ? "bg-red-500 hover:bg-red-600"
+                        : "bg-green-500 hover:bg-green-600"
+                    }`}
+                  >
+                    {acomp.validado ? "Eliminar" : "Validar +"}
+                  </button>
+                )}
               </div>
             ))}
           </div>
         )}
+        <button
+         className="text-blue-600 hover:underline"
+         disabled={restantes!=0}
+          onClick={redirigir}
+        >
+          Confirmar Acompañantes
+        </button>
       </div>
     </div>
   );
