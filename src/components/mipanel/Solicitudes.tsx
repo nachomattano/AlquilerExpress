@@ -45,9 +45,9 @@ export default function SolicitudesReserva() {
             if (storedRol === "cliente" && usuarioActual) {
               const user = JSON.parse(usuarioActual);
               const solicitudesDelCliente = solicitudesData.filter(
-                (s) => s.solicitante === user.id
+                (s) => s.solicitante == user.id
               );
-              const idsInmueblesSolicitados = solicitudesData.map(s => s.inmuebleid);
+              const idsInmueblesSolicitados = solicitudesDelCliente.map(s => s.inmuebleid);
 
               const inmueblesFiltrados = inmueblesData.filter(
                 (inmueble) => idsInmueblesSolicitados.includes(inmueble.id)
