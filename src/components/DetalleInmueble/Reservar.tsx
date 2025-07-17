@@ -88,7 +88,7 @@ export default  function Reservar ({id}:{id:string}){
         }
 
         
-
+        console.log
         const res = await fetch('/api/solicitudes', {
             method: 'POST',
             body: JSON.stringify({
@@ -100,7 +100,7 @@ export default  function Reservar ({id}:{id:string}){
                 inmuebleid: id,
                 solicitante: usuario?.id, 
                 cantidad: cantidadTotal,
-                monto: inmueble? inmueble.preciopordia : 3 * Math.floor(((rangoFechas && rangoFechas.to? rangoFechas.to.getTime(): 2) - (rangoFechas && rangoFechas?.from?  rangoFechas.from.getTime() : 1))/(1000 * 60 * 60 * 24))
+                monto: (inmueble && inmueble.preciopordia? inmueble.preciopordia : 3) * (Math.floor(((rangoFechas && rangoFechas.to? rangoFechas.to.getTime(): 2) - (rangoFechas && rangoFechas?.from?  rangoFechas.from.getTime() : 1))/(1000 * 60 * 60 * 24)))
             }),
             headers: { 'Content-Type': 'application/json' }
         });
@@ -208,7 +208,7 @@ return <>
                                         </span>
                                         
                                         </p>
-                                        <p>Monto por dia: <span>{inmueble && inmueble.preciopordia? inmueble.preciopordia : 3}$</span>  </p>
+                                        <p>Monto por dia: <span>{inmueble && inmueble.preciopordia? inmueble.preciopordia *  (Math.floor(((rangoFechas && rangoFechas.to? rangoFechas.to.getTime(): 2) - (rangoFechas && rangoFechas?.from?  rangoFechas.from.getTime() : 1))/(1000 * 60 * 60 * 24))): 3}$</span>  </p>
                                         </div>)}
                                     </div>
                                     
