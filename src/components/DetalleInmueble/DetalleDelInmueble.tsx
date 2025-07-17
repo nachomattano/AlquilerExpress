@@ -6,13 +6,15 @@ import { comentario } from '@/types/comentario';
 import { getComentarios, createComentario, createComentarioRespuesta, deleteComentario } from '@/lib/db/comentario';
 import toast from "react-hot-toast";
 import { useState, useEffect } from 'react';
+import PanelUsuario from '@/app/panelcliente/page';
+import { user } from '@/types/user';
 
 export default function DetalleDelInmueble({ inmueble }: { inmueble: inmueble }) {
   const [nuevoComentario, setNuevoComentario] = useState('');
   const [comentarios, setComentarios] = useState<comentario[]>([]);
 
   const [userType, setUserType] = useState<string | null>(null);
-  const [userMail, setUserMail] = useState<string | null>(null);
+    const [usuario, setUsuario] = useState<user | null>(null); 
 
   const [comentarioAResponder, setComentarioAResponder] = useState<comentario | null>(null);
   const [respuesta, setRespuesta] = useState('');
@@ -20,9 +22,11 @@ export default function DetalleDelInmueble({ inmueble }: { inmueble: inmueble })
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const tipo = localStorage.getItem('userType')?.trim().toLowerCase() ?? null;
-      const mail = localStorage.getItem('userMail')?.trim().toLowerCase() ?? null;
+      const usuarioActual = localStorage.getItem("user");
+      if (usuarioActual) {
+          setUsuario(JSON.parse(usuarioActual));
+      }
       setUserType(tipo);
-      setUserMail(mail);
     }
   }, []);
 
@@ -42,7 +46,7 @@ export default function DetalleDelInmueble({ inmueble }: { inmueble: inmueble })
       id: null,
       comentario: nuevoComentario,
       inmuebleid: inmueble?.id ?? '',
-      autorid: userMail ?? null,
+      autorid: usuario?.mail ?? null,
       comentarioid: null,
     };
 
@@ -59,6 +63,7 @@ export default function DetalleDelInmueble({ inmueble }: { inmueble: inmueble })
 
   const handleEnviarRespuesta = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log(JSON.stringify(comentarioAResponder))
     if (!comentarioAResponder) return;
 
     const respuestaObj: comentario = {
@@ -66,11 +71,11 @@ export default function DetalleDelInmueble({ inmueble }: { inmueble: inmueble })
       comentario: respuesta,
       inmuebleid: comentarioAResponder.inmuebleid,
       comentarioid: comentarioAResponder.id,
-      autorid: userMail,
+      autorid: usuario?.mail,
     };
 
     try {
-      await createComentarioRespuesta(respuestaObj);
+      await createComentario(respuestaObj);
       toast.success("Respuesta enviada");
       setRespuesta('');
       setComentarioAResponder(null);
@@ -150,7 +155,7 @@ export default function DetalleDelInmueble({ inmueble }: { inmueble: inmueble })
                 .map((c) => {
                   const isOwner =
                     userType === "cliente" &&
-                    c.autorid?.trim().toLowerCase() === userMail;
+                    c.autorid?.trim().toLowerCase() === usuario?.mail;
 
                   return (
                     <div key={c.id} className="bg-gray-100 p-4 rounded-md shadow-sm">
