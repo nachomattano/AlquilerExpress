@@ -212,7 +212,7 @@ export default function VerReservas() {
                           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Estado
                           </th>
-                          {rol !== 'cliente' &&
+                          {rol == 'empleado' &&
                             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                               Acciones
                             </th>
@@ -241,7 +241,7 @@ export default function VerReservas() {
                                 {reserva.solicitante}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">{getEstadoBadge(reserva.estado)}</td>
-                            {rol !== 'cliente' && (
+                            {rol == 'empleado' && (
                               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 {reserva.estado === "Vigente" && (
                                   <div className="flex gap-2">

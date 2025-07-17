@@ -1,4 +1,5 @@
 'use client'
+import Alquileres from "@/components/mipanel/Alquileres"
 import VerReservas from "@/components/mipanel/empleado/VerReservas"
 import Solicitudes from "@/components/mipanel/Solicitudes"
 
@@ -17,6 +18,12 @@ const usuarioItems = [
       title: "Ver Reservas",
       icon: House,
       component: VerReservas
+    },
+    {
+      id: "verAlquileres",
+      title: "Ver Alquileres",
+      icon: House,
+      component: Alquileres
     }
 ]
 
