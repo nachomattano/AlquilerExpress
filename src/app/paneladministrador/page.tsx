@@ -13,6 +13,7 @@ import VerCliente from "../verclientes/page"
 import VerInmuebles from "../verInmuebles/page"
 import Alquileres from "@/components/mipanel/Alquileres"
 import Estadisticas from "@/components/mipanel/administrador/Estadisticas"
+import CrearReservaManual from "@/components/mipanel/empleado/CrearReserva"
 
 const adminItems = [
 
@@ -70,7 +71,14 @@ const adminItems = [
       title: "Ver Reservas",
       icon: HousePlus,
       component: VerReservas
+    },
+    {
+      id: "Crear Reserva",
+      title: "Crear Reserva",
+      icon: HousePlus,
+      component: CrearReservaManual
     }
+
 ]
 
 export default function PanelAdmin() {

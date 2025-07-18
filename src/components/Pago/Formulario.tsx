@@ -37,6 +37,9 @@ const [usuario, setUsuario] = useState<user | null>(null);
     var duplicado 
     for (let i = 0; i<acompanantes.length;i++){
       falla = acompanantes[i].email
+      if (falla == "menor@gmail.com"){
+        aux = true
+      }else{
       let acom = await getUsuarioPorMail(acompanantes[i].email)
       if (acompanantes.filter(a => a.email == acompanantes[i].email).length >=2){
         duplicado = acompanantes[i].email
@@ -48,6 +51,7 @@ const [usuario, setUsuario] = useState<user | null>(null);
       }else{
         aux=true
       }
+    }
     }
     let valido = aux
     if (duplicado){

@@ -45,7 +45,7 @@ export default function SolicitudesReserva() {
             if (storedRol === "cliente" && usuarioActual) {
               const user = JSON.parse(usuarioActual);
               const solicitudesDelCliente = solicitudesData.filter(
-                (s) => s.solicitante == user.id
+                (s) => s.solicitante == user.id &&  (s.estado != estadoSolicitud.Cancelada) && s.estado != estadoSolicitud.Pagada
               );
               const idsInmueblesSolicitados = solicitudesDelCliente.map(s => s.inmuebleid);
 
@@ -102,7 +102,7 @@ export default function SolicitudesReserva() {
         const res = await fetch(`/api/solicitudes/${solicitud.id}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ estado: estadoSolicitud.Rechazada }),
+            body: JSON.stringify({ estado: estadoSolicitud.Cancelada }),
         });
 
         if (res.ok) {
@@ -119,9 +119,10 @@ export default function SolicitudesReserva() {
     useEffect(() => {
         if (inmuebleSeleccionado) {
             let filtradas: solicitud[]
-            filtradas = solicitudes.filter((solicitud) => String(solicitud.inmuebleid) === inmuebleSeleccionado)
+            filtradas = solicitudes.filter((solicitud) => String(solicitud.inmuebleid) === inmuebleSeleccionado && (solicitud.estado != estadoSolicitud.Cancelada) && solicitud.estado != estadoSolicitud.Pagada)
             if (rol == "cliente"){
-              filtradas = solicitudes.filter((solicitud) => String(solicitud.inmuebleid) === inmuebleSeleccionado && solicitud.solicitante==cliente?.id)
+              filtradas = solicitudes.filter((solicitud) => String(solicitud.inmuebleid) === inmuebleSeleccionado && solicitud.solicitante==cliente?.id && (solicitud.estado != estadoSolicitud.Cancelada) && solicitud.estado != estadoSolicitud.Pagada)
+              console.log(JSON.stringify(filtradas))
             }
             setSolicitudesFiltradas(filtradas)
         } else {
@@ -244,6 +245,7 @@ export default function SolicitudesReserva() {
                       </thead>
                       <tbody className="bg-white divide-y divide-gray-200">
                         {solicitudesFiltradas.map((solicitud) => (
+                          
                           <tr key={solicitud.id} className="hover:bg-gray-50">
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                               {solicitud.solicitante}

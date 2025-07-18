@@ -6,6 +6,7 @@ import { estadoPago } from '@/types/estado-pago';
 import { pago } from '@/types/pago';
 import { getSolicitudReserva } from '@/lib/db/solicitudes-reservas';
 import toast from 'react-hot-toast';
+import { estadoSolicitud } from '@/types/estado-solicitud';
 
 export default function Pagar( {id} : {id?:string|null|undefined} ) {
   const [fullname, setFullName] = useState("");
@@ -19,6 +20,11 @@ export default function Pagar( {id} : {id?:string|null|undefined} ) {
         console.log("IDDDDDDDDDDDDDDDDDDD",id)
        const solicitud = await getSolicitudReserva(id)
        console.log(JSON.stringify(solicitud))
+       await fetch(`/api/solicitudes/${solicitud?.id}`, {
+                   method: 'POST',
+                   headers: { 'Content-Type': 'application/json' },
+                   body: JSON.stringify({ estado: estadoSolicitud.Pagada }),
+               });
         const res = await fetch(`/api/pagos/${solicitud?.pagoid}`, {
             method: 'POST',
             body: JSON.stringify({fullname,numerotarjeta, numeroseguridad}),
@@ -27,6 +33,7 @@ export default function Pagar( {id} : {id?:string|null|undefined} ) {
         const data = await res.json();
         if (res.ok){
           toast.success(`${data.message}`);
+          window.location.replace('/panelcliente')
         } else {
           toast.error(`${data.message}`);
   }
