@@ -291,7 +291,7 @@ const confirmarCancelacion = async () => {
                                 {reserva.solicitante}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">{getEstadoBadge(reserva.estado)}</td>
-                            {rol == 'empleado' && (
+                            {rol != 'cliente' && (
                               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 {reserva.estado === "Vigente" && (
                                   <div className="flex gap-2">
