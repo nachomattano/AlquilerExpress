@@ -89,8 +89,7 @@ export default function DetalleDelInmueble({ inmueble }: { inmueble: inmueble })
 
   const handleEliminarComentario = async (comentarioId: string | null | undefined) => {
     if (!comentarioId) return;
-    const confirmar = window.confirm("¿Seguro que querés eliminar este comentario y todas sus respuestas?");
-    if (!confirmar) return;
+    
 
     try {
       // 1) eliminar en cascada las respuestas de este comentario
