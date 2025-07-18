@@ -23,6 +23,15 @@ export async function createSolicitud ( solicitud: solicitud ){
     return query
 }
 
+export async function createSolicitudAccepted ( solicitud: solicitud ){
+    const supabase = await createClient();
+    let { id, ...soliSinId } = solicitud
+    soliSinId.estado = estadoSolicitud.Aceptada
+    const {error} = await supabase.from("solicitudreserva").insert(soliSinId)
+    
+    return error
+}
+
 export async function updateStateSolicitud ( state: estadoSolicitud, id: string|null|undefined ){
     const supabase = await createClient()
     const {error}= await supabase.from("solicitudreserva").update({ estado: state }).eq("id", id)
