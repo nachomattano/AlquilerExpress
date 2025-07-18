@@ -130,12 +130,9 @@ return <>
                                         <ul className="list-disc list-inside text-gray-800 mt-2">
                                       
                                             <li key={1}>
-                                                Acompañantes mayores de edad {cantidadMayores}
+                                                Cantidad de acompañantes {cantidadMayores}
                                             </li>
 
-                                            <li key={2}>
-                                                Acompañantes menores de edad {cantidadMenores}
-                                            </li>
                                         </ul>
                                     </div>
                                     )}
@@ -149,7 +146,7 @@ return <>
                     
                                             <div className="space-y-2">
                                                 <label htmlFor="cantidadMayores" className="flex font-medium text-gray-700">
-                                                    Cantidad De Acompañantes Mayores de Edad
+                                                    Cantidad De Acompañantes
                                                 </label>
                                                 <input
                                                     id="cantidadMayores"
@@ -162,27 +159,6 @@ return <>
                                                     className="w-50 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                                 />
                                                
-                                            </div>
-                                    </div>
-
-                                    <div className="space-y-4">
-
-                    
-                                            <div className="space-y-2">
-                                                <label htmlFor="cantidadMenores" className="flex font-medium text-gray-700">
-                                                    Cantidad De Acompañantes Menores de Edad
-                                                </label>
-                                                <input
-                                                    id="cantidadMenores"
-                                                    type="number"
-                                                    min={0}
-                                                    disabled={cantidadRestante==0}
-                                                    placeholder=""
-                                                    value={cantidadMenores}
-                                                    onChange={(e) => {let event; if (parseInt (e.target.value) < cantidadMenores ) event= -1; else event=+1; setCantidadMenores(parseInt(e.target.value)); setCantidad(cantidadTotal+event);  event == -1? setCantRestante(cantidadRestante+1) : setCantRestante(cantidadRestante-1);console.log(cantidadRestante)}}
-                                                    className="w-50 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                                />
-                                                
                                             </div>
                                     </div>
 

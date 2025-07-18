@@ -204,11 +204,7 @@ export default function CrearReservaManual() {
                                                       <ul className="list-disc list-inside text-gray-800 mt-2">
                                                     
                                                           <li key={1}>
-                                                              Acompañantes mayores de edad {cantidadMayores}
-                                                          </li>
-              
-                                                          <li key={2}>
-                                                              Acompañantes menores de edad {cantidadMenores}
+                                                              Cantidad de acompañantes {cantidadMayores}
                                                           </li>
                                                       </ul>
                                                   </div>
@@ -223,14 +219,14 @@ export default function CrearReservaManual() {
                                   
                                                           <div className="space-y-2">
                                                               <label htmlFor="cantidadMayores" className="flex font-medium text-gray-700">
-                                                                  Cantidad De Acompañantes Mayores de Edad
+                                                                  Cantidad De Acompañantes
                                                               </label>
                                                               <input
                                                                   id="cantidadMayores"
                                                                   type="number"
                                                                   min={0}
                                                                   disabled={cantidadRestante==0}
-                                                                  placeholder=""
+                                                                  placeholder=" "
                                                                   value={cantidadMayores}
                                                                   onChange={(e) => {let event; if (parseInt (e.target.value) < cantidadMayores ) event= -1; else event=+1; setCantidadMayores(parseInt(e.target.value)); setCantidad(cantidadTotal+event);  event == -1? setCantRestante(cantidadRestante+1) : setCantRestante(cantidadRestante-1);console.log(cantidadRestante)}}
                                                                   className="w-50 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -238,28 +234,6 @@ export default function CrearReservaManual() {
                                                              
                                                           </div>
                                                   </div>
-              
-                                                  <div className="space-y-4">
-              
-                                  
-                                                          <div className="space-y-2">
-                                                              <label htmlFor="cantidadMenores" className="flex font-medium text-gray-700">
-                                                                  Cantidad De Acompañantes Menores de Edad
-                                                              </label>
-                                                              <input
-                                                                  id="cantidadMenores"
-                                                                  type="number"
-                                                                  min={0}
-                                                                  disabled={cantidadRestante==0}
-                                                                  placeholder=""
-                                                                  value={cantidadMenores}
-                                                                  onChange={(e) => {let event; if (parseInt (e.target.value) < cantidadMenores ) event= -1; else event=+1; setCantidadMenores(parseInt(e.target.value)); setCantidad(cantidadTotal+event);  event == -1? setCantRestante(cantidadRestante+1) : setCantRestante(cantidadRestante-1);console.log(cantidadRestante)}}
-                                                                  className="w-50 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                                              />
-                                                              
-                                                          </div>
-                                                  </div>
-              
               
                                                   <div className="mt-6">
                                                       <h3 className="text-md font-medium text-gray-700 mb-2">Seleccionar fechas de reserva</h3>
@@ -282,7 +256,7 @@ export default function CrearReservaManual() {
                                                       </span>
                                                       
                                                       </p>
-                                                      <p>Monto por dia: <span>{inmueble && inmueble.preciopordia? inmueble.preciopordia *  (Math.floor(((rangoFechas && rangoFechas.to? rangoFechas.to.getTime(): 2) - (rangoFechas && rangoFechas?.from?  rangoFechas.from.getTime() : 1))/(1000 * 60 * 60 * 24))): 3}$</span>  </p>
+                                                      <p>Monto total a pagar: <span>{inmueble && inmueble.preciopordia? inmueble.preciopordia *  (Math.floor(((rangoFechas && rangoFechas.to? rangoFechas.to.getTime(): 2) - (rangoFechas && rangoFechas?.from?  rangoFechas.from.getTime() : 1))/(1000 * 60 * 60 * 24))): 3}$</span>  </p>
                                                       </div>)}
                                                   </div>
                                                   
