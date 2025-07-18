@@ -174,7 +174,7 @@ export default function Estadisticas(){
                             onChange={(e) => setEstadisticaSeleccionada(e.target.value)}
                             className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
                         >
-                            <option value="">Selecciona un inmueble para ver sus solicitudes</option>
+                            <option value="">Selecciona una estadistica</option>
                             {estadisticas.map((estadistica) => (
                             <option key={estadistica} value={estadistica || ""}>
                                 {estadistica}
