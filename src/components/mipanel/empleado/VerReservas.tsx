@@ -17,6 +17,9 @@ export default function VerReservas() {
     const [loading, setLoading] = useState(true)
     const [ rol, setRol ] = useState<typeUser | null >(null)
     const [ cliente, setCliente ] = useState<user | null>(null);
+    const [reservaAEliminar, setReservaAEliminar] = useState<reserva | null>(null)
+const [montoADevolver, setMontoADevolver] = useState<number | null>(null)
+const [mostrarModal, setMostrarModal] = useState(false)
 
     useEffect(() => {
       const storedRol = localStorage.getItem('userType') as typeUser | null
@@ -114,9 +117,40 @@ export default function VerReservas() {
     }
   }
 
+
+  const abrirModalCancelar = (reserva: reserva) => {
+  let desde = new Date(reserva?.fechadesde? reserva?.fechadesde : "").getTime()
+  const ahora = Date.now()
+  const diferenciaMs = Math.abs(ahora - desde)
+  const dias = Math.ceil(diferenciaMs / (1000 * 60 * 60 * 24))
+
+  let devolucion = 0
+  if (dias >= 7) {
+    devolucion = (reserva.costo || 0) * 0.80
+  } else if (dias >= 3) {
+    devolucion = (reserva.costo || 0) * 0.50
+  } else {
+    devolucion = (reserva.costo || 0) * 0.20
+  }
+
+  setReservaAEliminar(reserva)
+  setMontoADevolver(devolucion)
+  setMostrarModal(true)
+}
+
+const confirmarCancelacion = async () => {
+  if (!reservaAEliminar) return
+  await updateStateReserva(estadoReserva.Cancelada, reservaAEliminar?.id)
+  toast.success(`Se ha devuelto $${montoADevolver?.toLocaleString()}`)
+  setMostrarModal(false)
+}
+
   const cancelar = async (idReserva: String | null | undefined) => {
     const reserva = await getReserva(idReserva as string)
-    const diferenciaMs = Math.abs(new Date().getTime() - (reserva?.fechadesde? reserva?.fechadesde.getTime() : new Date().getTime()));
+    let desde = new Date(reserva?.fechadesde? reserva?.fechadesde : "").getTime()
+    console.log(desde)
+    let actual = new Date().getTime()
+    const diferenciaMs = Math.abs(actual - desde);
     const diferenciaDias = Math.ceil(diferenciaMs / (1000 * 60 * 60 * 24));
     await updateStateReserva(estadoReserva.Cancelada, idReserva as string)
     if (diferenciaDias >= 7){
@@ -242,10 +276,10 @@ export default function VerReservas() {
                               {reserva.id}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {reserva.fechadesde ? new Date(reserva.fechadesde).toLocaleDateString() : "N/A"}
+                              {reserva.fechadesde?.toString() ?? "N/A"}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                              {reserva.fechahasta ? new Date(reserva.fechahasta).toLocaleDateString() : "N/A"}
+                              {reserva.fechahasta?.toString() ?? "N/A"}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                               ${reserva.costo?.toLocaleString()}
@@ -262,7 +296,15 @@ export default function VerReservas() {
                                 {reserva.estado === "Vigente" && (
                                   <div className="flex gap-2">
                                     <button
-                                      className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200"
+                                      disabled={(reserva.fechadesde?.toString() ?? "").split("T")[0] != new Date().toISOString().split("T")[0]}
+                                      className={`px-4 py-2 rounded-md font-semibold transition-colors duration-200
+    ${
+      (reserva.fechadesde?.toString() ?? "").split("T")[0] != new Date().toISOString().split("T")[0]
+        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+        : 'bg-blue-600 text-white hover:bg-blue-700'
+    }
+  `}
+
                                       onClick={() => checkIn(reserva.fechadesde, reserva.id)}
                                     >
                                       Check In
@@ -271,24 +313,49 @@ export default function VerReservas() {
                                 )}
                               </td>
                             )}
-                            {rol == 'cliente' && (
+                            
                               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                 {reserva.estado === "Vigente" && (
                                   <div className="flex gap-2">
                                     <button
                                       className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md text-sm font-medium transition-colors duration-200"
-                                      onClick={() => cancelar(reserva.id)}
+                                      onClick={() => abrirModalCancelar(reserva) }
                                     >
                                       Cancelar
                                     </button>
                                   </div>
                                 )}
                               </td>
-                            )}
+
+                           
                           </tr>
                         ))}
+                       
                       </tbody>
                     </table>
+                     {mostrarModal && reservaAEliminar && (
+  <div className="fixed inset-0 bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50">
+    <div className="bg-white rounded-lg p-6 w-full max-w-md shadow-lg border">
+      <h2 className="text-lg font-semibold mb-4">Confirmar cancelación</h2>
+      <p>Se devolverá <strong>${montoADevolver?.toLocaleString()}</strong> al cliente.</p>
+
+      <div className="mt-6 flex justify-end gap-4">
+        <button
+          onClick={() => setMostrarModal(false)}
+          className="px-4 py-2 rounded-md bg-gray-300 hover:bg-gray-400 text-gray-800"
+        >
+          Rechazar
+        </button>
+        <button
+          onClick={confirmarCancelacion}
+          className="px-4 py-2 rounded-md bg-green-600 hover:bg-green-700 text-white"
+        >
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </div>
+)}
                   </div>
                 )}
               </div>

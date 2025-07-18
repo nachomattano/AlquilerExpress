@@ -29,7 +29,7 @@ export async function createReserva ( reserva: reserva ){
     return error
 }
 
-export async function updateStateReserva ( state: estadoReserva, id: string ){
+export async function updateStateReserva ( state: estadoReserva, id: string|null|undefined ){
     const supabase = await createClient()
     await supabase.from("reserva").update({ estado: state }).eq("id", id)
 }
