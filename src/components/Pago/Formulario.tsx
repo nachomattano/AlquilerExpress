@@ -59,7 +59,7 @@ const [usuario, setUsuario] = useState<user | null>(null);
       return
     }
     if(!valido){
-      toast.error(userMail == falla? `Mail duplicado ${falla}`: `Email ${falla} no exitente en el sistema`)
+      toast.error(userMail == falla? `No puedes ingresar el email de tu cuenta`: `Email ${falla} no existente en el sistema`)
       return
     }
     window.location.replace(`/pago/${id}/pagar`)

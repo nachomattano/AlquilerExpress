@@ -165,7 +165,7 @@ export default function CrearReservaManual() {
                 onChange={(e) =>{ setInmuebleSeleccionado(e.target.value); handleSelect(e.target.value)}}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
               >
-                <option value="">Selecciona un inmueble para ver sus solicitudes</option>
+                <option value="">Selecciona un inmueble para crear solicitud</option>
                 {inmuebles.map((inmueble) => (
                   <option key={inmueble.id} value={inmueble.id || ""}>
                     {inmueble.titulo}
