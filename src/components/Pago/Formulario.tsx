@@ -17,14 +17,47 @@ interface Acompanante {
 
 export default function Formulario({ id }: { id?: string | null | undefined }) {
   const [acompanantes, setAcompanantes] = useState<Acompanante[]>([]);
-  const [mostrarAcompanantes, setMostrarAcompanantes] = useState(false);
+  const [mostrarAcompanantes, setMostrarAcompanantes] = useState(true);
   const [solicitud, setSolicitud] = useState<solicitud | null>();
   const [pago, setPago] = useState<pago | null>();
-
+const [usuario, setUsuario] = useState<user | null>(null); 
   const [ restantes, setRestantes ] = useState<number>(0)
  
 
   const redirigir = async () => {
+
+        let usuarioActual = localStorage.getItem("user");
+        let user
+        if (usuarioActual) {
+            user = JSON.parse(usuarioActual)
+        }
+        let userMail = user.mail
+    var aux
+    let falla 
+    var duplicado 
+    for (let i = 0; i<acompanantes.length;i++){
+      falla = acompanantes[i].email
+      let acom = await getUsuarioPorMail(acompanantes[i].email)
+      if (acompanantes.filter(a => a.email == acompanantes[i].email).length >=2){
+        duplicado = acompanantes[i].email
+        break
+      }
+      if (!acom.user || userMail == acompanantes[i].email){
+        aux=false
+        break
+      }else{
+        aux=true
+      }
+    }
+    let valido = aux
+    if (duplicado){
+      toast.error(`Mail duplicado ${duplicado}`)
+      return
+    }
+    if(!valido){
+      toast.error(userMail == falla? `Mail duplicado ${falla}`: `Email ${falla} no exitente en el sistema`)
+      return
+    }
     window.location.replace(`/pago/${id}/pagar`)
   }
 
@@ -58,6 +91,14 @@ export default function Formulario({ id }: { id?: string | null | undefined }) {
         console.log("[DEBUG] Solicitud cargada:", solicitudesData);
         console.log("[DEBUG] Pago cargado:", pagosData);
         console.log(restantes)
+
+        const nuevos = Array.from({ length:  solicitudesData?.cantidad? solicitudesData.cantidad-1:0}, () => ({
+        email: "",
+        validado: false
+      }));
+      setMostrarAcompanantes(true);
+      setAcompanantes([...acompanantes, ...nuevos]);
+
       } catch (error) {
         console.error("Error cargando datos:", error);
       }
@@ -70,33 +111,6 @@ export default function Formulario({ id }: { id?: string | null | undefined }) {
     nuevos[index].email = value;
     nuevos[index].validado = false;
     setAcompanantes(nuevos);
-  };
-
-  const handleValidarOEliminar = async (index: number) => {
-    const acomp = acompanantes[index];
-
-
-    if (acomp.validado) {
-      const nuevos = acompanantes.filter((_, i) => i !== index);
-      setAcompanantes(nuevos);
-      setRestantes(restantes+1)
-      toast.success(`Acompañante eliminado`);
-      return;
-    }
-
-    const usuario = await getUsuarioPorMail(acomp.email);
-    if (!usuario.user) {
-      toast.error(`El email ${acomp.email} no está registrado en el sistema`);
-      const nuevos = [...acompanantes];
-      nuevos[index].email = "";
-      setAcompanantes(nuevos);
-    } else {
-      toast.success(`Acompañante ${acomp.email} válido`);
-      setRestantes(restantes-1)
-      const nuevos = [...acompanantes];
-      nuevos[index].validado = true;
-      setAcompanantes(nuevos);
-    }
   };
 
   const handleToggleMenor = (index: number) => {
@@ -120,20 +134,7 @@ export default function Formulario({ id }: { id?: string | null | undefined }) {
       <h2 className="text-center text-2xl font-bold mb-4">Agregar acompañantes</h2>
 
       <div className="space-y-4">
-        {typeof solicitud?.cantidad === "number" && solicitud.cantidad > 1 && (
-          <button
-            type="button"
-            onClick={handleAddAcompanante}
-            disabled={restantes == 0}
-            className={`text-sm ${
-              acompanantes.length >= (solicitud.cantidad - 1)
-                ? "text-gray-400 cursor-not-allowed"
-                : "text-blue-600 hover:underline"
-            }`}
-          >
-            Agregar acompañantes ({acompanantes.filter(a => !a.titular).length}/{solicitud.cantidad - 1})
-          </button>
-        )}
+        
 
         {mostrarAcompanantes && (
           <div className="space-y-4">
@@ -142,7 +143,7 @@ export default function Formulario({ id }: { id?: string | null | undefined }) {
                 <input
                   type="email"
                   placeholder={acomp.titular ? "Titular (no editable)" : "Email del acompañante"}
-                  value={acomp.email}
+                  value={acomp.esMenor? "": acomp.email}
                   onChange={(e) => handleEmailChange(index, e.target.value)}
                   disabled={acomp.validado || acomp.titular || acomp.esMenor}
                   className={`w-full px-3 py-2 border rounded-md shadow-sm ${
@@ -162,25 +163,12 @@ export default function Formulario({ id }: { id?: string | null | undefined }) {
                   Es menor
                 </label>
 
-                <button
-                  type="button"
-                  onClick={() => handleValidarOEliminar(index)}
-                  disabled={!acomp.email}
-                  className={`px-4 py-2 rounded-md text-white ${
-                    acomp.validado
-                      ? "bg-red-500 hover:bg-red-600"
-                      : "bg-green-500 hover:bg-green-600"
-                  }`}
-                >
-                  {acomp.validado ? "Eliminar" : "Validar"}
-                </button>
               </div>
             ))}
           </div>
         )}
         <button
          className="text-blue-600 hover:underline"
-         disabled={restantes!=0}
           onClick={redirigir}
         >
           Confirmar Acompañantes

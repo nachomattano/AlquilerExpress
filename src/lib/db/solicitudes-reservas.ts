@@ -25,7 +25,8 @@ export async function createSolicitud ( solicitud: solicitud ){
 
 export async function updateStateSolicitud ( state: estadoSolicitud, id: string|null|undefined ){
     const supabase = await createClient()
-    await supabase.from("solicitudreserva").update({ estado: state }).eq("id", id)
+    const {error}= await supabase.from("solicitudreserva").update({ estado: state }).eq("id", id)
+    return error
 }
 
 export async function updatePagoId (id:string|null|undefined, pagoid: string|null|undefined){

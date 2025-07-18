@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Eye, EyeOff, Library } from 'lucide-react'; // Si usás Lucide o algún ícono SVG
 import { estadoPago } from '@/types/estado-pago';
 import { pago } from '@/types/pago';
@@ -12,7 +12,7 @@ export default function Pagar( {id} : {id?:string|null|undefined} ) {
   const [numerotarjeta, setNum] = useState("");
   const [numeroseguridad, setCod] = useState("");
   const [verCodigo, setVerCodigo] = useState(false); // 👁️ Estado para mostrar u ocultar
-
+  useEffect(()=>{  toast.success("Acompañantes confirmados con exito!")},[])
 
   const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()

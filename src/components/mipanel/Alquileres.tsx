@@ -39,10 +39,12 @@ export default function Alquileres() {
             getAlquileres()
           ]);
 
+          console.log("Alquileres", alquileresDataRaw)
+
           const inmueblesData = inmueblesDataRaw || []
           const alquileresData = alquileresDataRaw || []
 
-          setAlquileres(alquileres || []);
+          setAlquileres(alquileresData || []);
 
           if (storedRol == 'cliente' && usuarioActual) {
             const user = JSON.parse(usuarioActual)
@@ -78,7 +80,7 @@ export default function Alquileres() {
         body: JSON.stringify({
           fecha: new Date(),
           checkinid: alquiler?.checkinid,
-          comentario: "",
+          comentarios: "",
           empleadoid: usuario?.id
         })
       })

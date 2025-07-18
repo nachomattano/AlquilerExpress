@@ -40,7 +40,7 @@ export async function createCheckin ( checkin:checkin ){
     console.log(JSON.stringify(checkInCreated))
     const reserva = await getReserva(sinid?.reservaid)
     console.log(JSON.stringify(reserva))
-    const alquiler = { id:'', fechadesde:new Date(), fechahasta: null, clienteid:reserva?.solicitante, checkinid:checkInCreated?.id, checkoutid: null, costo: reserva?.costo, cantidadhuespedes: reserva?.cantidad, inmuebleid: reserva?.inmuebleid  }
+    const alquiler = { id:'', fechadesde:reserva?.fechadesde, fechahasta: reserva?.fechahasta, clienteid:reserva?.solicitante, checkinid:checkInCreated?.id, checkoutid: null, costo: reserva?.costo, cantidadhuespedes: reserva?.cantidad, inmuebleid: reserva?.inmuebleid  }
     await createAlquiler(alquiler)
     await supabase.from("inmueble").update({ estado: estadoInmueble.alquilado }).eq("id", reserva?.inmuebleid)
     return error

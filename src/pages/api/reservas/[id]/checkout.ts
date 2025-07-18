@@ -10,7 +10,7 @@ import { checkout } from '@/types/check-out'
 export default async function handler(req:NextApiRequest,res:NextApiResponse){
 
     const {method, query:{ id }, body: {
-    comentario,
+    comentarios,
     empleadoid,
     fecha,
     checkinid,
@@ -26,7 +26,7 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
     }
   
     if (method == 'POST'){
-        const checkout : checkout = { id:null, comentario,
+        const checkout : checkout = { id:null, comentarios,
             empleadoid,
             fecha,
             checkinid
@@ -34,9 +34,10 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
 
         const error = await createCheckout(checkout, estado)
         if (!error){
-            res.status(200)
+            res.status(200).send(200)
             return ''
         }
-        res.status(400)
+        console.log(`error en el checkout ${JSON.stringify(error)}`)
+        res.status(400).send(400)
     }
 }

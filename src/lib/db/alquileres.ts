@@ -14,6 +14,12 @@ export async function getAlquileresParaInmueble( id:string ):Promise<alquiler[]|
     return alquiler
 }
 
+export async function getAlquilerPorCheckin( id:string|null|undefined ):Promise<alquiler|null|undefined> {
+    const supabase = await createClient();
+    const { data: alquiler } = (await supabase.from("alquiler").select().eq( "checkin", id ).single());
+    return alquiler
+}
+
 export async function getAlquiler( id:string ):Promise<alquiler|null|undefined> {
     const supabase = await createClient();
     const { data: alquiler } = (await supabase.from("alquiler").select().eq( "id", id ).single());
