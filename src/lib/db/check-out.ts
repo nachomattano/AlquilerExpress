@@ -38,9 +38,10 @@ export async function createCheckout ( checkout: checkout, estado: estadoInmuebl
     const checkoutCreated = await getCheckinReserva(checkout.checkinid)
     const checkin = await getCheckin(checkout.checkinid)
     const reserva = await getReserva(checkin?.id)
-    const alquiler = await getAlquilerPorCheckin(checkin?.id)
+    const alquiler = await getAlquilerPorCheckin(checkout?.checkinid)
+    console.log(JSON.stringify(checkoutCreated))
     await supabase.from("inmueble").update({ estado: estado }).eq("id", reserva?.inmuebleid)
-    await supabase.from("alquileres").update({ checkoutid: checkoutCreated?.id }).eq("id", alquiler?.id)
+    await supabase.from("alquiler").update({ checkoutid: 1 }).eq("id", alquiler?.id)
     return error
 }
 
