@@ -301,7 +301,7 @@ export default function SolicitudesReserva() {
                                   window.location.href = `/pago/${solicitud?.id}`;
                                 }}
                                             >
-                                    Ir a pagar
+                                    Completar Solicitud
                                 </button>
                               )}
                             </td>

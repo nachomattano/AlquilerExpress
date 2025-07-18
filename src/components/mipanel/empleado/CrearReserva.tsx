@@ -72,7 +72,7 @@ export default function CrearReservaManual() {
             to: new Date(data.disponibilidad.hasta)
           }]
         : [];
-                    
+                    console.log(`Rango de fechas -> ${JSON.stringify(rangosNoDisponibles)}`)
                     const cantidad = inmueble?.cantidadhuespedes? inmueble.cantidadhuespedes:1
                     setCantidadP(cantidad) 
                     setCantRestante(cantidad-cantidadTotal)
@@ -154,7 +154,7 @@ export default function CrearReservaManual() {
       <div className="max-w-7xl mx-auto space-y-6">
         <div className="bg-white rounded-lg shadow-md border border-gray-200">
           <div className="px-6 py-4 border-b border-gray-200">
-            <h1 className="text-2xl font-bold text-center text-gray-900">Crear Solicitud Aceptada</h1>
+            <h1 className="text-2xl font-bold text-center text-gray-900">Crear Solicitud</h1>
           </div>
 
           <div className="p-6 space-y-6">
@@ -177,7 +177,7 @@ export default function CrearReservaManual() {
             {inmuebleSeleccionado && (
               <>
                       <div className="h-full bg-white shadow-lg rounded-xl">
-                                              <h2 className="text-center mt-4 text-2xl font-bold mb-4">Llenar Formulario para Agendar la Solicitud como Aceptada</h2>
+                                              <h2 className="text-center mt-4 text-2xl font-bold mb-4">Llenar Formulario para Agendar la Solicitud</h2>
                                               <div className="p-6 pt-0">
                                               <form onSubmit={handleSubmit} className="space-y-4">
                                                  
@@ -268,7 +268,7 @@ export default function CrearReservaManual() {
                                                   <button
                                                   type="submit"
                                                   className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
-                                                  Crear Solicitud Aceptada
+                                                  Crear Solicitud
                                                   </button>
               
                                               </form>

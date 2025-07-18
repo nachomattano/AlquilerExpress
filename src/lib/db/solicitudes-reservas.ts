@@ -8,6 +8,12 @@ export async function getSolicitudesReserva (): Promise<solicitud[]|null>{
     const { data: solicitudreserva } = await supabase.from("solicitudreserva").select();
     return solicitudreserva
 }
+export async function getSolicitudesReservaPorInmueble (id:string|null|undefined): Promise<solicitud[]|null>{
+    const supabase = await createClient();
+    const { data: solicitudreserva } = await supabase.from("solicitudreserva").select().eq("inmuebleid",id);
+    return solicitudreserva
+}
+
 
 export async function getSolicitudReserva( id:string|null|undefined ): Promise<solicitud|null>{
     const supabase = await createClient();

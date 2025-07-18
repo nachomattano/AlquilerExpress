@@ -44,6 +44,7 @@ export default  function Reservar ({id}:{id:string}){
                     }
                 });
                 const data = await res.json();
+                
                 console.log("DATAAAAA", JSON.stringify(data))
                 const rangosNoDisponibles = Array.isArray(data.disponibilidad)
     ? data.disponibilidad.map((rango: { desde: string; hasta: string }) => ({
@@ -56,6 +57,7 @@ export default  function Reservar ({id}:{id:string}){
         to: new Date(data.disponibilidad.hasta)
       }]
     : [];
+     console.log(`Rango de fechas -> ${JSON.stringify(rangosNoDisponibles)}`)
                 const inmu = await getInmueble(id as string)
                 const cantidad = inmu?.cantidadhuespedes? inmu.cantidadhuespedes:1
                 setCantidadP(cantidad) 
